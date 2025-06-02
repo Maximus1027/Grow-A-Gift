@@ -1,6 +1,8 @@
 import { Networking } from "@flamework/networking";
 
-interface ClientToServerEvents {}
+interface ClientToServerEvents {
+	onPlotAction: (action: unknown, ...args: unknown[]) => void;
+}
 
 interface ServerToClientEvents {}
 

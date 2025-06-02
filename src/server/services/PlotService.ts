@@ -1,5 +1,8 @@
 import { Service, OnStart, OnInit } from "@flamework/core";
+import { act } from "@rbxts/react-roblox";
 import { Players, Workspace } from "@rbxts/services";
+import { t } from "@rbxts/t";
+import { Events } from "server/network";
 import { Plot } from "shared/plots/plot";
 
 @Service({})
@@ -28,6 +31,21 @@ export class PlotService implements OnStart, OnInit {
 				);
 				character.MoveTo(spawnPosition);
 			});
+		});
+
+		Events.onPlotAction.connect((player: Player, action: unknown, ...args: unknown[]) => {
+			if (!t.string(action)) {
+				return;
+			}
+
+			const plot = this.plotMap.get(player);
+
+			if (!plot) {
+				return;
+			}
+
+			//Shift computation from service to plot object
+			plot.dispatch(action, args as unknown[]);
 		});
 	}
 
