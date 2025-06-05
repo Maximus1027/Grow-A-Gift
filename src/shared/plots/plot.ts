@@ -1,6 +1,8 @@
 import Object from "@rbxts/object-utils";
-import { ReplicatedStorage, ServerStorage, Workspace } from "@rbxts/services";
+import { HttpService, ReplicatedStorage, ServerStorage, Workspace } from "@rbxts/services";
 import { t } from "@rbxts/t";
+import * as minersConfig from "shared/config/miners.json";
+import { doesMinerExist, isModelIntersecting } from "shared/utils/generictils";
 
 const assets = ServerStorage.WaitForChild("assets") as Folder;
 const minersFolder = assets.WaitForChild("miners") as Folder & Model[];
@@ -16,6 +18,12 @@ export class Plot {
 		return this.plot;
 	}
 
+	public getMinersFolder(): Partial<PlotFolder>["miners"] {
+		const mineFolder = this.getPlotFolder().FindFirstChild("miners") as Partial<PlotFolder>["miners"];
+
+		return mineFolder;
+	}
+
 	private createPlot() {
 		const plotFolder = new Instance("Folder");
 		plotFolder.Name = `${this.player.Name}`;
@@ -28,6 +36,8 @@ export class Plot {
 		plotBaseplate.Parent = plotFolder;
 
 		const minersFolder = new Instance("Folder");
+		minersFolder.Name = "miners";
+		minersFolder.Parent = plotFolder;
 
 		return plotFolder as PlotFolder;
 	}
@@ -36,10 +46,24 @@ export class Plot {
 	 * Place void miner and define it's position by model's center
 	 * @param pos
 	 */
-	private placeVoidMiner(pos: Vector3) {
-		const newMiner = minersFolder;
+	private placeVoidMiner(minerId: string, pos: Vector3) {
+		if (!doesMinerExist(minerId)) {
+			return;
+		}
 
-		//Ensure no miner exists at spot
+		//create new miner
+		const newMiner = minersFolder.FindFirstChild(minerId)?.Clone() as Model;
+		newMiner!.Name = newMiner?.Name + HttpService.GenerateGUID(false);
+		newMiner!.PivotTo(new CFrame(pos));
+
+		//Ensure nothing exists in its spot
+		if (isModelIntersecting(newMiner)) {
+			return;
+		}
+
+		//place on grid
+		this.grid.set(newMiner?.Name, pos);
+		newMiner!.Parent = this.getMinersFolder();
 	}
 
 	/**
@@ -50,11 +74,12 @@ export class Plot {
 	public dispatch(action: string, args: unknown[]) {
 		switch (action) {
 			case "place":
-				if (!args || !(args.size() > 0) || !t.Vector3(args[0])) {
+				//ensure there are two args and follow the correct types
+				if (!args || !(args.size() > 1) || !t.string(args[0]) || !t.Vector3(args[1])) {
 					return;
 				}
 
-				this.placeVoidMiner(args[0]);
+				this.placeVoidMiner(args[0], args[1]);
 		}
 	}
 }
