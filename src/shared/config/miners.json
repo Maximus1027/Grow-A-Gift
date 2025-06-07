@@ -1,5 +1,6 @@
 {
     "basic": {
-        "rate": 1 
+        "rate": 1,
+        "rarity": "common"
     }
 } 

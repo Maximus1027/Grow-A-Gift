@@ -1,0 +1,9 @@
+{
+    "build": {
+        "common": "rbxassetid://104690182497244",
+        "rare": "rbxassetid://97358744126358",
+        "epic": "rbxassetid://71765056811269",
+        "legendary": "rbxassetid://74141928945692",
+        "mythic": "rbxassetid://78765413410329"
+    }
+}
