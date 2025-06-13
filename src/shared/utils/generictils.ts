@@ -1,5 +1,5 @@
 import Object from "@rbxts/object-utils";
-import { Workspace } from "@rbxts/services";
+import { ReplicatedStorage, Workspace } from "@rbxts/services";
 import * as minersConfig from "shared/config/miners.json";
 
 /**
@@ -8,7 +8,14 @@ import * as minersConfig from "shared/config/miners.json";
 export const isModelIntersecting = function (model1: Model): boolean {
 	const parts = Workspace.GetPartBoundsInBox(model1.GetBoundingBox()[0], model1.GetBoundingBox()[1]);
 
-	return parts.size() > 0;
+	return (
+		parts.size() >
+		model1
+			.GetDescendants()
+			.filter((child) => child.IsA("BasePart"))
+			.size() +
+			1
+	);
 };
 
 /**
@@ -24,3 +31,8 @@ export const doesMinerExist = function (minerId: string): boolean {
 
 	return false;
 };
+
+export const getMachinesFolder = () => ReplicatedStorage.WaitForChild("assets").WaitForChild("miners");
+
+export const getPlayerPlot = (player: Player) =>
+	Workspace.WaitForChild("Plots").WaitForChild(player.Name).WaitForChild("plot") as BasePart;

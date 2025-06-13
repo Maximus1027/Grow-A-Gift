@@ -4,9 +4,10 @@ import { t } from "@rbxts/t";
 import * as minersConfig from "shared/config/miners.json";
 import { doesMinerExist, isModelIntersecting } from "shared/utils/generictils";
 
-const assets = ServerStorage.WaitForChild("assets") as Folder;
-const minersFolder = assets.WaitForChild("miners") as Folder & Model[];
-const plotSquare = assets.WaitForChild("plot") as Model;
+const serverAssets = ServerStorage.WaitForChild("assets") as Folder;
+const sharedAssets = ReplicatedStorage.WaitForChild("assets") as Folder;
+const minersFolder = sharedAssets.WaitForChild("miners") as Folder & Model[];
+const plotSquare = serverAssets.WaitForChild("plot") as Model;
 export class Plot {
 	constructor(readonly player: Player) {
 		this.plot = this.createPlot();

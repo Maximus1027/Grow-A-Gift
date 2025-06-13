@@ -1,9 +1,9 @@
 {
     "build": {
-        "common": "rbxassetid://104690182497244",
-        "rare": "rbxassetid://97358744126358",
-        "epic": "rbxassetid://71765056811269",
-        "legendary": "rbxassetid://74141928945692",
-        "mythic": "rbxassetid://78765413410329"
+        "Common": "rbxassetid://104690182497244",
+        "Rare": "rbxassetid://97358744126358",
+        "Epic": "rbxassetid://71765056811269",
+        "Legendary": "rbxassetid://74141928945692",
+        "Mythic": "rbxassetid://78765413410329"
     }
 }

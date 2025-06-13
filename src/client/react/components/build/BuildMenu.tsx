@@ -1,12 +1,33 @@
-import React from "@rbxts/react";
+import Object from "@rbxts/object-utils";
+import React, { useEffect, useState } from "@rbxts/react";
+
+import * as Miners from "shared/config/miners.json";
+import { useSelector } from "@rbxts/react-reflex";
+import { RootState } from "client/react/store/store";
+import { useMotion } from "@rbxts/pretty-react-hooks";
+import { MachineButton } from "./machine";
+import { ReplicatedStorage } from "@rbxts/services";
+
+const machineModels = ReplicatedStorage.WaitForChild("assets").WaitForChild("miners");
 
 export function BuildMenu() {
+	const isBuilding = useSelector((state: RootState) => state.build.isBuilding);
+	const [pos, setpos] = useMotion(1.08);
+
+	useEffect(() => {
+		if (isBuilding) {
+			setpos.spring(0.85);
+		} else {
+			setpos.spring(1.08);
+		}
+	}, [isBuilding]);
+
 	return (
 		<screengui
 			key={"build"}
 			IgnoreGuiInset={true}
 			ScreenInsets={Enum.ScreenInsets.DeviceSafeInsets}
-			ZIndexBehavior={Enum.ZIndexBehavior.Sibling}
+			ZIndexBehavior={Enum.ZIndexBehavior.Global}
 		>
 			<imagelabel
 				key={"main"}
@@ -17,7 +38,7 @@ export function BuildMenu() {
 				BackgroundTransparency={1}
 				BorderColor3={Color3.fromRGB(0, 0, 0)}
 				BorderSizePixel={0}
-				Position={UDim2.fromScale(0.5, 1.06)}
+				Position={pos.map((y) => UDim2.fromScale(0.5, y))}
 				Size={UDim2.fromScale(0.699, 0.591)}
 			>
 				<textlabel
@@ -37,7 +58,7 @@ export function BuildMenu() {
 					Size={UDim2.fromScale(0.0636, 0.151)}
 				/>
 
-				<textlabel
+				<textbutton
 					key={"displaymode"}
 					FontFace={new Font("rbxasset://fonts/families/FredokaOne.json")}
 					Text={"BUILD MODE"}
@@ -74,6 +95,9 @@ export function BuildMenu() {
 						CellSize={UDim2.fromScale(0.12, 0.8)}
 						SortOrder={Enum.SortOrder.LayoutOrder}
 					/>
+					{Object.keys(Miners).map((miner) => (
+						<MachineButton machineModel={machineModels.FindFirstChild(miner) as Model} machineId={miner} />
+					))}
 				</scrollingframe>
 
 				<uiaspectratioconstraint

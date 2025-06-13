@@ -1,5 +1,5 @@
 {
-  "name": "flamework-template",
+  "name": "void-miners",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -21,7 +21,7 @@
     "eslint-plugin-roblox-ts": "^0.0.30",
     "prettier": "^2.3.2",
     "rbxts-transformer-flamework": "^1.2.2",
-    "roblox-ts": "^2.3.0",
+    "roblox-ts": "^3.0.0",
     "typescript": "~5.2.2"
   },
   "dependencies": {
