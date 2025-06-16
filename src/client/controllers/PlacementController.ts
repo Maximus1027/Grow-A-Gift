@@ -3,6 +3,7 @@ import { ContextActionService, Players, ReplicatedStorage, RunService, Workspace
 import { store } from "client/react/store/store";
 import { getMachinesFolder, getPlayerPlot, isModelIntersecting } from "shared/utils/generictils";
 import * as MainConfig from "shared/config/main.json";
+import { Events } from "client/network";
 
 const machines = getMachinesFolder();
 const player = Players.LocalPlayer;
@@ -28,6 +29,13 @@ export class PlacementController implements OnStart, OnInit {
 			(processed, state) => state === Enum.UserInputState.Begin && this.toggleBuildMode(),
 			false,
 			Enum.KeyCode.F,
+		);
+
+		ContextActionService.BindAction(
+			"ConfirmPlacement",
+			(processed, state) => state === Enum.UserInputState.Begin && this.confirmPlacement(),
+			false,
+			Enum.UserInputType.MouseButton1,
 		);
 
 		const character = player.Character ?? player.CharacterAdded.Wait()[0];
@@ -79,12 +87,28 @@ export class PlacementController implements OnStart, OnInit {
 	}
 
 	/**
+	 * Place object on grid
+	 */
+	public confirmPlacement() {
+		if (!this.tempMachine || isModelIntersecting(this.tempMachine)) {
+			return;
+		}
+
+		const plot = getPlayerPlot(player);
+
+		Events.onPlotAction.fire("place", this.tempMachine.Name, this.tempMachine.GetPivot().Position);
+
+		this.stopPlacingMachine();
+		store.selectMachine("");
+	}
+
+	/**
 	 * place hologram at player mouse
 	 * @param machineId
 	 */
 	public beginPlacingMachine(machineId: string) {
 		const machineDisplay = machines.FindFirstChild(machineId)?.Clone() as Model;
-		machineDisplay.Name = `${machineDisplay}temp`;
+		machineDisplay.Name = `${machineDisplay}`;
 		machineDisplay.PivotTo(mouse.Hit);
 		machineDisplay!.Parent = this.temp;
 

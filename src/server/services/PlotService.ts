@@ -34,6 +34,7 @@ export class PlotService implements OnStart, OnInit {
 		});
 
 		Events.onPlotAction.connect((player: Player, action: unknown, ...args: unknown[]) => {
+			print("test");
 			if (!t.string(action)) {
 				return;
 			}
@@ -43,6 +44,8 @@ export class PlotService implements OnStart, OnInit {
 			if (!plot) {
 				return;
 			}
+
+			print("a");
 
 			//Shift computation from service to plot object
 			plot.dispatch(action, args as unknown[]);

@@ -1,16 +1,18 @@
-# Flamework Template
+#Void Miners
+Current todo list/idea for the game:
 
-👋 Hey! This is a pre-configured template you can use for your projects that use [Flamework](https://fireboltofdeath.dev/docs/flamework/).
+- Upgrade void miners that you buy from NPC
+- Players spawn on a hot air balloon
+- Players can upgrade placed void miners by installing artifacts (+25% efficiency)
+- Players can pay to increase artifact slots (1 default)
+- Artifacts are found by going on expiditions
+- Progress to a better zone/planet for greater income (not sure if money boost or different ores, the ladder would require further ideas related to that)
+- Void crystals, which are different from artifact, chnge the color of your beam with particles for visuals, resulting in greater profit
+- POSSIBLY: Expand base either by new zones or by paying for squares
+- 
 
-## Usage
+#Pivoting to Planet Miners
 
-First, create the folder on your computer where you want your project to be stored.
-
-Then, open a terminal at that directory and run the following commands:
-
-```console
-npx degit rbxts-flamework/template
-npm i
-```
-
-That's it! The template has been installed. For further information on how to use Flamework in your project, please see [here](https://fireboltofdeath.dev/docs/flamework).
+- Same as void miners, only difference is the planet (zone) that you're on will change the ores that you get from mining.
+- Think Earth -> Sun -> Star -> Supernova -> 
+- Iron, Cole -> Sun dust, gold, -> God ores, Emerald -> Instable Carbon, 

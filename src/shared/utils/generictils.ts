@@ -35,4 +35,4 @@ export const doesMinerExist = function (minerId: string): boolean {
 export const getMachinesFolder = () => ReplicatedStorage.WaitForChild("assets").WaitForChild("miners");
 
 export const getPlayerPlot = (player: Player) =>
-	Workspace.WaitForChild("Plots").WaitForChild(player.Name).WaitForChild("plot") as BasePart;
+	Workspace.WaitForChild("Plots").WaitForChild(player.Name).WaitForChild("plot") as Model;

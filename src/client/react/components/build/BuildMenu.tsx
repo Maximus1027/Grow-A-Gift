@@ -28,6 +28,7 @@ export function BuildMenu() {
 			IgnoreGuiInset={true}
 			ScreenInsets={Enum.ScreenInsets.DeviceSafeInsets}
 			ZIndexBehavior={Enum.ZIndexBehavior.Global}
+			ResetOnSpawn={false}
 		>
 			<imagelabel
 				key={"main"}

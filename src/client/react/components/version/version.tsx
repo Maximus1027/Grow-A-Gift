@@ -4,7 +4,7 @@ import * as main from "shared/config/main.json";
 
 export function Version() {
 	return (
-		<screengui>
+		<screengui ResetOnSpawn={false}>
 			<textlabel
 				Position={UDim2.fromScale(0.855, 0.95)}
 				BackgroundTransparency={1}

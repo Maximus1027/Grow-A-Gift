@@ -13,6 +13,7 @@ export class Plot {
 		this.plot = this.createPlot();
 	}
 	private plot: PlotFolder;
+	private plotBaseplate?: BasePart;
 	private grid = new Map<string, Vector3>();
 
 	public getPlotFolder(): PlotFolder {
@@ -36,6 +37,8 @@ export class Plot {
 		plotBaseplate.PrimaryPart!.Size = new Vector3(125, 1, 125);
 		plotBaseplate.Parent = plotFolder;
 
+		this.plotBaseplate = plotBaseplate.PrimaryPart;
+
 		const minersFolder = new Instance("Folder");
 		minersFolder.Name = "miners";
 		minersFolder.Parent = plotFolder;
@@ -48,7 +51,8 @@ export class Plot {
 	 * @param pos
 	 */
 	private placeVoidMiner(minerId: string, pos: Vector3) {
-		if (!doesMinerExist(minerId)) {
+		print(minerId, pos);
+		if (!doesMinerExist(minerId) || !this.plotBaseplate) {
 			return;
 		}
 
@@ -56,15 +60,18 @@ export class Plot {
 		const newMiner = minersFolder.FindFirstChild(minerId)?.Clone() as Model;
 		newMiner!.Name = newMiner?.Name + HttpService.GenerateGUID(false);
 		newMiner!.PivotTo(new CFrame(pos));
+		newMiner!.Parent = this.getMinersFolder();
+
+		print(newMiner.GetPivot());
 
 		//Ensure nothing exists in its spot
 		if (isModelIntersecting(newMiner)) {
+			newMiner.Destroy();
 			return;
 		}
 
 		//place on grid
-		this.grid.set(newMiner?.Name, pos);
-		newMiner!.Parent = this.getMinersFolder();
+		this.grid.set(newMiner?.Name, pos.sub(newMiner.GetPivot().Position));
 	}
 
 	/**
