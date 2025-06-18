@@ -19,17 +19,22 @@ export class PlotService implements OnStart, OnInit {
 		Players.PlayerAdded.Connect((player: Player) => {
 			const plot = this.setupPlayer(player);
 
+			print(player);
+
 			const spawnPlot = this.plotMap
 				.get(player)
-				?.getPlotFolder()!
-				.FindFirstChild("plot")
-				?.FindFirstChild("baseplate") as BasePart;
+				?.getPlotFolder()
+				.GetDescendants()
+				.find((child) => child.HasTag("Spawn"));
+
+			print(spawnPlot);
+
+			if (!spawnPlot || !spawnPlot.IsA("BasePart")) {
+				return;
+			}
 
 			player.CharacterAdded.Connect((character) => {
-				const spawnPosition = spawnPlot.Position.add(
-					new Vector3(0, character.GetExtentsSize().Y, spawnPlot.Size.Z / 2 - 10),
-				);
-				character.MoveTo(spawnPosition);
+				character.PivotTo(spawnPlot.CFrame.add(new Vector3(0, character.GetExtentsSize().Y, 0)));
 			});
 		});
 

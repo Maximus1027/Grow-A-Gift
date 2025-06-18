@@ -24,7 +24,12 @@ export function MoneyDisplay(props: MoneyProps) {
 	}, []);
 
 	return (
-		<screengui key={"money"} ResetOnSpawn={false} ZIndexBehavior={Enum.ZIndexBehavior.Sibling}>
+		<screengui
+			key={"MONEY DISPLAY"}
+			IgnoreGuiInset={true}
+			ScreenInsets={Enum.ScreenInsets.DeviceSafeInsets}
+			ZIndexBehavior={Enum.ZIndexBehavior.Sibling}
+		>
 			<textlabel
 				key={"textLabel"}
 				FontFace={new Font("rbxasset://fonts/families/FredokaOne.json")}
@@ -33,13 +38,13 @@ export function MoneyDisplay(props: MoneyProps) {
 				TextScaled={true}
 				TextSize={14}
 				TextWrapped={true}
+				TextXAlignment={Enum.TextXAlignment.Left}
 				BackgroundColor3={Color3.fromRGB(255, 255, 255)}
 				BackgroundTransparency={1}
 				BorderColor3={Color3.fromRGB(0, 0, 0)}
 				BorderSizePixel={0}
-				Position={UDim2.fromScale(0.02, 0.879)}
-				Size={UDim2.fromScale(0.3, 0.09)}
-				TextXAlignment={Enum.TextXAlignment.Left}
+				Position={UDim2.fromScale(0.0221, 0.939)}
+				Size={UDim2.fromScale(0.212, 0.052)}
 			>
 				<uistroke key={"uIStroke"} Color={Color3.fromRGB(0, 217, 21)} Thickness={3} />
 			</textlabel>

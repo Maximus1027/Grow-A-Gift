@@ -1,0 +1,15 @@
+{
+    "Earth": {
+        "ores": {
+            "coal": {
+                "weight": 15
+            },
+            "iron": {
+                "weight": 5
+            },
+            "diamond": {
+                "weight": 1
+            }
+        }
+    }
+}

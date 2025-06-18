@@ -9,7 +9,7 @@ const machines = getMachinesFolder();
 const player = Players.LocalPlayer;
 const mouse = player.GetMouse();
 
-//TODO: Finish game & get rich, afford yregsur
+//TODO: Finish game & get rich, afford hair
 
 @Controller({})
 export class PlacementController implements OnStart, OnInit {
@@ -28,7 +28,7 @@ export class PlacementController implements OnStart, OnInit {
 			// eslint-disable-next-line roblox-ts/lua-truthiness
 			(processed, state) => state === Enum.UserInputState.Begin && this.toggleBuildMode(),
 			false,
-			Enum.KeyCode.F,
+			Enum.KeyCode.B,
 		);
 
 		ContextActionService.BindAction(
