@@ -19,15 +19,11 @@ export class PlotService implements OnStart, OnInit {
 		Players.PlayerAdded.Connect((player: Player) => {
 			const plot = this.setupPlayer(player);
 
-			print(player);
-
 			const spawnPlot = this.plotMap
 				.get(player)
 				?.getPlotFolder()
 				.GetDescendants()
 				.find((child) => child.HasTag("Spawn"));
-
-			print(spawnPlot);
 
 			if (!spawnPlot || !spawnPlot.IsA("BasePart")) {
 				return;
@@ -35,11 +31,16 @@ export class PlotService implements OnStart, OnInit {
 
 			player.CharacterAdded.Connect((character) => {
 				character.PivotTo(spawnPlot.CFrame.add(new Vector3(0, character.GetExtentsSize().Y, 0)));
+
+				character.GetDescendants().forEach((part) => {
+					if (part.IsA("BasePart")) {
+						part.CollisionGroup = "plr";
+					}
+				});
 			});
 		});
 
 		Events.onPlotAction.connect((player: Player, action: unknown, ...args: unknown[]) => {
-			print("test");
 			if (!t.string(action)) {
 				return;
 			}
@@ -49,8 +50,6 @@ export class PlotService implements OnStart, OnInit {
 			if (!plot) {
 				return;
 			}
-
-			print("a");
 
 			//Shift computation from service to plot object
 			plot.dispatch(action, args as unknown[]);
@@ -63,9 +62,5 @@ export class PlotService implements OnStart, OnInit {
 		this.plotMap.set(player, plot);
 
 		return plot;
-	}
-
-	private placeVoidMiner(player: Player, pos: Vector3) {
-		const plot = this.plotMap.get(player);
 	}
 }

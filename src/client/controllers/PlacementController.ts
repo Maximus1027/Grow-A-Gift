@@ -47,7 +47,7 @@ export class PlacementController implements OnStart, OnInit {
 		RunService.RenderStepped.Connect((dt) => {
 			if (this.tempMachine) {
 				const raycastParams = new RaycastParams();
-				raycastParams.AddToFilter(plot);
+				raycastParams.AddToFilter(plot.FindFirstChild("baseplate") as BasePart);
 				raycastParams.FilterType = Enum.RaycastFilterType.Include;
 
 				const origin = Workspace.CurrentCamera!.CFrame.Position;

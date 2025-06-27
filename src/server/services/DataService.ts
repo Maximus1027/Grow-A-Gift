@@ -1,0 +1,55 @@
+import { Service, OnStart } from "@flamework/core";
+import { Players } from "@rbxts/services";
+import { doesPlayerOwnHouse, getPlayerHouseObject } from "shared/utils/playertils";
+
+@Service({})
+export class StatsService implements OnStart {
+	onStart() {
+		Players.PlayerAdded.Connect((player) => this.setupPlayer(player));
+		Players.GetPlayers().forEach((player) => this.setupPlayer(player));
+	}
+
+	private setupPlayer(player: Player) {
+		const dataFolder = new Instance("Folder");
+		dataFolder.Name = "stats";
+		dataFolder.Parent = player;
+
+		const money = new Instance("NumberValue");
+		money.Name = "Money";
+		money.Parent = dataFolder;
+
+		const inventory = new Instance("Folder");
+		inventory.Name = "inventory";
+		inventory.Parent = dataFolder;
+
+		this.addHouseToInventory(player, "tiki", 1);
+		this.addHouseToInventory(player, "tiki", 1);
+		this.addHouseToInventory(player, "tiki", 1);
+		this.addHouseToInventory(player, "tiki", 1);
+		this.addHouseToInventory(player, "trailer", 25);
+	}
+
+	public getMoneyStat(player: Player): NumberValue {
+		return player.FindFirstChild("stats")?.FindFirstChild("Money") as NumberValue;
+	}
+
+	public getInventoryFolder(player: Player): Folder {
+		return player.WaitForChild("stats").WaitForChild("inventory") as Folder;
+	}
+
+	public addHouseToInventory(player: Player, houseId: string, amount?: number) {
+		if (doesPlayerOwnHouse(player, houseId)) {
+			const object = getPlayerHouseObject(player, houseId) as NumberValue;
+			object.Value += amount ?? 1;
+
+			return;
+		}
+
+		const house = new Instance("NumberValue");
+		house.Name = houseId;
+
+		house.Value = amount ?? 1;
+
+		house.Parent = this.getInventoryFolder(player);
+	}
+}

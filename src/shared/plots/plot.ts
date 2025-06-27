@@ -1,12 +1,13 @@
 import Object from "@rbxts/object-utils";
 import { HttpService, ReplicatedStorage, ServerStorage, Workspace } from "@rbxts/services";
 import { t } from "@rbxts/t";
-import * as minersConfig from "shared/config/miners.json";
-import { doesMinerExist, isModelIntersecting } from "shared/utils/generictils";
+import * as HousesConfig from "shared/config/house.json";
+import { doesHouseExist, isModelIntersecting } from "shared/utils/generictils";
+import { doesPlayerOwnHouse, getPlayerHouseObject } from "shared/utils/playertils";
 
 const serverAssets = ServerStorage.WaitForChild("assets") as Folder;
 const sharedAssets = ReplicatedStorage.WaitForChild("assets") as Folder;
-const minersFolder = sharedAssets.WaitForChild("miners") as Folder & Model[];
+const houseFolder = sharedAssets.WaitForChild("houses") as Folder & Model[];
 const plotSquare = serverAssets.WaitForChild("plot") as Model;
 export class Plot {
 	constructor(readonly player: Player) {
@@ -20,10 +21,10 @@ export class Plot {
 		return this.plot;
 	}
 
-	public getMinersFolder(): Partial<PlotFolder>["miners"] {
-		const mineFolder = this.getPlotFolder().FindFirstChild("miners") as Partial<PlotFolder>["miners"];
+	public getHouseFolder(): Partial<PlotFolder>["houses"] {
+		const houseFolder = this.getPlotFolder().FindFirstChild("houses") as Partial<PlotFolder>["houses"];
 
-		return mineFolder;
+		return houseFolder;
 	}
 
 	private createPlot() {
@@ -39,9 +40,13 @@ export class Plot {
 
 		this.plotBaseplate = plotBaseplate.PrimaryPart;
 
-		const minersFolder = new Instance("Folder");
-		minersFolder.Name = "miners";
-		minersFolder.Parent = plotFolder;
+		const houseFolder = new Instance("Folder");
+		houseFolder.Name = "houses";
+		houseFolder.Parent = plotFolder;
+
+		const npcFolder = new Instance("Folder");
+		npcFolder.Name = "NPC";
+		npcFolder.Parent = plotFolder;
 
 		return plotFolder as PlotFolder;
 	}
@@ -50,28 +55,41 @@ export class Plot {
 	 * Place void miner and define it's position by model's center
 	 * @param pos
 	 */
-	private placeVoidMiner(minerId: string, pos: Vector3) {
-		print(minerId, pos);
-		if (!doesMinerExist(minerId) || !this.plotBaseplate) {
+	private placeHouse(houseId: string, pos: Vector3) {
+		if (!doesHouseExist(houseId) || !this.plotBaseplate || !doesPlayerOwnHouse(this.player, houseId)) {
 			return;
 		}
 
-		//create new miner
-		const newMiner = minersFolder.FindFirstChild(minerId)?.Clone() as Model;
-		newMiner!.Name = newMiner?.Name + HttpService.GenerateGUID(false);
-		newMiner!.PivotTo(new CFrame(pos));
-		newMiner!.Parent = this.getMinersFolder();
+		//create new House
+		const newHouse = houseFolder.FindFirstChild(houseId)?.Clone() as Model;
+		newHouse!.Name = newHouse?.Name + HttpService.GenerateGUID(false);
+		newHouse!.PivotTo(new CFrame(pos));
 
-		print(newMiner.GetPivot());
+		//	newHouse.AddTag("Drill");
+		newHouse.SetAttribute("owner", this.player.Name);
+
+		newHouse!.Parent = this.getHouseFolder();
+
+		print(newHouse.GetPivot());
 
 		//Ensure nothing exists in its spot
-		if (isModelIntersecting(newMiner)) {
-			newMiner.Destroy();
+		if (isModelIntersecting(newHouse)) {
+			newHouse.Destroy();
 			return;
 		}
 
 		//place on grid
-		this.grid.set(newMiner?.Name, pos.sub(newMiner.GetPivot().Position));
+		this.grid.set(newHouse?.Name, pos.sub(newHouse.GetPivot().Position));
+
+		//remove from inventory
+		const houseObject = getPlayerHouseObject(this.player, houseId);
+
+		if (t.instanceIsA("NumberValue")(houseObject)) {
+			houseObject.Value -= 1;
+			if (houseObject.Value <= 0) {
+				houseObject.Destroy();
+			}
+		}
 	}
 
 	/**
@@ -87,12 +105,12 @@ export class Plot {
 					return;
 				}
 
-				this.placeVoidMiner(args[0], args[1]);
+				this.placeHouse(args[0], args[1]);
 		}
 	}
 }
 
 type PlotFolder = Folder & {
 	plot: Model;
-	miners: Folder & Model[];
+	houses: Folder & Model[];
 };

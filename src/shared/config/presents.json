@@ -1,0 +1,22 @@
+{
+    "Common": {
+        "min": 1,
+        "max": 5
+    },
+    "Rare": {
+        "min": 50,
+        "max": 255
+    },
+    "Epic": {
+        "min": 500,
+        "max": 750
+    },
+    "Legendary": {
+        "min": 1000,
+        "max": 1200
+    },
+    "Mythic": {
+        "min": 10000,
+        "max": 25000
+    }
+}

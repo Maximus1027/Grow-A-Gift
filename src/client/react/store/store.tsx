@@ -15,5 +15,5 @@ export type RootStore = typeof store;
 export type RootState = InferState<RootStore>;
 
 store.subscribe((state: RootState) => {
-	print(state);
+	//	print(state);
 });
