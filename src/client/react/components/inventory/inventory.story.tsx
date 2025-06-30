@@ -3,5 +3,5 @@ import { Inventory } from "./inventory";
 import React from "@rbxts/react";
 
 export = hoarcekat(() => {
-	return <Inventory />;
+	return <Inventory inventoryFolder={new Instance("Folder")} />;
 });

@@ -1,4 +1,4 @@
-import React from "@rbxts/react";
+import React, { useEffect, useState } from "@rbxts/react";
 import { InventorySlot } from "./inventoryslot";
 import { InventoryDivider } from "./divider";
 import { ExitButton } from "./exit";
