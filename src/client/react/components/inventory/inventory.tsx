@@ -1,9 +1,41 @@
-import React from "@rbxts/react";
+import React, { useEffect, useState } from "@rbxts/react";
 import { InventorySlot } from "./inventoryslot";
 import { InventoryDivider } from "./divider";
 import { ExitButton } from "./exit";
+import { getInventoryFolder } from "shared/utils/playertils";
+import { Players } from "@rbxts/services";
+import { t } from "@rbxts/t";
 
-export function Inventory() {
+export interface InventoryProps {
+	inventoryFolder: Folder;
+}
+
+export function Inventory(props: InventoryProps) {
+	const inventoryFolder = props.inventoryFolder;
+
+	const [houseIds, setHouses] = useState<NumberValue[]>([]);
+
+	useEffect(() => {
+		const inventoryFolder = props.inventoryFolder;
+
+		if (inventoryFolder) {
+			inventoryFolder.ChildAdded.Connect((houseValue) => {
+				if (t.instanceIsA("NumberValue")(houseValue)) {
+					setHouses(inventoryFolder.GetChildren() as NumberValue[]);
+				}
+			});
+
+			inventoryFolder.ChildRemoved.Connect((houseValue) => {
+				if (t.instanceIsA("NumberValue")(houseValue)) {
+					// Only update with the current children, do not clear first
+					setHouses(inventoryFolder.GetChildren() as NumberValue[]);
+				}
+			});
+
+			setHouses(inventoryFolder.GetChildren() as NumberValue[]);
+		}
+	}, []);
+
 	return (
 		<screengui
 			key={"iNVENTORYDEV"}
@@ -40,7 +72,9 @@ export function Inventory() {
 					Position={UDim2.fromScale(0.499, 0.566)}
 					Size={UDim2.fromScale(0.897, 0.707)}
 				>
-					<InventorySlot />
+					{houseIds.map((house) => (
+						<InventorySlot key={house.Name} houseid={house.Name} />
+					))}
 					<uigridlayout
 						key={"uIGridLayout"}
 						CellPadding={UDim2.fromScale(0.017, 0)}

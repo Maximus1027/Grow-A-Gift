@@ -1,10 +1,15 @@
 import React from "@rbxts/react";
+import { Events } from "client/network";
 
-export function InventorySlot() {
+export interface InventorySlotProps {
+	houseid: string;
+}
+
+export function InventorySlot(props: InventorySlotProps) {
 	return (
 		<imagebutton
-			key={"imageButton"}
-			Image={"rbxassetid://114194005086957"}
+			key={props.houseid}
+			Image={"rbxassetid://137995061476893"}
 			ScaleType={Enum.ScaleType.Fit}
 			AnchorPoint={new Vector2(0.5, 0.5)}
 			BackgroundColor3={Color3.fromRGB(255, 255, 255)}
@@ -13,6 +18,11 @@ export function InventorySlot() {
 			BorderSizePixel={0}
 			Position={UDim2.fromScale(0.116, 0.24)}
 			Size={UDim2.fromScale(0.231, 0.48)}
+			Event={{
+				MouseButton1Click: () => {
+					Events.onInventoryAction.fire("addHotbar", props.houseid);
+				},
+			}}
 		/>
 	);
 }
