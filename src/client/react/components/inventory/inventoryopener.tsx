@@ -1,29 +1,29 @@
-import React from "@rbxts/react";
-import { useProducer } from "@rbxts/react-reflex";
+import React, { useEffect, useRef, useState } from "@rbxts/react";
+import { useProducer, useSelector } from "@rbxts/react-reflex";
+import { RunService } from "@rbxts/services";
 import { RootStore } from "client/react/store/store";
 
-export function ExitButton() {
+export function InventoryOpener() {
 	const dispatch = useProducer<RootStore>();
 
 	return (
 		<imagebutton
-			key={"exit"}
-			Image={"rbxassetid://126615963509378"}
+			key={"openinv"}
+			Image={"rbxassetid://130138970079871"}
 			ScaleType={Enum.ScaleType.Fit}
 			AnchorPoint={new Vector2(0.5, 0.5)}
 			BackgroundColor3={Color3.fromRGB(255, 255, 255)}
 			BackgroundTransparency={1}
 			BorderColor3={Color3.fromRGB(0, 0, 0)}
 			BorderSizePixel={0}
-			Position={UDim2.fromScale(0.93, 0.106)}
-			Size={UDim2.fromScale(0.137, 0.212)}
+			LayoutOrder={999}
+			Position={UDim2.fromScale(0.0856, 0.5)}
+			Size={UDim2.fromScale(0.171, 1)}
 			Event={{
 				Activated: () => {
 					dispatch.toggleInventory();
 				},
 			}}
-		>
-			<uiaspectratioconstraint key={"uIAspectRatioConstraint1"} AspectRatio={1} />
-		</imagebutton>
+		/>
 	);
 }

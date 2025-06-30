@@ -34,7 +34,9 @@ export const doesHouseExist = function (houseId: string): boolean {
 	return false;
 };
 
-export const getMachinesFolder = () => ReplicatedStorage.WaitForChild("assets").WaitForChild("houses");
+export const getHouseModel = (houseid: string) => getHouseAssetsFolder().FindFirstChild(houseid);
+
+export const getHouseAssetsFolder = () => ReplicatedStorage.WaitForChild("assets").WaitForChild("houses");
 
 export const getPlayerPlot = (player: Player) =>
 	Workspace.WaitForChild("Plots").WaitForChild(player.Name).WaitForChild("plot") as Model;

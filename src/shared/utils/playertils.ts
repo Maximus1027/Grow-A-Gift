@@ -25,11 +25,12 @@ export const getPlayerHouseObjectHotbar = (player: Player, houseId: string) => {
 };
 
 export const getNextAvailableHotbarSlot = (player: Player): number => {
-	const houseCount = getHotbarFolder(player).GetChildren().size();
+	const houses = getInventoryFolder(player).GetChildren() as NumberValue[];
+	const equipCount = houses.filter((house) => house.GetAttribute("slot") !== undefined).size();
 
-	if (houseCount >= (mainConfig.hotbar as number)) {
+	if (equipCount >= (mainConfig.hotbar as number)) {
 		return 1;
 	} else {
-		return houseCount + 1;
+		return equipCount + 1;
 	}
 };

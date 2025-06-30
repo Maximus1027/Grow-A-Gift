@@ -3,6 +3,9 @@ import { HotbarSlot } from "./slot";
 import { Players, ReplicatedStorage } from "@rbxts/services";
 
 import { t } from "@rbxts/t";
+import { InventoryOpener } from "../inventory/inventoryopener";
+import { useSelector } from "@rbxts/react-reflex";
+import { RootState } from "client/react/store/store";
 
 const houseModels = ReplicatedStorage.WaitForChild("assets").WaitForChild("houses") as Folder;
 const player = Players.LocalPlayer;
@@ -12,28 +15,7 @@ export interface HotbarProps {
 }
 
 export function Hotbar(props: HotbarProps) {
-	const [houseIds, setHouses] = useState<NumberValue[]>([]);
-
-	useEffect(() => {
-		const inventoryFolder = props.inventoryFolder;
-
-		if (inventoryFolder) {
-			inventoryFolder.ChildAdded.Connect((houseValue) => {
-				if (t.instanceIsA("NumberValue")(houseValue)) {
-					setHouses(inventoryFolder.GetChildren() as NumberValue[]);
-				}
-			});
-
-			inventoryFolder.ChildRemoved.Connect((houseValue) => {
-				if (t.instanceIsA("NumberValue")(houseValue)) {
-					// Only update with the current children, do not clear first
-					setHouses(inventoryFolder.GetChildren() as NumberValue[]);
-				}
-			});
-
-			setHouses(inventoryFolder.GetChildren() as NumberValue[]);
-		}
-	}, []);
+	const houseids = useSelector((state: RootState) => state.inventory.inventory);
 
 	return (
 		<screengui
@@ -73,8 +55,9 @@ export function Hotbar(props: HotbarProps) {
 						SortOrder={Enum.SortOrder.LayoutOrder}
 						VerticalAlignment={Enum.VerticalAlignment.Center}
 					/>
-
-					{houseIds
+					<InventoryOpener />
+					{houseids
+						.filter((house) => house.GetAttribute("slot") !== undefined)
 						.sort(
 							(house1, house2) =>
 								(house1.GetAttribute("slot") as number) < (house2.GetAttribute("slot") as number),

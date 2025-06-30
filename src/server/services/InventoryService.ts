@@ -43,11 +43,11 @@ export class InventoryService implements OnStart {
 	 * @param slot
 	 */
 	moveHouseToHotbar(player: Player, houseid: string, slot?: number) {
-		const hotbarFolder = getHotbarFolder(player);
+		const inventoryFolder = getInventoryFolder(player);
 
 		const houseValue = getPlayerHouseObject(player, houseid);
 
-		if (!houseValue) {
+		if (!houseValue || houseValue.GetAttribute("slot") !== undefined) {
 			warn(`${player} does not own ${houseid} or it is already in hotbar`);
 			return;
 		}
@@ -55,7 +55,7 @@ export class InventoryService implements OnStart {
 		const nextSlot = slot ?? getNextAvailableHotbarSlot(player);
 
 		//if item in slot already move it to inventory first
-		const sameSlotHouse = hotbarFolder.GetChildren().find((house) => {
+		const sameSlotHouse = inventoryFolder.GetChildren().find((house) => {
 			return house.GetAttribute("slot") === nextSlot;
 		});
 
@@ -64,7 +64,6 @@ export class InventoryService implements OnStart {
 		}
 
 		houseValue.SetAttribute("slot", nextSlot);
-		houseValue.Parent = hotbarFolder;
 	}
 
 	/**
@@ -74,16 +73,13 @@ export class InventoryService implements OnStart {
 	 * @returns
 	 */
 	moveHouseToInventory(player: Player, houseid: string) {
-		const inventoryFolder = getInventoryFolder(player);
-
-		const houseValue = getPlayerHouseObjectHotbar(player, houseid);
+		const houseValue = getPlayerHouseObject(player, houseid);
 
 		if (!houseValue) {
-			warn(`Could not find ${houseid} in ${player}'s hotbar`);
+			warn(`Could not find ${houseid} in ${player}'s inventory`);
 			return;
 		}
 
-		houseValue.Parent = inventoryFolder;
 		houseValue.SetAttribute("slot", undefined);
 	}
 }

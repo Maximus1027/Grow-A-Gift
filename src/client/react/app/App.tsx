@@ -6,6 +6,7 @@ import { Players } from "@rbxts/services";
 import { MoneyDisplay } from "../components/balance/moneydisplay";
 import { Hotbar } from "../components/hotbar/Hotbar";
 import { Presents } from "../components/present/Presents";
+import { Inventory } from "../components/inventory/inventory";
 
 const player = Players.LocalPlayer;
 const stats = player.WaitForChild("stats");
@@ -20,6 +21,7 @@ export function App() {
 			<Presents />
 			<MoneyDisplay value={moneyValue} />
 			<Hotbar inventoryFolder={hotbarFolder} />
+			<Inventory />
 		</ReflexProvider>
 	);
 }

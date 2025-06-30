@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "@rbxts/react";
 import { useProducer, useSelector } from "@rbxts/react-reflex";
 import { RunService } from "@rbxts/services";
 import { PlacementController } from "client/controllers/PlacementController";
+import { Events } from "client/network";
 import { RootStore, RootState } from "client/react/store/store";
 
 export interface HotbarProps {
@@ -14,6 +15,7 @@ export interface HotbarProps {
 export function HotbarSlot(props: HotbarProps) {
 	const dispatch = useProducer<RootStore>();
 	const selectedMachine = useSelector((state: RootState) => state.build.selectedMachine);
+	const inventoryOpen = useSelector((state: RootState) => state.inventory.inventoryOpen);
 	const camera = useRef();
 	const [houseAmount, setAmount] = useState<number>(props.valueBase.Value);
 
@@ -62,15 +64,26 @@ export function HotbarSlot(props: HotbarProps) {
 			Size={UDim2.fromScale(0.171, 1)}
 			Event={{
 				MouseButton1Click: () => {
-					print("work");
 					const placementController = Dependency<PlacementController>();
-					if (selectedMachine !== props.houseId) {
-						dispatch.selectMachine(props.houseId);
-						placementController.beginPlacingMachine(props.houseId);
-					} else {
+
+					if (inventoryOpen) {
+						Events.onInventoryAction("addInventory", props.houseId);
+						return;
+					}
+
+					if (selectedMachine === props.houseId) {
 						dispatch.selectMachine("");
 						placementController.stopPlacingMachine();
+
+						return;
 					}
+
+					if (selectedMachine !== "") {
+						placementController.stopPlacingMachine();
+					}
+
+					dispatch.selectMachine(props.houseId);
+					placementController.beginPlacingMachine(props.houseId);
 				},
 			}}
 		>

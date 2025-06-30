@@ -1,11 +1,11 @@
 import { Controller, OnInit, OnStart } from "@flamework/core";
 import { ContextActionService, Players, ReplicatedStorage, RunService, Workspace } from "@rbxts/services";
 import { store } from "client/react/store/store";
-import { getMachinesFolder, getPlayerPlot, isModelIntersecting } from "shared/utils/generictils";
+import { getHouseAssetsFolder, getPlayerPlot, isModelIntersecting } from "shared/utils/generictils";
 import * as MainConfig from "shared/config/main.json";
 import { Events } from "client/network";
 
-const machines = getMachinesFolder();
+const houses = getHouseAssetsFolder();
 const player = Players.LocalPlayer;
 const mouse = player.GetMouse();
 
@@ -107,7 +107,7 @@ export class PlacementController implements OnStart, OnInit {
 	 * @param machineId
 	 */
 	public beginPlacingMachine(machineId: string) {
-		const machineDisplay = machines.FindFirstChild(machineId)?.Clone() as Model;
+		const machineDisplay = houses.FindFirstChild(machineId)?.Clone() as Model;
 		machineDisplay.Name = `${machineDisplay}`;
 		machineDisplay.PivotTo(mouse.Hit);
 		machineDisplay!.Parent = this.temp;
@@ -136,7 +136,10 @@ export class PlacementController implements OnStart, OnInit {
 	 * stop hologram
 	 */
 	public stopPlacingMachine() {
-		this.tempMachine?.Destroy();
+		if (this.tempMachine) {
+			this.tempMachine?.Destroy();
+		}
+
 		this.tempMachine = undefined;
 	}
 }
