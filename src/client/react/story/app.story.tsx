@@ -1,25 +1,24 @@
 import React from "@rbxts/react";
-import { Version } from "../components/version/version";
 import { ReflexProvider } from "@rbxts/react-reflex";
-import { store } from "../store/store";
 import { Players } from "@rbxts/services";
 import { MoneyDisplay } from "../components/balance/moneydisplay";
 import { Hotbar } from "../components/hotbar/Hotbar";
 import { Presents } from "../components/present/Presents";
+import { Version } from "../components/version/version";
+import { createStore, store } from "../store/store";
+import { hoarcekat } from "@rbxts/pretty-react-hooks";
 
 const player = Players.LocalPlayer;
-const stats = player.WaitForChild("stats");
-const moneyValue = stats.WaitForChild("Money") as NumberValue;
+const moneyValue = new Instance("NumberValue");
 
-export function App() {
-	const hotbarFolder = player.WaitForChild("stats").WaitForChild("hotbar") as Folder;
+export = hoarcekat(() => {
+	print("test");
 
 	return (
 		<ReflexProvider producer={store}>
 			<Version />
-			<Presents />
 			<MoneyDisplay value={moneyValue} />
-			<Hotbar inventoryFolder={hotbarFolder} />
+			<Hotbar inventoryFolder={new Instance("Folder")} />
 		</ReflexProvider>
 	);
-}
+});

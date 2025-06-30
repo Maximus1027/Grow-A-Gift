@@ -2,6 +2,7 @@ import { Networking } from "@flamework/networking";
 
 interface ClientToServerEvents {
 	onPlotAction: (action: unknown, ...args: unknown[]) => void;
+	onInventoryAction: (action: unknown, ...args: unknown[]) => void;
 }
 
 interface ServerToClientEvents {}

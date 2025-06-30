@@ -22,6 +22,10 @@ export class StatsService implements OnStart {
 		inventory.Name = "inventory";
 		inventory.Parent = dataFolder;
 
+		const hotbar = new Instance("Folder");
+		hotbar.Name = "hotbar";
+		hotbar.Parent = dataFolder;
+
 		this.addHouseToInventory(player, "tiki", 1);
 		this.addHouseToInventory(player, "tiki", 1);
 		this.addHouseToInventory(player, "tiki", 1);
@@ -35,6 +39,10 @@ export class StatsService implements OnStart {
 
 	public getInventoryFolder(player: Player): Folder {
 		return player.WaitForChild("stats").WaitForChild("inventory") as Folder;
+	}
+
+	public getHotbarInventory(player: Player): Folder {
+		return player.WaitForChild("stats").WaitForChild("hotbar") as Folder;
 	}
 
 	public addHouseToInventory(player: Player, houseId: string, amount?: number) {

@@ -2,19 +2,20 @@ import React, { useEffect, useState } from "@rbxts/react";
 import { HotbarSlot } from "./slot";
 import { Players, ReplicatedStorage } from "@rbxts/services";
 
-import * as Houses from "shared/config/house.json";
-import Object from "@rbxts/object-utils";
 import { t } from "@rbxts/t";
-import { number } from "@rbxts/react/src/prop-types";
 
 const houseModels = ReplicatedStorage.WaitForChild("assets").WaitForChild("houses") as Folder;
 const player = Players.LocalPlayer;
 
-export function Hotbar() {
+export interface HotbarProps {
+	inventoryFolder: Folder;
+}
+
+export function Hotbar(props: HotbarProps) {
 	const [houseIds, setHouses] = useState<NumberValue[]>([]);
 
 	useEffect(() => {
-		const inventoryFolder = player.WaitForChild("stats").WaitForChild("inventory") as Folder;
+		const inventoryFolder = props.inventoryFolder;
 
 		if (inventoryFolder) {
 			inventoryFolder.ChildAdded.Connect((houseValue) => {
@@ -73,14 +74,24 @@ export function Hotbar() {
 						VerticalAlignment={Enum.VerticalAlignment.Center}
 					/>
 
-					{houseIds.map((house: NumberValue) => {
-						const model = houseModels.FindFirstChild(house.Name);
-						if (!model || !model.IsA("Model")) return <></>;
-						print(house, model);
-						return (
-							<HotbarSlot key={house.Name} houseModel={model} houseId={house.Name} valueBase={house} />
-						);
-					})}
+					{houseIds
+						.sort(
+							(house1, house2) =>
+								(house1.GetAttribute("slot") as number) < (house2.GetAttribute("slot") as number),
+						)
+						.map((house: NumberValue) => {
+							const model = houseModels.FindFirstChild(house.Name);
+							if (!model || !model.IsA("Model")) return <></>;
+							print(house, model);
+							return (
+								<HotbarSlot
+									key={house.Name}
+									houseModel={model}
+									houseId={house.Name}
+									valueBase={house}
+								/>
+							);
+						})}
 				</frame>
 			</frame>
 		</screengui>
