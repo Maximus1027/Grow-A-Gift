@@ -60,13 +60,25 @@ export class Plot {
 			return;
 		}
 
+		print("yuhhhhh");
+
 		//create new House
 		const newHouse = houseFolder.FindFirstChild(houseId)?.Clone() as Model;
-		newHouse!.Name = newHouse?.Name + HttpService.GenerateGUID(false);
+		newHouse!.Name = newHouse?.Name + "-" + HttpService.GenerateGUID(false);
 		newHouse!.PivotTo(new CFrame(pos));
 
 		//	newHouse.AddTag("Drill");
 		newHouse.SetAttribute("owner", this.player.Name);
+
+		//add selection selection box
+		const selectionBox = new Instance("SelectionBox");
+		selectionBox.Name = "select";
+		selectionBox.Visible = false;
+		selectionBox.Adornee = newHouse;
+		selectionBox.Transparency = 0;
+		selectionBox.LineThickness = 0.15;
+		selectionBox.Color3 = Color3.fromRGB(255, 255, 255);
+		selectionBox.Parent = newHouse;
 
 		newHouse!.Parent = this.getHouseFolder();
 

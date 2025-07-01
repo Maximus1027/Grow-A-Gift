@@ -1,13 +1,7 @@
 import { Service, OnStart } from "@flamework/core";
 import { t } from "@rbxts/t";
 import { Events } from "server/network";
-import {
-	getHotbarFolder,
-	getInventoryFolder,
-	getNextAvailableHotbarSlot,
-	getPlayerHouseObject,
-	getPlayerHouseObjectHotbar,
-} from "shared/utils/playertils";
+import { getInventoryFolder, getNextAvailableHotbarSlot, getPlayerHouseObject } from "shared/utils/playertils";
 
 @Service({})
 export class InventoryService implements OnStart {

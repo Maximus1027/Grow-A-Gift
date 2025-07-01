@@ -48,7 +48,7 @@ export function InventorySlot(props: InventorySlotProps) {
 
 	return (
 		<imagebutton
-			key={props.houseid}
+			key={props.houseId}
 			Image={"rbxassetid://137995061476893"}
 			ScaleType={Enum.ScaleType.Fit}
 			AnchorPoint={new Vector2(0.5, 0.5)}

@@ -2,7 +2,13 @@ import React from "@rbxts/react";
 import { useProducer } from "@rbxts/react-reflex";
 import { RootStore } from "client/react/store/store";
 
-export function ExitButton() {
+export interface ExitButtonProps {
+	Position: UDim2;
+	Size: UDim2;
+	onClick: () => void;
+}
+
+export function ExitButton(props: ExitButtonProps) {
 	const dispatch = useProducer<RootStore>();
 
 	return (
@@ -15,12 +21,10 @@ export function ExitButton() {
 			BackgroundTransparency={1}
 			BorderColor3={Color3.fromRGB(0, 0, 0)}
 			BorderSizePixel={0}
-			Position={UDim2.fromScale(0.93, 0.106)}
-			Size={UDim2.fromScale(0.137, 0.212)}
+			Position={props.Position}
+			Size={props.Size}
 			Event={{
-				Activated: () => {
-					dispatch.toggleInventory();
-				},
+				Activated: () => props.onClick(),
 			}}
 		>
 			<uiaspectratioconstraint key={"uIAspectRatioConstraint1"} AspectRatio={1} />

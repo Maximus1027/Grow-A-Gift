@@ -2,11 +2,13 @@ import { createProducer } from "@rbxts/reflex";
 
 export interface InventoryState {
 	inventoryOpen: boolean;
+	promptHouseid?: string;
 	inventory: NumberValue[];
 }
 
 const initialState: InventoryState = {
 	inventoryOpen: false,
+	promptHouseid: undefined,
 	inventory: [],
 };
 
@@ -21,6 +23,12 @@ export const InventoryActions = createProducer(initialState, {
 		return {
 			...state,
 			inventory: contents,
+		};
+	},
+	promptHouse: (state: InventoryState, houseid?: string) => {
+		return {
+			...state,
+			promptHouseid: state.promptHouseid === houseid ? undefined : houseid,
 		};
 	},
 });

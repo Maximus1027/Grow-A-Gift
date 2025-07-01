@@ -1,5 +1,12 @@
 import { Controller, OnInit, OnStart } from "@flamework/core";
-import { ContextActionService, Players, ReplicatedStorage, RunService, Workspace } from "@rbxts/services";
+import {
+	ContextActionService,
+	Players,
+	ReplicatedStorage,
+	RunService,
+	UserInputService,
+	Workspace,
+} from "@rbxts/services";
 import { store } from "client/react/store/store";
 import { getHouseAssetsFolder, getPlayerPlot, isModelIntersecting } from "shared/utils/generictils";
 import * as MainConfig from "shared/config/main.json";
@@ -9,7 +16,7 @@ const houses = getHouseAssetsFolder();
 const player = Players.LocalPlayer;
 const mouse = player.GetMouse();
 
-//TODO: Finish game & get rich, afford hair
+//TODO: Finish game & get rich
 
 @Controller({})
 export class PlacementController implements OnStart, OnInit {
@@ -23,20 +30,11 @@ export class PlacementController implements OnStart, OnInit {
 		this.temp = machineFolder;
 	}
 	onStart() {
-		ContextActionService.BindAction(
-			"ToggleBuild",
-			// eslint-disable-next-line roblox-ts/lua-truthiness
-			(processed, state) => state === Enum.UserInputState.Begin && this.toggleBuildMode(),
-			false,
-			Enum.KeyCode.B,
-		);
-
-		ContextActionService.BindAction(
-			"ConfirmPlacement",
-			(processed, state) => state === Enum.UserInputState.Begin && this.confirmPlacement(),
-			false,
-			Enum.UserInputType.MouseButton1,
-		);
+		UserInputService.InputBegan.Connect((input) => {
+			if (input.UserInputType === Enum.UserInputType.MouseButton1) {
+				this.confirmPlacement();
+			}
+		});
 
 		const character = player.Character ?? player.CharacterAdded.Wait()[0];
 		const head = character.PrimaryPart as Part;

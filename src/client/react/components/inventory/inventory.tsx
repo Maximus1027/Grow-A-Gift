@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "@rbxts/react";
 import { InventorySlot } from "./inventoryslot";
 import { InventoryDivider } from "./divider";
 import { ExitButton } from "./exit";
-import { useSelector } from "@rbxts/react-reflex";
+import { useProducer, useSelector } from "@rbxts/react-reflex";
 import { RootState, RootStore } from "client/react/store/store";
 import { getHouseModel } from "shared/utils/generictils";
 import { t } from "@rbxts/t";
@@ -10,6 +10,8 @@ import { t } from "@rbxts/t";
 export function Inventory() {
 	const inventoryToggle = useSelector((state: RootState) => state.inventory.inventoryOpen);
 	const houseids = useSelector((state: RootState) => state.inventory.inventory);
+
+	const dispatch = useProducer<RootStore>();
 
 	return (
 		inventoryToggle && (
@@ -32,7 +34,11 @@ export function Inventory() {
 					Size={UDim2.fromScale(0.379, 0.458)}
 				>
 					<uiaspectratioconstraint key={"uIAspectRatioConstraint"} AspectRatio={1.55} />
-					<ExitButton />
+					<ExitButton
+						onClick={() => dispatch.toggleInventory()}
+						Position={UDim2.fromScale(0.93, 0.106)}
+						Size={UDim2.fromScale(0.137, 0.212)}
+					/>
 					<scrollingframe
 						key={"scrollingFrame"}
 						AutomaticCanvasSize={Enum.AutomaticSize.Y}
