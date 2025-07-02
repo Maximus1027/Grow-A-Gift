@@ -52,8 +52,8 @@ export function HotbarSlot(props: HotbarProps) {
 
 	return (
 		<imagebutton
-			key={"slot" + props.houseId}
-			Image={"rbxassetid://96898172348045"}
+			key={"equip" + props.houseId}
+			Image={"rbxassetid://137479388509722"}
 			ScaleType={Enum.ScaleType.Fit}
 			AnchorPoint={new Vector2(0.5, 0.5)}
 			BackgroundColor3={Color3.fromRGB(255, 255, 255)}

@@ -3,7 +3,7 @@ import { act } from "@rbxts/react-roblox";
 import { Players, Workspace } from "@rbxts/services";
 import { t } from "@rbxts/t";
 import { Events } from "server/network";
-import { Plot } from "shared/plots/plot";
+import { Plot } from "server/plots/plot";
 
 @Service({})
 export class PlotService implements OnStart, OnInit {

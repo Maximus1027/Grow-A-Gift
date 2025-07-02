@@ -29,6 +29,7 @@ export function MoneyDisplay(props: MoneyProps) {
 			IgnoreGuiInset={true}
 			ScreenInsets={Enum.ScreenInsets.DeviceSafeInsets}
 			ZIndexBehavior={Enum.ZIndexBehavior.Sibling}
+			ResetOnSpawn={false}
 		>
 			<textlabel
 				key={"textLabel"}

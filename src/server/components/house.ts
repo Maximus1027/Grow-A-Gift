@@ -4,9 +4,7 @@ import Object from "@rbxts/object-utils";
 
 import * as HouseConfig from "shared/config/house.json";
 import { HttpService, Players } from "@rbxts/services";
-import { Ore } from "shared/enums/Ore";
-import { StatsService } from "server/services/DataService";
-import { t } from "@rbxts/t";
+
 import { NPC } from "shared/npc/npc";
 import { getLootTable, returnRandomRarity } from "shared/utils/loot";
 import { Rarity } from "shared/enums/Rarity";
@@ -27,7 +25,6 @@ export class House extends BaseComponent<Attributes, Model> implements OnStart, 
 	private NPCfolder = this.instance.Parent?.Parent?.FindFirstChild("NPC") as Folder;
 	private spawn?: BasePart;
 	private end: BasePart = this.instance.FindFirstChild("drop") as BasePart;
-	private statsService = Dependency<StatsService>();
 	private owner?: Player;
 
 	onStart() {
@@ -65,5 +62,9 @@ export class House extends BaseComponent<Attributes, Model> implements OnStart, 
 		if (this.owner) {
 			new NPC(this.NPCfolder, spawnLocation, this.end.Position, randomRarity, this.owner);
 		}
+	}
+
+	destroy(): void {
+		print("destroye");
 	}
 }

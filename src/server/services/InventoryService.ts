@@ -1,7 +1,7 @@
 import { Service, OnStart } from "@flamework/core";
 import { t } from "@rbxts/t";
 import { Events } from "server/network";
-import { getInventoryFolder, getNextAvailableHotbarSlot, getPlayerHouseObject } from "shared/utils/playertils";
+import { getInventoryFolder, getPlayerHouseObject } from "shared/utils/playertils";
 
 @Service({})
 export class InventoryService implements OnStart {
@@ -41,23 +41,12 @@ export class InventoryService implements OnStart {
 
 		const houseValue = getPlayerHouseObject(player, houseid);
 
-		if (!houseValue || houseValue.GetAttribute("slot") !== undefined) {
+		if (!houseValue || houseValue.GetAttribute("equip") === true) {
 			warn(`${player} does not own ${houseid} or it is already in hotbar`);
 			return;
 		}
 
-		const nextSlot = slot ?? getNextAvailableHotbarSlot(player);
-
-		//if item in slot already move it to inventory first
-		const sameSlotHouse = inventoryFolder.GetChildren().find((house) => {
-			return house.GetAttribute("slot") === nextSlot;
-		});
-
-		if (sameSlotHouse) {
-			this.moveHouseToInventory(player, sameSlotHouse.Name);
-		}
-
-		houseValue.SetAttribute("slot", nextSlot);
+		houseValue.SetAttribute("equip", true);
 	}
 
 	/**
@@ -74,6 +63,6 @@ export class InventoryService implements OnStart {
 			return;
 		}
 
-		houseValue.SetAttribute("slot", undefined);
+		houseValue.SetAttribute("equip", false);
 	}
 }

@@ -1,6 +1,7 @@
 {
     "tiki": {
         "rate": 5,
+        "cost": 1000000,
         "rarity": "legendary",
         "loot": {
             "Common": 50,
@@ -12,6 +13,7 @@
     },
     "trailer": {
         "rate": 1,
+        "cost": 100,
         "rarity": "common",
          "loot": {
             "Common": 50,

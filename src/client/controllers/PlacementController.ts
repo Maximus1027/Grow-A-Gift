@@ -97,7 +97,7 @@ export class PlacementController implements OnStart, OnInit {
 		Events.onPlotAction.fire("place", this.tempMachine.Name, this.tempMachine.GetPivot().Position);
 
 		this.stopPlacingMachine();
-		store.selectMachine("");
+		task.delay(0.1, () => store.selectMachine(""));
 	}
 
 	/**

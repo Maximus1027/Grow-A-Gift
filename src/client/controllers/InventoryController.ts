@@ -32,7 +32,7 @@ export class InventoryController implements OnStart {
 
 	trackHouseForEquip(houseid: NumberValue) {
 		//how we check if house was put in hotbar
-		houseid.GetAttributeChangedSignal("slot").Connect(() => {
+		houseid.GetAttributeChangedSignal("equip").Connect(() => {
 			store.setInventory(inventoryFolder.GetChildren() as NumberValue[]);
 		});
 	}

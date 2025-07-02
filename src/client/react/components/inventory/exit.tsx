@@ -1,4 +1,5 @@
-import React from "@rbxts/react";
+import { useMotion } from "@rbxts/pretty-react-hooks";
+import React, { useEffect } from "@rbxts/react";
 import { useProducer } from "@rbxts/react-reflex";
 import { RootStore } from "client/react/store/store";
 
@@ -11,6 +12,8 @@ export interface ExitButtonProps {
 export function ExitButton(props: ExitButtonProps) {
 	const dispatch = useProducer<RootStore>();
 
+	const [rot, setRot] = useMotion(0);
+
 	return (
 		<imagebutton
 			key={"exit"}
@@ -22,9 +25,13 @@ export function ExitButton(props: ExitButtonProps) {
 			BorderColor3={Color3.fromRGB(0, 0, 0)}
 			BorderSizePixel={0}
 			Position={props.Position}
+			Rotation={rot}
 			Size={props.Size}
 			Event={{
-				Activated: () => props.onClick(),
+				Activated: () => {
+					props.onClick();
+					setRot.spring(50);
+				},
 			}}
 		>
 			<uiaspectratioconstraint key={"uIAspectRatioConstraint1"} AspectRatio={1} />

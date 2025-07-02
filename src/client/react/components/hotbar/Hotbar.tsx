@@ -23,6 +23,7 @@ export function Hotbar(props: HotbarProps) {
 			IgnoreGuiInset={true}
 			ScreenInsets={Enum.ScreenInsets.DeviceSafeInsets}
 			ZIndexBehavior={Enum.ZIndexBehavior.Global}
+			ResetOnSpawn={false}
 		>
 			<frame
 				key={"frame"}
@@ -54,14 +55,11 @@ export function Hotbar(props: HotbarProps) {
 						HorizontalAlignment={Enum.HorizontalAlignment.Center}
 						SortOrder={Enum.SortOrder.LayoutOrder}
 						VerticalAlignment={Enum.VerticalAlignment.Center}
+						Padding={new UDim(0.009)}
 					/>
 					<InventoryOpener />
 					{houseids
-						.filter((house) => house.GetAttribute("slot") !== undefined)
-						.sort(
-							(house1, house2) =>
-								(house1.GetAttribute("slot") as number) < (house2.GetAttribute("slot") as number),
-						)
+						.filter((house) => house.GetAttribute("equip") === true)
 						.map((house: NumberValue) => {
 							const model = houseModels.FindFirstChild(house.Name);
 							if (!model || !model.IsA("Model")) return <></>;

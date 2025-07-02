@@ -3,7 +3,7 @@ import { Players } from "@rbxts/services";
 import { doesPlayerOwnHouse, getPlayerHouseObject } from "shared/utils/playertils";
 
 @Service({})
-export class StatsService implements OnStart {
+export class DataService implements OnStart {
 	onStart() {
 		Players.PlayerAdded.Connect((player) => this.setupPlayer(player));
 		Players.GetPlayers().forEach((player) => this.setupPlayer(player));
@@ -26,11 +26,8 @@ export class StatsService implements OnStart {
 		hotbar.Name = "hotbar";
 		hotbar.Parent = dataFolder;
 
-		this.addHouseToInventory(player, "tiki", 1);
-		this.addHouseToInventory(player, "tiki", 1);
-		this.addHouseToInventory(player, "tiki", 1);
-		this.addHouseToInventory(player, "tiki", 1);
-		this.addHouseToInventory(player, "trailer", 25);
+		this.addHouseToInventory(player, "tiki", 5, true);
+		this.addHouseToInventory(player, "trailer", 5);
 	}
 
 	public getMoneyStat(player: Player): NumberValue {
@@ -45,7 +42,15 @@ export class StatsService implements OnStart {
 		return player.WaitForChild("stats").WaitForChild("hotbar") as Folder;
 	}
 
-	public addHouseToInventory(player: Player, houseId: string, amount?: number) {
+	/**
+	 * Adds a house to the player's inventory
+	 * @param player
+	 * @param houseId
+	 * @param amount
+	 * @param hotbar if true, house is automatically placed in hotbar
+	 * @returns
+	 */
+	public addHouseToInventory(player: Player, houseId: string, amount?: number, hotbar?: boolean) {
 		if (doesPlayerOwnHouse(player, houseId)) {
 			const object = getPlayerHouseObject(player, houseId) as NumberValue;
 			object.Value += amount ?? 1;
@@ -57,6 +62,8 @@ export class StatsService implements OnStart {
 		house.Name = houseId;
 
 		house.Value = amount ?? 1;
+
+		house.SetAttribute("equip", hotbar);
 
 		house.Parent = this.getInventoryFolder(player);
 	}

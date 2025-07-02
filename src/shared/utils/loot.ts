@@ -28,7 +28,5 @@ export const returnRandomRarity = (loot: LootTable): Rarity => {
 export const getLootTable = (houseId: string): LootTable => {
 	const config = HousesConfig as unknown as HouseConfig;
 
-	print(config, houseId, config[houseId]);
-
 	return config[houseId].loot;
 };

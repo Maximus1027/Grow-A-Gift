@@ -8,7 +8,7 @@ export function InventoryOpener() {
 	const inventoryState = useSelector((state: RootState) => state.inventory);
 
 	return (
-		(inventoryState.inventory.filter((house) => house.GetAttribute("slot") === undefined).size() > 0 ||
+		(inventoryState.inventory.filter((house) => house.GetAttribute("equip") !== true).size() > 0 ||
 			inventoryState.inventoryOpen) && (
 			<imagebutton
 				key={"openinv"}
