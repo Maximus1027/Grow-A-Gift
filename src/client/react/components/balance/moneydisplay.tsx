@@ -22,7 +22,50 @@ export function MoneyDisplay(props: MoneyProps) {
 			setMoney.spring(value);
 		});
 	}, []);
-
+	return (
+		<screengui
+			key={"MONEY DISPLAY"}
+			IgnoreGuiInset={true}
+			ScreenInsets={Enum.ScreenInsets.DeviceSafeInsets}
+			ZIndexBehavior={Enum.ZIndexBehavior.Sibling}
+			ResetOnSpawn={false}
+		>
+			<imagelabel
+				key={"imageLabel"}
+				Image={"rbxassetid://125600642646562"}
+				ScaleType={Enum.ScaleType.Fit}
+				AnchorPoint={new Vector2(0.5, 0.5)}
+				BackgroundColor3={Color3.fromRGB(255, 255, 255)}
+				BackgroundTransparency={1}
+				BorderColor3={Color3.fromRGB(0, 0, 0)}
+				BorderSizePixel={0}
+				Position={UDim2.fromScale(0.125, 0.935)}
+				Size={UDim2.fromScale(0.25, 0.157)}
+			>
+				<uiaspectratioconstraint key={"uIAspectRatioConstraint"} AspectRatio={2.99} />
+				<textlabel
+					key={"textLabel"}
+					FontFace={new Font("rbxasset://fonts/families/FredokaOne.json")}
+					Text={money.map((mon) => `$${abv.commify(math.ceil(mon))}`)}
+					TextColor3={Color3.fromRGB(255, 255, 255)}
+					TextScaled={true}
+					TextSize={14}
+					TextWrapped={true}
+					AnchorPoint={new Vector2(0.5, 0.5)}
+					BackgroundColor3={Color3.fromRGB(255, 255, 255)}
+					BackgroundTransparency={1}
+					BorderColor3={Color3.fromRGB(0, 0, 0)}
+					BorderSizePixel={0}
+					TextXAlignment={Enum.TextXAlignment.Left}
+					Position={UDim2.fromScale(0.595, 0.528)}
+					Size={UDim2.fromScale(0.565, 0.322)}
+				>
+					<uistroke key={"uIStroke"} Color={Color3.fromRGB(0, 217, 21)} Thickness={5} />
+					<uiaspectratioconstraint key={"uIAspectRatioConstraint"} AspectRatio={5.32} />
+				</textlabel>
+			</imagelabel>
+		</screengui>
+	);
 	return (
 		<screengui
 			key={"MONEY DISPLAY"}

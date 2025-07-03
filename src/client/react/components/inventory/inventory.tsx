@@ -10,7 +10,6 @@ import { t } from "@rbxts/t";
 export function Inventory() {
 	const inventoryToggle = useSelector((state: RootState) => state.inventory.inventoryOpen);
 	const houseids = useSelector((state: RootState) => state.inventory.inventory);
-
 	const dispatch = useProducer<RootStore>();
 
 	return (
