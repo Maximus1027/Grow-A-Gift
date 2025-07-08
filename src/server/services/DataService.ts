@@ -16,6 +16,7 @@ export class DataService implements OnStart {
 
 		const money = new Instance("NumberValue");
 		money.Name = "Money";
+		money.Value = 100000000;
 		money.Parent = dataFolder;
 
 		const inventory = new Instance("Folder");

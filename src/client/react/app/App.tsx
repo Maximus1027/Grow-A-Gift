@@ -8,6 +8,7 @@ import { Hotbar } from "../components/hotbar/Hotbar";
 import { Presents } from "../components/present/Presents";
 import { Inventory } from "../components/inventory/inventory";
 import { HouseSelect } from "../components/houseselect/SelectHouse";
+import { Store } from "../components/store/Store";
 
 const player = Players.LocalPlayer;
 const stats = player.WaitForChild("stats");
@@ -23,6 +24,7 @@ export function App() {
 			<MoneyDisplay value={moneyValue} />
 			<Hotbar inventoryFolder={hotbarFolder} />
 			<Inventory />
+			<Store />
 			<HouseSelect />
 		</ReflexProvider>
 	);

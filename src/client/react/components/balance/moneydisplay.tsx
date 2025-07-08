@@ -21,6 +21,7 @@ export function MoneyDisplay(props: MoneyProps) {
 
 			setMoney.spring(value);
 		});
+		setMoney.immediate((props.value.Value as number) ?? 0);
 	}, []);
 	return (
 		<screengui

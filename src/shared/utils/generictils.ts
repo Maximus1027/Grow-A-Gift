@@ -1,6 +1,7 @@
 import Object from "@rbxts/object-utils";
 import { ReplicatedStorage, Workspace } from "@rbxts/services";
 import * as houseConfig from "shared/config/house.json";
+import { Rarity } from "shared/enums/Rarity";
 
 /**
  * Check if two models are intersecting in the same place
@@ -38,8 +39,22 @@ export const getHouseModel = (houseid: string) => getHouseAssetsFolder().FindFir
 
 export const getHouseAssetsFolder = () => ReplicatedStorage.WaitForChild("assets").WaitForChild("houses");
 
+export const getPresentAssetsFolder = () => ReplicatedStorage.WaitForChild("assets").WaitForChild("presents");
+
+export const getPresentModel = (rarity: Rarity) => getPresentAssetsFolder().FindFirstChild(rarity);
+
 export const getPlayerPlot = (player: Player) =>
 	Workspace.WaitForChild("Plots").WaitForChild(player.Name).WaitForChild("plot") as Model;
 
 export const getPlayerPlotFolder = (player: Player) =>
 	Workspace.WaitForChild("Plots").WaitForChild(player.Name) as Folder;
+
+export const formatSecondsToMinutesAndSeconds = (totalSeconds: number): string => {
+	const minutes = math.floor(totalSeconds / 60);
+	const remainingSeconds = totalSeconds % 60;
+
+	// Pad with leading zero if seconds is a single digit
+	const formattedSeconds = remainingSeconds < 10 ? `0${remainingSeconds}` : `${remainingSeconds}`;
+
+	return `${minutes}:${formattedSeconds}`;
+};

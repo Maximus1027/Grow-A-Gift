@@ -16,9 +16,12 @@ export function HouseSelect() {
 	const [title, setHouseTitle] = useState<string>("");
 
 	useEffect(() => {
+		print("{gbef");
 		if (!setpos.isComplete()) {
 			return;
 		}
+
+		print("idkj");
 
 		setvisible(true);
 

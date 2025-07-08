@@ -3,8 +3,8 @@
         "rate": 5,
         "cost": 1000000,
         "rarity": "legendary",
-        "displayName": "Tiki Hut",
-        "stock": 4,
+        "displayName": "Tiki Hut Fortnite",
+
         "loot": {
             "Common": 50,
             "Rare": 25,
@@ -18,8 +18,8 @@
         "cost": 100,
         "rarity": "common",
         "displayName": "Trailer",
-        "stock": 12,
-        "loot": {
+      
+         "loot": {
             "Common": 50,
             "Rare": 25,
             "Epic": 10,

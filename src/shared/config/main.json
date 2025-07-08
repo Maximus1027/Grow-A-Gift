@@ -1,5 +1,6 @@
 {
     "version": "1.0.0",
     "gridSize": 1, 
-    "hotbar": 7
+    "hotbar": 7,
+    "timeToStock": 120
 }

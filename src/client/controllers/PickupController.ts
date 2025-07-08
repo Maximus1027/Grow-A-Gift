@@ -16,8 +16,11 @@ export class PickupController implements OnStart {
 			if (input.UserInputType === Enum.UserInputType.MouseButton1) {
 				const state = store.getState();
 
+				print("test", state);
+
 				//Ensure not currently placing
 				if (state.build.selectedMachine !== "" || state.inventory.inventoryOpen) {
+					print("oops");
 					return;
 				}
 				this.promptPickup();
@@ -56,6 +59,7 @@ export class PickupController implements OnStart {
 	}
 
 	promptPickup() {
+		print(this.currentselection);
 		if (!this.currentselection) {
 			return;
 		}
