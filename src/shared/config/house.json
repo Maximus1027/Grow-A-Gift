@@ -1,16 +1,16 @@
 {
     "tiki": {
-        "rate": 5,
+        "rate": 1,
         "cost": 1000000,
         "rarity": "legendary",
         "displayName": "Tiki Hut",
         "stock": 4,
         "loot": {
-            "Common": 50,
-            "Rare": 25,
-            "Epic": 10,
-            "Legendary": 5,
-            "Mythic": 10
+            "Common": 2,
+            "Rare": 10,
+            "Epic": 30,
+            "Legendary": 100,
+            "Mythic": 1000
         }
     },
     "trailer": {

@@ -55,7 +55,7 @@ export class House extends BaseComponent<Attributes, Model> implements OnStart, 
 	 */
 	private drill() {
 		const lootTable = getLootTable(this.houseId);
-		const randomRarity = returnRandomRarity(lootTable);
+		const randomRarity = returnRandomRarity(lootTable, this.houseId);
 
 		const spawnLocation = this.spawn!.Position;
 

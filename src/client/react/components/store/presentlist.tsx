@@ -30,7 +30,7 @@ export function PresentList(props: PresentListProps) {
 			{Object.entries(props.lootTable)
 				.sort((a, b) => a[1] < b[1])
 				.map((rarity) => (
-					<PresentDisplay key={rarity[0]} rarity={rarity[0]} />
+					<PresentDisplay distance={2.3} key={rarity[0]} rarity={rarity[0]} />
 				))}
 		</frame>
 	);

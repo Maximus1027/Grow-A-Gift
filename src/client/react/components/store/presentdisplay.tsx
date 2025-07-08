@@ -5,6 +5,9 @@ import { getPresentModel } from "shared/utils/generictils";
 
 export interface PresentDisplayProps {
 	rarity: Rarity;
+	distance: number;
+	position?: UDim2;
+	size?: UDim2;
 }
 
 export function PresentDisplay(props: PresentDisplayProps) {
@@ -20,7 +23,7 @@ export function PresentDisplay(props: PresentDisplayProps) {
 
 		presentModel.Parent = camera.current;
 
-		presentModel.PivotTo(new CFrame(0, 0, -2.3).mul(CFrame.fromEulerAnglesXYZ(0, 0, 0)));
+		presentModel.PivotTo(new CFrame(0, 0, -props.distance).mul(CFrame.fromEulerAnglesXYZ(0, 0, 0)));
 
 		return () => {
 			presentModel.Destroy();
@@ -33,8 +36,10 @@ export function PresentDisplay(props: PresentDisplayProps) {
 			BackgroundColor3={Color3.fromRGB(255, 0, 0)}
 			BorderColor3={Color3.fromRGB(0, 0, 0)}
 			BorderSizePixel={0}
-			Size={UDim2.fromOffset(100, 100)}
+			Size={props.size}
+			AnchorPoint={new Vector2(0.5, 0.5)}
 			BackgroundTransparency={1}
+			Position={props.position}
 		>
 			<camera CFrame={new CFrame(new Vector3(0, 0, 0))} ref={camera} />
 		</viewportframe>

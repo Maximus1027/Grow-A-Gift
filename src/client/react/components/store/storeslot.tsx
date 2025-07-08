@@ -22,12 +22,6 @@ export function StoreSlot(props: StoreSlotProps) {
 	// eslint-disable-next-line roblox-ts/no-any
 	const maxStock = (Houses as HouseConfig)[props.houseid].stock;
 
-	useEffect(() => {
-		return () => {
-			"unmount";
-		};
-	}, []);
-
 	return (
 		<imagelabel
 			key={"slot"}
