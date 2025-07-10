@@ -36,10 +36,10 @@ export function PresentChancesHover() {
 		});
 
 		return () => {
-			print("dicso");
+			("dicso");
 			hb.Disconnect();
 		};
-	}, []);
+	}, [hover]);
 
 	return (
 		hover !== undefined && (

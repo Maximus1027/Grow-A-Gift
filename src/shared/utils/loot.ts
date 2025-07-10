@@ -3,8 +3,8 @@ import { Rarity } from "shared/enums/Rarity";
 
 import * as HousesConfig from "shared/config/house.json";
 
-export type LootTable = Record<Rarity, number>;
-export type HouseConfig = Record<string, { loot: LootTable; stock: number }>;
+export type LootTable = Partial<Record<Partial<Rarity>, number>>;
+export type HouseConfig = Record<string, { loot: LootTable; displayName: string; stock: number }>;
 
 /**
  * Cached values
@@ -33,13 +33,10 @@ export const returnRandomRarity = (loot: LootTable, houseid: string): Rarity => 
 	for (const rarity of rarities) {
 		const chance = loot[rarity];
 
-		if (math.random(1, chance) === 1) {
-			print(rarity, chance);
+		if (math.random(1, chance as number) === 1) {
 			return rarity;
 		}
 	}
-
-	print("fallback");
 
 	//incase no luck above return least rarest
 
@@ -58,8 +55,6 @@ export const getLootTable = (houseId: string): LootTable => {
 
 export const convertChanceToString = (rarity: Rarity, houseid: string) => {
 	const chance = getLootTable(houseid)[rarity];
-
-	print(getLootTable(houseid), rarity);
 
 	return `1 in ${chance}`;
 };

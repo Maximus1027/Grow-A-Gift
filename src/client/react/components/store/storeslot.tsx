@@ -48,7 +48,7 @@ export function StoreSlot(props: StoreSlotProps) {
 				<uiaspectratioconstraint />
 			</viewportframe>
 
-			{<PresentList lootTable={getLootTable(props.houseid)} />}
+			{<PresentList houseid={props.houseid} lootTable={getLootTable(props.houseid)} />}
 
 			<textlabel
 				key={"house"}

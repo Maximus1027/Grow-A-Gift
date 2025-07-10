@@ -16,11 +16,8 @@ export class PickupController implements OnStart {
 			if (input.UserInputType === Enum.UserInputType.MouseButton1) {
 				const state = store.getState();
 
-				print("test", state);
-
 				//Ensure not currently placing
 				if (state.build.selectedMachine !== "" || state.inventory.inventoryOpen) {
-					print("oops");
 					return;
 				}
 				this.promptPickup();
@@ -45,8 +42,6 @@ export class PickupController implements OnStart {
 
 			const selectionBox = potentialHouse?.FindFirstChild("select") as SelectionBox;
 
-			print(selectionBox);
-
 			//Remove last selectd
 			if (this.currentselection && this.currentselection !== selectionBox) {
 				this.currentselection!.Visible = false;
@@ -59,7 +54,6 @@ export class PickupController implements OnStart {
 	}
 
 	promptPickup() {
-		print(this.currentselection);
 		if (!this.currentselection) {
 			return;
 		}

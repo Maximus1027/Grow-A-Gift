@@ -9,7 +9,6 @@ const moneyDisplay = new Instance("NumberValue");
 export = hoarcekat(() => {
 	useEffect(() => {
 		moneyDisplay.Value = math.random(1, 1000);
-		print("test");
 	}, []);
 
 	return <MoneyDisplay value={moneyDisplay} />;

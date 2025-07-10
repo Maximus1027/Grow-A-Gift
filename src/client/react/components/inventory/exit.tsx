@@ -10,10 +10,6 @@ export interface ExitButtonProps {
 }
 
 export function ExitButton(props: ExitButtonProps) {
-	const dispatch = useProducer<RootStore>();
-
-	const [rot, setRot] = useMotion(0);
-
 	return (
 		<imagebutton
 			key={"exit"}
@@ -25,12 +21,11 @@ export function ExitButton(props: ExitButtonProps) {
 			BorderColor3={Color3.fromRGB(0, 0, 0)}
 			BorderSizePixel={0}
 			Position={props.Position}
-			Rotation={rot}
+			Rotation={0}
 			Size={props.Size}
 			Event={{
 				Activated: () => {
 					props.onClick();
-					setRot.spring(50);
 				},
 			}}
 		>

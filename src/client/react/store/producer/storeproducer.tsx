@@ -21,6 +21,7 @@ export const StoreActions = createProducer(initialState, {
 		return {
 			...state,
 			storeOpen: store,
+			hovering: undefined,
 		};
 	},
 	setStock: (state: StoreState, stock: Record<string, number>) => {

@@ -1,5 +1,5 @@
 import Object from "@rbxts/object-utils";
-import React, { useEffect, useState } from "@rbxts/react";
+import React, { useEffect, useMemo, useState } from "@rbxts/react";
 import { useProducer, useSelector } from "@rbxts/react-reflex";
 import { RootState, RootStore, store } from "client/react/store/store";
 
@@ -30,8 +30,6 @@ const getConfigMap = (storeType: storeType, config: Record<string, storeConfig>)
 			return a[1].cost < b[1].cost;
 		})
 		.map(([key, config]) => {
-			print(key, orderNum);
-
 			return (
 				<StoreSlot
 					key={key}
@@ -66,6 +64,8 @@ export function Store() {
 	const [pos, setpos] = useMotion(1.5);
 	const [visible, setvisible] = useState(false);
 
+	const countdown = useMemo(() => <CountdownTimer />, []);
+
 	useEffect(() => {
 		if (!setpos.isComplete()) {
 			return;
@@ -84,9 +84,7 @@ export function Store() {
 		}
 	}, [storeState.storeOpen]);
 
-	useEffect(() => {
-		print("stock update", storeState.stock);
-	}, [storeState.stock]);
+	useEffect(() => {}, [storeState.stock]);
 
 	return (
 		<screengui key={"sTOREDEV"} ZIndexBehavior={Enum.ZIndexBehavior.Sibling}>
@@ -133,7 +131,8 @@ export function Store() {
 						dispatch.toggleStore(undefined);
 					}}
 				/>
-				<CountdownTimer />
+
+				{countdown}
 			</imagelabel>
 		</screengui>
 	);

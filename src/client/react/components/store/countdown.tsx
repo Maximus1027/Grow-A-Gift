@@ -11,11 +11,11 @@ export function CountdownTimer() {
 	const [timeUntil, setTime] = useState(0);
 
 	useEffect(() => {
-		const count = RunService.Heartbeat.Connect(() =>
-			setTime(math.round(lastStock + (timeToStock as number) - os.clock())),
-		);
+		const count = RunService.Heartbeat.Connect(() => {
+			setTime(math.round(lastStock + (timeToStock as number) - os.time()));
+		});
+
 		return () => {
-			print("discon");
 			count.Disconnect();
 		};
 	}, [lastStock]);
@@ -24,7 +24,7 @@ export function CountdownTimer() {
 		<textlabel
 			key={"var_time"}
 			FontFace={new Font("rbxasset://fonts/families/FredokaOne.json")}
-			Text={"Next  Stock Reset in " + formatSecondsToMinutesAndSeconds(timeUntil <= 0 ? 0 : timeUntil)}
+			Text={"Next  Stock Reset in " + (timeUntil <= 0 ? 0 : formatSecondsToMinutesAndSeconds(timeUntil))}
 			TextColor3={Color3.fromRGB(255, 255, 255)}
 			TextScaled={true}
 			TextSize={14}

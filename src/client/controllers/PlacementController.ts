@@ -22,6 +22,7 @@ const mouse = player.GetMouse();
 export class PlacementController implements OnStart, OnInit {
 	private temp?: Folder;
 	private tempMachine?: Model;
+	private placementRotation: CFrame = new CFrame();
 	onInit() {
 		const machineFolder = new Instance("Folder");
 		machineFolder.Name = "temp";
@@ -36,6 +37,12 @@ export class PlacementController implements OnStart, OnInit {
 			}
 		});
 
+		UserInputService.InputBegan.Connect((input) => {
+			if (input.KeyCode === Enum.KeyCode.R) {
+				if (this.tempMachine) this.rotateTemporaryHouse();
+			}
+		});
+
 		const character = player.Character ?? player.CharacterAdded.Wait()[0];
 		const head = character.PrimaryPart as Part;
 		const plot = getPlayerPlot(player);
@@ -43,6 +50,13 @@ export class PlacementController implements OnStart, OnInit {
 		const gridSize = MainConfig.gridSize as number;
 
 		RunService.RenderStepped.Connect((dt) => {
+			const direction = Workspace.CurrentCamera!.CFrame.LookVector;
+
+			const angle = math.atan2(direction.X, direction.Z);
+
+			const rot = math.rad(90);
+			const fixedAngle = math.round(angle / rot) * rot;
+
 			if (this.tempMachine) {
 				const raycastParams = new RaycastParams();
 				raycastParams.AddToFilter(plot.FindFirstChild("baseplate") as BasePart);
@@ -53,14 +67,21 @@ export class PlacementController implements OnStart, OnInit {
 				const ray = Workspace.Raycast(origin, mouse.Hit.Position.sub(origin).Unit.mul(1000), raycastParams);
 
 				if (ray) {
-					const divPivot = ray.Position;
-					const gridPivot = new CFrame(
-						math.floor(divPivot.X / gridSize + 0.5) * gridSize,
+					const rayPosition = ray.Position;
+
+					const housePivot = this.tempMachine.GetPivot();
+
+					const gridPosition = new CFrame(
+						math.floor(rayPosition.X / gridSize + 0.5) * gridSize,
 						ray.Position.Y,
-						math.floor(divPivot.Z / gridSize + 0.5) * gridSize,
+						math.floor(rayPosition.Z / gridSize + 0.5) * gridSize,
 					);
 
-					this.tempMachine.PivotTo(this.tempMachine.GetPivot().Lerp(gridPivot, 0.6));
+					const target = gridPosition.mul(this.placementRotation);
+
+					const lerped = housePivot.Lerp(target, 0.4);
+
+					this.tempMachine.PivotTo(lerped);
 
 					const selectionBox = this.tempMachine.FindFirstChildWhichIsA("SelectionBox");
 
@@ -84,6 +105,10 @@ export class PlacementController implements OnStart, OnInit {
 		store.toggleBuild();
 	}
 
+	private rotateTemporaryHouse() {
+		this.placementRotation = this.placementRotation.mul(CFrame.fromEulerAnglesXYZ(0, math.rad(-90), 0));
+	}
+
 	/**
 	 * Place object on grid
 	 */
@@ -94,7 +119,7 @@ export class PlacementController implements OnStart, OnInit {
 
 		const plot = getPlayerPlot(player);
 
-		Events.onPlotAction.fire("place", this.tempMachine.Name, this.tempMachine.GetPivot().Position);
+		Events.onPlotAction.fire("place", this.tempMachine.Name, this.tempMachine.GetPivot());
 
 		this.stopPlacingMachine();
 		task.delay(0.1, () => store.selectMachine(""));
@@ -105,6 +130,11 @@ export class PlacementController implements OnStart, OnInit {
 	 * @param machineId
 	 */
 	public beginPlacingMachine(machineId: string) {
+		const character = player.Character;
+		if (!character) {
+			return;
+		}
+
 		const machineDisplay = houses.FindFirstChild(machineId)?.Clone() as Model;
 		machineDisplay.Name = `${machineDisplay}`;
 		machineDisplay.PivotTo(mouse.Hit);
@@ -125,9 +155,19 @@ export class PlacementController implements OnStart, OnInit {
 			}
 		});
 
-		this.tempMachine = machineDisplay;
+		//** Starting orientation manipulation so that it faces the character */
+		const direction = Workspace.CurrentCamera!.CFrame.LookVector;
 
-		print("wprking");
+		const angle = math.atan2(direction.X, direction.Z);
+
+		const rot = math.rad(90);
+		const fixedAngle = math.round(angle / rot) * rot;
+
+		this.placementRotation = CFrame.fromEulerAnglesXYZ(0, fixedAngle - math.pi / 2, 0);
+
+		machineDisplay.PivotTo(new CFrame(machineDisplay.GetPivot().Position).mul(this.placementRotation));
+
+		this.tempMachine = machineDisplay;
 	}
 
 	/**

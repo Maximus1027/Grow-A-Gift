@@ -63,7 +63,6 @@ export function Hotbar(props: HotbarProps) {
 						.map((house: NumberValue) => {
 							const model = houseModels.FindFirstChild(house.Name);
 							if (!model || !model.IsA("Model")) return <></>;
-							print(house, model);
 							return (
 								<HotbarSlot
 									key={house.Name}

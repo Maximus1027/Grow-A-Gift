@@ -45,8 +45,6 @@ export function HotbarSlot(props: HotbarProps) {
 			baseEvent.Disconnect();
 
 			machineDisplay.Destroy();
-
-			print("disconnect");
 		};
 	}, []);
 

@@ -5,7 +5,7 @@ import { ExitButton } from "../inventory/exit";
 import { useMotion } from "@rbxts/pretty-react-hooks";
 import { Events } from "client/network";
 import { SellButton } from "./sellbutton";
-import { getHouseCost } from "shared/utils/houseutils";
+import { getHouseCost, getHouseDisplayName } from "shared/utils/houseutils";
 
 export function HouseSelect() {
 	const pickup = useSelector((state: RootState) => state.inventory.promptHouseid);
@@ -16,12 +16,9 @@ export function HouseSelect() {
 	const [title, setHouseTitle] = useState<string>("");
 
 	useEffect(() => {
-		print("{gbef");
 		if (!setpos.isComplete()) {
 			return;
 		}
-
-		print("idkj");
 
 		setvisible(true);
 
@@ -39,7 +36,8 @@ export function HouseSelect() {
 	}, [pickup]);
 
 	return (
-		visible && (
+		visible &&
+		title !== "" && (
 			<screengui key={"HOUSESELECTION" + pickup} ResetOnSpawn={false} ZIndexBehavior={Enum.ZIndexBehavior.Global}>
 				<imagelabel
 					key={"mansion"}
@@ -113,7 +111,7 @@ export function HouseSelect() {
 					<textlabel
 						key={"selectionid"}
 						FontFace={new Font("rbxasset://fonts/families/FredokaOne.json")}
-						Text={title}
+						Text={getHouseDisplayName(title)}
 						TextColor3={Color3.fromRGB(255, 255, 255)}
 						TextScaled={true}
 						TextSize={14}

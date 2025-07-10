@@ -43,11 +43,12 @@ export const getPresentAssetsFolder = () => ReplicatedStorage.WaitForChild("asse
 
 export const getPresentModel = (rarity: Rarity) => getPresentAssetsFolder().FindFirstChild(rarity);
 
-export const getPlayerPlot = (player: Player) =>
-	Workspace.WaitForChild("Plots").WaitForChild(player.Name).WaitForChild("plot") as Model;
-
 export const getPlayerPlotFolder = (player: Player) =>
-	Workspace.WaitForChild("Plots").WaitForChild(player.Name) as Folder;
+	Workspace.FindFirstChild("Plots")
+		?.GetChildren()
+		.find((folder) => folder.GetAttribute("player") === player.Name);
+
+export const getPlayerPlot = (player: Player) => getPlayerPlotFolder(player)!.FindFirstChild("plot") as Model;
 
 export const formatSecondsToMinutesAndSeconds = (totalSeconds: number): string => {
 	const minutes = math.floor(totalSeconds / 60);

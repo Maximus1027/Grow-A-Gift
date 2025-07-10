@@ -10,9 +10,9 @@ export class PlotService implements OnStart, OnInit {
 	private plotMap = new Map<Player, Plot>();
 
 	onInit() {
-		const PlotsFolder = new Instance("Folder");
-		PlotsFolder.Name = "Plots";
-		PlotsFolder.Parent = Workspace;
+		// const PlotsFolder = new Instance("Folder");
+		// PlotsFolder.Name = "Plots";
+		// PlotsFolder.Parent = Workspace;
 	}
 
 	onStart() {
@@ -38,6 +38,16 @@ export class PlotService implements OnStart, OnInit {
 					}
 				});
 			});
+		});
+
+		Players.PlayerRemoving.Connect((player: Player) => {
+			const foundPlot = this.plotMap.get(player);
+
+			if (!foundPlot) {
+				return;
+			}
+
+			foundPlot.destroy();
 		});
 
 		Events.onPlotAction.connect((player: Player, action: unknown, ...args: unknown[]) => {

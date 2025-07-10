@@ -3,12 +3,17 @@ import React from "@rbxts/react";
 import { LootTable } from "shared/utils/loot";
 import { PresentDisplay } from "./presentdisplay";
 import { Rarity } from "shared/enums/Rarity";
+import { useProducer, useSelector } from "@rbxts/react-reflex";
+import { RootStore } from "client/react/store/store";
 
 export interface PresentListProps {
 	lootTable: LootTable;
+	houseid: string;
 }
 
 export function PresentList(props: PresentListProps) {
+	const dispatch = useProducer<RootStore>();
+
 	return (
 		<frame
 			key={"presents"}
@@ -19,6 +24,10 @@ export function PresentList(props: PresentListProps) {
 			BorderSizePixel={0}
 			Position={UDim2.fromScale(0.776, 0.244)}
 			Size={UDim2.fromScale(0.43, 0.3)}
+			Event={{
+				MouseEnter: () => dispatch.toggleChancesHover(props.houseid),
+				MouseLeave: () => dispatch.toggleChancesHover(undefined),
+			}}
 		>
 			<uigridlayout
 				key={"uIGridLayout"}

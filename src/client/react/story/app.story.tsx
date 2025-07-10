@@ -12,8 +12,6 @@ const player = Players.LocalPlayer;
 const moneyValue = new Instance("NumberValue");
 
 export = hoarcekat(() => {
-	print("test");
-
 	return (
 		<ReflexProvider producer={store}>
 			<Version />

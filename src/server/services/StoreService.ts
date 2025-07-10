@@ -30,8 +30,11 @@ export class StoreService implements OnStart {
 			}
 		});
 
+		this.setupPlayerStockLoop();
+
 		const setupPlayer = (player: Player) => {
 			this.playerStock.set(player, {});
+			//this.onStockRefresh(player);
 		};
 
 		//initiate players
@@ -39,8 +42,6 @@ export class StoreService implements OnStart {
 		Players.GetPlayers().forEach((player) => setupPlayer(player));
 		//remove players
 		Players.PlayerRemoving.Connect((player) => this.playerStock.delete(player));
-
-		this.setupPlayerStockLoop();
 	}
 
 	/**
@@ -49,8 +50,7 @@ export class StoreService implements OnStart {
 	setupPlayerStockLoop() {
 		const heartbeat = RunService.Heartbeat.Connect(() => {
 			for (const [player, stock] of this.playerStock) {
-				if (os.clock() - ((player.GetAttribute("laststock") as number) ?? 0) >= (timeToStock as number)) {
-					print("time for restock!");
+				if (os.time() - ((player.GetAttribute("laststock") as number) ?? 0) >= (timeToStock as number)) {
 					this.onStockRefresh(player);
 				}
 			}
@@ -62,14 +62,15 @@ export class StoreService implements OnStart {
 	 * @param player
 	 */
 	onStockRefresh(player: Player) {
+		print("refreshing player", player);
 		const stockTable: Record<string, number> = {};
 
-		Object.entries(HouseConfig).forEach((house) => (stockTable[house[0]] = math.random(1, house[1].stock)));
+		Object.entries(HouseConfig).forEach((house) => (stockTable[house[0]] = house[1].stock));
 
 		//update player and server with new values
 		this.playerStock.set(player, stockTable);
 
-		player.SetAttribute("laststock", os.clock());
+		player.SetAttribute("laststock", os.time());
 
 		//let client know (add record to store)
 		Events.onStock.fire(player, stockTable);

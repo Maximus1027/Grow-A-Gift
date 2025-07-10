@@ -41,8 +41,6 @@ export function InventorySlot(props: InventorySlotProps) {
 			baseEvent.Disconnect();
 
 			machineDisplay.Destroy();
-
-			print("disconnect");
 		};
 	}, []);
 

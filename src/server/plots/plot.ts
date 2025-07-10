@@ -33,17 +33,27 @@ export class Plot {
 	}
 
 	private createPlot() {
-		const plotFolder = new Instance("Folder");
-		plotFolder.Name = `${this.player.Name}`;
+		const PlotsFolder = Workspace.WaitForChild("Plots") as Folder & Folder[];
 
-		plotFolder.Parent = Workspace.WaitForChild("Plots");
+		//get next available plot
+		const plotFolder = PlotsFolder.GetChildren().find((folder) => folder.GetAttribute("player") === undefined);
+		plotFolder?.SetAttribute("player", this.player.Name);
 
-		const plotBaseplate = plotSquare.Clone();
-		plotBaseplate.PivotTo(new CFrame(0, 0, 0));
-		plotBaseplate.PrimaryPart!.Size = new Vector3(125, 1, 125);
-		plotBaseplate.Parent = plotFolder;
+		// const plotFolder = new Instance("Folder");
+		// plotFolder.Name = `${this.player.Name}`;
 
-		this.plotBaseplate = plotBaseplate.PrimaryPart;
+		// plotFolder.Parent = Workspace.WaitForChild("Plots");
+
+		// const plotBaseplate = plotSquare.Clone();
+		// plotBaseplate.PivotTo(new CFrame(0, 0, 0));
+		// plotBaseplate.PrimaryPart!.Size = new Vector3(125, 1, 125);
+		// plotBaseplate.Parent = plotFolder;
+
+		const placementGrid = plotFolder?.FindFirstChild("plot");
+
+		if (placementGrid?.IsA("Model")) {
+			this.plotBaseplate = placementGrid.PrimaryPart;
+		}
 
 		const houseFolder = new Instance("Folder");
 		houseFolder.Name = "houses";
@@ -60,15 +70,21 @@ export class Plot {
 	 * Place void miner and define it's position by model's center
 	 * @param pos
 	 */
-	private placeHouse(houseId: string, pos: Vector3) {
-		if (!doesHouseExist(houseId) || !this.plotBaseplate || !doesPlayerOwnHouse(this.player, houseId)) {
+	private placeHouse(houseId: string, cframe: CFrame) {
+		if (
+			!doesHouseExist(houseId) ||
+			!this.plotBaseplate ||
+			!doesPlayerOwnHouse(this.player, houseId) ||
+			!this.player.Character
+		) {
+			warn(`A severe issue cancelled placing ${this.player}'s ${houseId}`);
 			return;
 		}
 
 		//create new House
 		const newHouse = houseFolder.FindFirstChild(houseId)?.Clone() as Model;
 		newHouse!.Name = newHouse?.Name + "-" + HttpService.GenerateGUID(false);
-		newHouse!.PivotTo(new CFrame(pos));
+		newHouse!.PivotTo(cframe);
 
 		//	newHouse.AddTag("Drill");
 		newHouse.SetAttribute("owner", this.player.Name);
@@ -85,17 +101,14 @@ export class Plot {
 
 		newHouse!.Parent = this.getHouseFolder();
 
-		print(newHouse.GetPivot());
-
 		//Ensure nothing exists in its spot
 		if (isModelIntersecting(newHouse)) {
-			print("??");
 			newHouse.Destroy();
 			return;
 		}
 
 		//place on grid
-		this.grid.set(newHouse?.Name, pos.sub(newHouse.GetPivot().Position));
+		this.grid.set(newHouse?.Name, cframe.Position.sub(newHouse.GetPivot().Position));
 
 		//remove from inventory
 		const houseObject = getPlayerHouseObject(this.player, houseId);
@@ -163,8 +176,6 @@ export class Plot {
 	 * @param args
 	 */
 	public dispatch(action: string, args: unknown[]) {
-		print(action, args);
-
 		if (!args || !(args.size() > 0)) {
 			return;
 		}
@@ -172,7 +183,7 @@ export class Plot {
 		switch (action) {
 			case "place":
 				//ensure there are two args and follow the correct types
-				if (!(args.size() > 1) || !t.string(args[0]) || !t.Vector3(args[1])) {
+				if (!(args.size() > 1) || !t.string(args[0]) || !t.CFrame(args[1])) {
 					return;
 				}
 
@@ -197,6 +208,24 @@ export class Plot {
 				this.sellHouse(houseid);
 			}
 		}
+	}
+
+	/**
+	 * When player leaves the game cleanup anything relating to player
+	 */
+	public destroy() {
+		const houses = this.getPlotFolder().FindFirstChild("houses");
+		const npcs = this.getPlotFolder().FindFirstChild("NPC");
+
+		if (houses) {
+			houses.Destroy();
+		}
+
+		if (npcs) {
+			npcs.Destroy();
+		}
+
+		this.getPlotFolder().SetAttribute("player", undefined);
 	}
 }
 

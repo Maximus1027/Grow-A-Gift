@@ -14,7 +14,6 @@ export function PresentDisplay(props: PresentDisplayProps) {
 	const camera = useRef<Camera>();
 
 	useEffect(() => {
-		print(camera);
 		const presentModel = getPresentModel(props.rarity)?.Clone() as Model;
 
 		if (!presentModel) {

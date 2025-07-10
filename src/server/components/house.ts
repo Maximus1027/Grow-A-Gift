@@ -39,6 +39,8 @@ export class House extends BaseComponent<Attributes, Model> implements OnStart, 
 		this.spawn = (
 			(this.instance.Parent?.Parent!.FindFirstChild("plot") as Model).FindFirstChild("spawn") as Model
 		).PrimaryPart;
+
+		this.drill();
 	}
 
 	onTick(dt: number): void {
@@ -64,7 +66,5 @@ export class House extends BaseComponent<Attributes, Model> implements OnStart, 
 		}
 	}
 
-	destroy(): void {
-		print("destroye");
-	}
+	destroy(): void {}
 }

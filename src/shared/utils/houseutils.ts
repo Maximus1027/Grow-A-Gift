@@ -1,5 +1,6 @@
 import * as Houses from "shared/config/house.json";
 import Object from "@rbxts/object-utils";
+import { HouseConfig } from "./loot";
 
 /**
  * <House, Integer> $$ map
@@ -17,4 +18,8 @@ const valueMap: Map<string, number> = new Map(
  */
 export const getHouseCost = (houseid: string) => {
 	return valueMap.get(houseid);
+};
+
+export const getHouseDisplayName = (houseid: string) => {
+	return (Houses as HouseConfig)[houseid].displayName;
 };

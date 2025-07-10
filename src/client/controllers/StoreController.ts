@@ -17,8 +17,8 @@ export class StoreController implements OnStart {
 		store.setLastStock(player.GetAttribute("laststock") as number);
 
 		player.AttributeChanged.Connect((attribute) => {
+			print("changed");
 			//update when timer changes
-			print("updating", attribute);
 			if (attribute === "laststock") {
 				store.setLastStock(player.GetAttribute("laststock") as number);
 			}

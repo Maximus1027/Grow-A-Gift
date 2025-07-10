@@ -9,6 +9,7 @@ import { Presents } from "../components/present/Presents";
 import { Inventory } from "../components/inventory/inventory";
 import { HouseSelect } from "../components/houseselect/SelectHouse";
 import { Store } from "../components/store/Store";
+import { PresentChancesHover } from "../components/hover/PresentHover";
 
 const player = Players.LocalPlayer;
 const stats = player.WaitForChild("stats");
@@ -26,6 +27,7 @@ export function App() {
 			<Inventory />
 			<Store />
 			<HouseSelect />
+			<PresentChancesHover />
 		</ReflexProvider>
 	);
 }

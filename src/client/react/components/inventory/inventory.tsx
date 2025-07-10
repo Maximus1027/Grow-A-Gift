@@ -58,8 +58,6 @@ export function Inventory() {
 							.map((house) => {
 								const model = getHouseModel(house.Name);
 
-								print(house, model);
-
 								if (!t.instanceIsA("Model")(model)) {
 									return <></>;
 								}
