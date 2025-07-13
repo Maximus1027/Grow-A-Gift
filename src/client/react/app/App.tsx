@@ -16,14 +16,12 @@ const stats = player.WaitForChild("stats");
 const moneyValue = stats.WaitForChild("Money") as NumberValue;
 
 export function App() {
-	const hotbarFolder = player.WaitForChild("stats").WaitForChild("hotbar") as Folder;
-
 	return (
 		<ReflexProvider producer={store}>
 			<Version />
 			<Presents />
 			<MoneyDisplay value={moneyValue} />
-			<Hotbar inventoryFolder={hotbarFolder} />
+			<Hotbar />
 			<Inventory />
 			<Store />
 			<HouseSelect />

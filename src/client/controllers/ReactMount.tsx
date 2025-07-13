@@ -4,7 +4,9 @@ import { createPortal, createRoot } from "@rbxts/react-roblox";
 import { Players } from "@rbxts/services";
 import { App } from "client/react/app/App";
 
-@Controller({})
+@Controller({
+	loadOrder: 2,
+})
 export class ReactMount implements OnStart {
 	onStart() {
 		const root = createRoot(new Instance("Folder"));

@@ -2,7 +2,6 @@
     "tiki": {
         "rate": 8,
         "cost": 100,
-        "rarity": "legendary",
         "displayName": "Tiki Hut",
         "stock": 4,
         "loot": {
@@ -16,7 +15,6 @@
     "trailer": {
         "rate": 8,
         "cost": 5000,
-        "rarity": "common",
         "displayName": "Trailer",
         "stock": 6,
         "loot": {
@@ -25,5 +23,24 @@
             "Legendary": 80,
             "Mythic": 800
         }
-    } 
-} 
+    },
+    "tinyhouse": {
+        "rate": 8,
+        "cost": 10000000,
+        "displayName": "Tiny House",
+        "stock": 3,
+        "loot": {
+            "Legendary": 2,
+            "Mythic": 5
+        }
+    },
+    "tinyhouse2": {
+        "rate": 1,
+        "cost": 10000,
+        "displayName": "Tiny House TEST",
+        "stock": 3,
+        "loot": {
+            "Mythic": 1
+        }
+    }
+}

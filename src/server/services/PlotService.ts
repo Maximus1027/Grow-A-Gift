@@ -4,10 +4,17 @@ import { Players, Workspace } from "@rbxts/services";
 import { t } from "@rbxts/t";
 import { Events } from "server/network";
 import { Plot } from "server/plots/plot";
+import { DataService } from "./DataService";
+import { Profile } from "@rbxts/profileservice/globals";
+import { ProfileData } from "shared/types/profile";
+import { InventoryService } from "./InventoryService";
 
-@Service({})
+@Service({
+	loadOrder: 1,
+})
 export class PlotService implements OnStart, OnInit {
 	private plotMap = new Map<Player, Plot>();
+	constructor(readonly inventoryService: InventoryService) {}
 
 	onInit() {
 		// const PlotsFolder = new Instance("Folder");
@@ -16,7 +23,7 @@ export class PlotService implements OnStart, OnInit {
 	}
 
 	onStart() {
-		Players.PlayerAdded.Connect((player: Player) => {
+		this.inventoryService.PlayerLoaded.Connect((player: Player) => {
 			const plot = this.setupPlayer(player);
 
 			const spawnPlot = this.plotMap
@@ -29,7 +36,7 @@ export class PlotService implements OnStart, OnInit {
 				return;
 			}
 
-			player.CharacterAdded.Connect((character) => {
+			const characterAdded = (character: Model) => {
 				character.PivotTo(spawnPlot.CFrame.add(new Vector3(0, character.GetExtentsSize().Y, 0)));
 
 				character.GetDescendants().forEach((part) => {
@@ -37,7 +44,14 @@ export class PlotService implements OnStart, OnInit {
 						part.CollisionGroup = "plr";
 					}
 				});
-			});
+			};
+
+			player.CharacterAdded.Connect((character) => characterAdded(character));
+
+			//If character loaded before data
+			if (player.Character) {
+				characterAdded(player.Character);
+			}
 		});
 
 		Players.PlayerRemoving.Connect((player: Player) => {

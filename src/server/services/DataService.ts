@@ -1,71 +1,180 @@
 import { Service, OnStart } from "@flamework/core";
-import { Players } from "@rbxts/services";
-import { doesPlayerOwnHouse, getPlayerHouseObject } from "shared/utils/playertils";
+import { HttpService, Players } from "@rbxts/services";
+import { ProfileData } from "shared/types/profile";
+import { doesPlayerOwnHouse, getInventoryFolder, getMoneyStat, getPlayerHouseObject } from "shared/utils/playertils";
+import { InventoryService } from "./InventoryService";
+import ProfileService from "@rbxts/profileservice";
+import { Profile } from "@rbxts/profileservice/globals";
+import Object from "@rbxts/object-utils";
+import { Plot, PlotFolder } from "server/plots/plot";
+import { t } from "@rbxts/t";
+import Signal from "@rbxts/lemon-signal";
 
-@Service({})
+const defaultProfile: ProfileData = {
+	money: 10000000,
+	inventory: {},
+	equipped: [],
+	plot: {
+		placed: {},
+	},
+};
+
+@Service({
+	loadOrder: 0,
+})
 export class DataService implements OnStart {
+	private profileStore = ProfileService.GetProfileStore("PlayerData", defaultProfile);
+	private loadedProfiles = new Map<Player, Profile<ProfileData>>();
+
+	public PlayerLoaded = new Signal<[Player, Profile<ProfileData>]>();
+
 	onStart() {
-		Players.PlayerAdded.Connect((player) => this.setupPlayer(player));
-		Players.GetPlayers().forEach((player) => this.setupPlayer(player));
+		Players.PlayerAdded.Connect((player) => this.createProfile(player));
+		Players.GetPlayers().forEach((player) => this.createProfile(player));
+
+		Players.PlayerRemoving.Connect((player) => this.saveProfile(player));
 	}
 
-	private setupPlayer(player: Player) {
+	/**
+	 * Create profile for player
+	 * @param player
+	 * @returns
+	 */
+	private createProfile(player: Player) {
+		const userid = player.UserId;
+		const key = `profile_${userid}`;
+
+		const profile = this.profileStore.LoadProfileAsync(key);
+
+		if (!profile) {
+			return player.Kick("ERROR WITH LOADING DATA");
+		}
+
+		profile.ListenToRelease(() => {
+			this.loadedProfiles.delete(player);
+			player.Kick("Profile released");
+		});
+
+		profile.AddUserId(userid);
+		profile.Reconcile();
+
+		this.loadedProfiles.set(player, profile);
+
+		this.setupPlayer(player, profile);
+	}
+
+	/**
+	 * Setup folders and values
+	 * @param player
+	 */
+	private setupPlayer(player: Player, profile: Profile<ProfileData>) {
 		const dataFolder = new Instance("Folder");
 		dataFolder.Name = "stats";
 		dataFolder.Parent = player;
 
 		const money = new Instance("NumberValue");
 		money.Name = "Money";
-		money.Value = 100000000;
 		money.Parent = dataFolder;
 
 		const inventory = new Instance("Folder");
 		inventory.Name = "inventory";
 		inventory.Parent = dataFolder;
 
-		const hotbar = new Instance("Folder");
-		hotbar.Name = "hotbar";
-		hotbar.Parent = dataFolder;
+		/** Load Data */
+		money.Value = profile.Data.money;
 
-		this.addHouseToInventory(player, "tiki", 5, true);
-		this.addHouseToInventory(player, "trailer", 5);
-	}
+		// this.addHouseToInventory(player, "tiki", 5, true);
+		// this.addHouseToInventory(player, "trailer", 5);
 
-	public getMoneyStat(player: Player): NumberValue {
-		return player.FindFirstChild("stats")?.FindFirstChild("Money") as NumberValue;
-	}
+		/** Done Loading */
 
-	public getInventoryFolder(player: Player): Folder {
-		return player.WaitForChild("stats").WaitForChild("inventory") as Folder;
-	}
-
-	public getHotbarInventory(player: Player): Folder {
-		return player.WaitForChild("stats").WaitForChild("hotbar") as Folder;
+		this.PlayerLoaded.Fire(player, profile);
 	}
 
 	/**
-	 * Adds a house to the player's inventory
+	 * Save profile
 	 * @param player
-	 * @param houseId
-	 * @param amount
-	 * @param hotbar if true, house is automatically placed in hotbar
 	 * @returns
 	 */
-	public addHouseToInventory(player: Player, houseId: string, amount?: number, hotbar?: boolean) {
-		if (doesPlayerOwnHouse(player, houseId)) {
-			const object = getPlayerHouseObject(player, houseId) as NumberValue;
-			object.Value += amount ?? 1;
+	private saveProfile(player: Player) {
+		const profile = this.loadedProfiles.get(player);
 
+		if (!profile) {
 			return;
 		}
 
-		const house = new Instance("NumberValue");
-		house.Name = houseId;
+		profile.Data.money = getMoneyStat(player).Value;
+		this.saveInventory(player);
 
-		house.Value = amount ?? 1;
+		profile.Release();
+		this.loadedProfiles.delete(player);
 
-		house.SetAttribute("equip", hotbar);
+		print(`Saved profile for ${player.Name}`);
+	}
 
-		house.Parent = this.getInventoryFolder(player);
+	/**
+	 *
+	 * @param player
+	 */
+	private saveInventory(player: Player) {
+		const profile = this.loadedProfiles.get(player);
+
+		if (!profile) {
+			return;
+		}
+
+		const newInventory = {} as Record<string, number>;
+		const equip: string[] = {} as string[];
+
+		getInventoryFolder(player)
+			.GetChildren()
+			.forEach((item) => {
+				newInventory[item.Name] = (item as NumberValue).Value;
+
+				if (item.GetAttribute("equip") !== undefined) {
+					equip.push(item.Name);
+				}
+			});
+
+		profile.Data.inventory = newInventory;
+		profile.Data.equipped = equip;
+	}
+
+	/**
+	 * Save the player's plot
+	 * @param player
+	 * @param plot
+	 * @returns
+	 */
+	public savePlots(player: Player, plot: Plot) {
+		const profile = this.loadedProfiles.get(player);
+
+		if (!profile) {
+			return;
+		}
+
+		const placed = {} as ProfileData["plot"]["placed"];
+
+		const grid = plot.getGrid();
+		grid.forEach((cframe, house) => {
+			if (t.string(house)) {
+				const rotation = cframe.ToEulerAnglesXYZ();
+				const cframeEncode = [cframe.X, cframe.Y, cframe.Z, rotation[0], rotation[1], rotation[2]];
+
+				placed[house] = cframeEncode;
+			}
+		});
+
+		profile.Data.plot.placed = placed;
+	}
+
+	public getProfile(player: Player) {
+		const profile = this.loadedProfiles.get(player);
+
+		if (!profile) {
+			return;
+		}
+
+		return profile;
 	}
 }

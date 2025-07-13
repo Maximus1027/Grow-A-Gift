@@ -10,11 +10,7 @@ import { RootState } from "client/react/store/store";
 const houseModels = ReplicatedStorage.WaitForChild("assets").WaitForChild("houses") as Folder;
 const player = Players.LocalPlayer;
 
-export interface HotbarProps {
-	inventoryFolder: Folder;
-}
-
-export function Hotbar(props: HotbarProps) {
+export function Hotbar() {
 	const houseids = useSelector((state: RootState) => state.inventory.inventory);
 
 	return (
@@ -59,7 +55,8 @@ export function Hotbar(props: HotbarProps) {
 					/>
 					<InventoryOpener />
 					{houseids
-						.filter((house) => house.GetAttribute("equip") === true)
+						.filter((house) => house.GetAttribute("equip") !== undefined)
+						.sort((a, b) => (a.GetAttribute("equip") as number) < (b.GetAttribute("equip") as number))
 						.map((house: NumberValue) => {
 							const model = houseModels.FindFirstChild(house.Name);
 							if (!model || !model.IsA("Model")) return <></>;

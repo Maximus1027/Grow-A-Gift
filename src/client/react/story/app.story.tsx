@@ -16,7 +16,7 @@ export = hoarcekat(() => {
 		<ReflexProvider producer={store}>
 			<Version />
 			<MoneyDisplay value={moneyValue} />
-			<Hotbar inventoryFolder={new Instance("Folder")} />
+			<Hotbar />
 		</ReflexProvider>
 	);
 });

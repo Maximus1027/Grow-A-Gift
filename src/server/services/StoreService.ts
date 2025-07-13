@@ -9,12 +9,13 @@ import Object from "@rbxts/object-utils";
 import { timeToStock } from "shared/config/main.json";
 
 import * as HouseConfig from "shared/config/house.json";
+import { InventoryService } from "./InventoryService";
 
 @Service({})
 export class StoreService implements OnStart {
 	private playerStock = new Map<Player, Record<string, number>>();
 
-	constructor(private readonly dataService: DataService) {}
+	constructor(private readonly inventoryService: InventoryService) {}
 
 	onStart() {
 		Events.onStoreAction.connect((player: Player, action: unknown, id: unknown) => {
@@ -95,14 +96,14 @@ export class StoreService implements OnStart {
 			return;
 		}
 
-		const playerValue = this.dataService.getMoneyStat(player);
+		const playerValue = player.stats.Money;
 
 		if (!playerValue) {
 			return;
 		}
 
 		if (playerValue.Value >= getHousePrice) {
-			this.dataService.addHouseToInventory(player, houseid, 1, true);
+			this.inventoryService.addHouseToInventory(player, houseid, 1, true);
 			playerValue.Value -= getHousePrice;
 			stock[houseid] -= 1;
 

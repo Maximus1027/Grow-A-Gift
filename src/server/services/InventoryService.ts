@@ -1,11 +1,34 @@
 import { Service, OnStart } from "@flamework/core";
 import { t } from "@rbxts/t";
 import { Events } from "server/network";
-import { getInventoryFolder, getPlayerHouseObject } from "shared/utils/playertils";
+import { doesPlayerOwnHouse, getInventoryFolder, getPlayerHouseObject } from "shared/utils/playertils";
 
-@Service({})
+import MainConfig from "shared/config/main.json";
+import { DataService } from "./DataService";
+import Object from "@rbxts/object-utils";
+import Signal from "@rbxts/lemon-signal";
+
+@Service({
+	loadOrder: 1,
+})
 export class InventoryService implements OnStart {
+	constructor(private readonly dataService: DataService) {}
+
+	public PlayerLoaded = new Signal<Player>();
+
 	onStart() {
+		this.dataService.PlayerLoaded.Connect((player, profile) => {
+			const equippedHouses = profile.Data.equipped;
+			for (const [houseid, amount] of Object.entries(profile.Data.inventory)) {
+				const wasEquipped = equippedHouses.includes(houseid);
+
+				this.addHouseToInventory(player, houseid, amount, wasEquipped);
+			}
+
+			print(getInventoryFolder(player).GetChildren());
+			this.PlayerLoaded.Fire(player);
+		});
+
 		Events.onInventoryAction.connect((player: Player, action: unknown, ...args: unknown[]) => {
 			//Ensure correct event formatting
 			if (!t.string(action) || args.size() < 1 || !t.string(args[0])) {
@@ -19,11 +42,11 @@ export class InventoryService implements OnStart {
 					//check if slot was passed
 					const slot = args.size() >= 2 ? (args[1] as number) : undefined;
 
-					this.moveHouseToHotbar(player, houseid, slot);
+					this.equipHouse(player, houseid, true);
 					break;
 				}
 				case "addInventory": {
-					this.moveHouseToInventory(player, houseid);
+					this.unequipHouse(player, houseid);
 					break;
 				}
 			}
@@ -31,38 +54,108 @@ export class InventoryService implements OnStart {
 	}
 
 	/**
-	 * Moves house item to hotbar from inventory, if no slot then it will replace first slot and send the last slot into the inventory.
+	 * Adds a house to the player's inventory
 	 * @param player
-	 * @param houseid
-	 * @param slot
+	 * @param houseId
+	 * @param amount
+	 * @param hotbar if true, house is automatically placed in hotbar
+	 * @returns
 	 */
-	moveHouseToHotbar(player: Player, houseid: string, slot?: number) {
-		const inventoryFolder = getInventoryFolder(player);
+	public addHouseToInventory(player: Player, houseid: string, amount?: number, hotbar?: boolean) {
+		if (doesPlayerOwnHouse(player, houseid)) {
+			const object = getPlayerHouseObject(player, houseid) as NumberValue;
+			object.Value += amount ?? 1;
 
-		const houseValue = getPlayerHouseObject(player, houseid);
+			const equipHouse = false;
 
-		if (!houseValue || houseValue.GetAttribute("equip") === true) {
-			warn(`${player} does not own ${houseid} or it is already in hotbar`);
+			//this.inventoryService.equipHouse(player, houseid, equipHouse);
+
 			return;
 		}
 
-		houseValue.SetAttribute("equip", true);
+		const house = new Instance("NumberValue");
+		house.Name = houseid;
+		house.Value = amount ?? 1;
+
+		house.Parent = getInventoryFolder(player);
+
+		if (hotbar) this.equipHouse(player, houseid, true);
 	}
 
 	/**
-	 * Move house object from hotbar to inventory
+	 * Equip or unequip House
 	 * @param player
 	 * @param houseid
+	 * @param doEquip true to equip, false to unequip
 	 * @returns
 	 */
-	moveHouseToInventory(player: Player, houseid: string) {
-		const houseValue = getPlayerHouseObject(player, houseid);
+	public equipHouse(player: Player, houseid: string, doEquip: boolean) {
+		const houseValue = getPlayerHouseObject(player, houseid) as NumberValue;
 
 		if (!houseValue) {
-			warn(`Could not find ${houseid} in ${player}'s inventory`);
 			return;
 		}
 
-		houseValue.SetAttribute("equip", false);
+		if (!doEquip) {
+			houseValue.SetAttribute("equip", undefined);
+			return;
+		}
+
+		//If already equipped
+		if (houseValue.GetAttribute("equip") !== undefined) {
+			return;
+		}
+
+		if (this.getEquippedHouses(player).size() >= MainConfig.hotbar) {
+			const lastSlotItem = this.findLastEquippedHouse(player);
+
+			print(lastSlotItem);
+
+			if (lastSlotItem !== undefined) {
+				this.unequipHouse(player, lastSlotItem);
+			}
+		}
+
+		//equip or unequip -> attribute
+		houseValue.SetAttribute("equip", os.time());
+	}
+
+	/**
+	 * Unequip house from hotbar
+	 * @param player
+	 * @param houseid
+	 */
+	public unequipHouse(player: Player, houseid: string) {
+		this.equipHouse(player, houseid, false);
+	}
+
+	/**
+	 * Remove the last house to be equipped (last slot)
+	 * @param player
+	 * @returns
+	 */
+	private findLastEquippedHouse(player: Player) {
+		const inventoryFolder = getInventoryFolder(player);
+
+		const lastItem = inventoryFolder
+			.GetChildren()
+			.filter((child) => child.GetAttribute("equip") !== undefined)
+			.sort((a, b) => (a.GetAttribute("equip") as number) > (b.GetAttribute("equip") as number))
+			.pop();
+
+		return lastItem ? lastItem.Name : undefined;
+	}
+
+	/**
+	 * Get houses in hotbar
+	 * @param player
+	 * @returns
+	 */
+	private getEquippedHouses(player: Player) {
+		const inventoryFolder = getInventoryFolder(player);
+
+		const equipped = inventoryFolder.GetChildren().filter((child) => child.GetAttribute("equip") !== undefined);
+
+		return equipped;
 	}
 }

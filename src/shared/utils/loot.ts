@@ -1,5 +1,5 @@
 import Object from "@rbxts/object-utils";
-import { Rarity } from "shared/enums/Rarity";
+import { getRarityColor, Rarity } from "shared/enums/Rarity";
 
 import * as HousesConfig from "shared/config/house.json";
 
@@ -53,10 +53,28 @@ export const getLootTable = (houseId: string): LootTable => {
 	return config[houseId].loot;
 };
 
+/**
+ * Get "1 in x" string from rarity and houseid
+ * @param rarity
+ * @param houseid
+ * @returns "1 in x"
+ */
 export const convertChanceToString = (rarity: Rarity, houseid: string) => {
 	const chance = getLootTable(houseid)[rarity];
 
 	return `1 in ${chance}`;
+};
+
+/**
+ * Get richtext "1 in x" from rarity and houseid
+ * @param rarity
+ * @param houseid
+ * @returns
+ */
+export const convertChanceToStringMarkup = (rarity: Rarity, houseid: string) => {
+	const chance = getLootTable(houseid)[rarity];
+
+	return `1 in <font color="#${getRarityColor(rarity).ToHex()}">${chance}</font>`;
 };
 
 export const getOrderedLoottable = (houseid: string) => rarityOrderCache[houseid];

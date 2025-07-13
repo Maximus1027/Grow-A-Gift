@@ -18,6 +18,7 @@ export function HotbarSlot(props: HotbarProps) {
 	const inventoryOpen = useSelector((state: RootState) => state.inventory.inventoryOpen);
 	const camera = useRef();
 	const [houseAmount, setAmount] = useState<number>(props.valueBase.Value);
+	const placementController = Dependency<PlacementController>();
 
 	useEffect(() => {
 		const machineDisplay = props.houseModel.Clone() as Model;
@@ -62,8 +63,6 @@ export function HotbarSlot(props: HotbarProps) {
 			Size={UDim2.fromScale(0.171, 1)}
 			Event={{
 				MouseButton1Click: () => {
-					const placementController = Dependency<PlacementController>();
-
 					if (inventoryOpen) {
 						Events.onInventoryAction("addInventory", props.houseId);
 						return;

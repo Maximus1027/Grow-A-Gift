@@ -27,6 +27,7 @@ export class NPC {
 		readonly spawnLocation: Vector3,
 		readonly goalLocation: Vector3,
 		readonly presentRarity: Rarity,
+		readonly chanceDisplay: string,
 		readonly owner: Player,
 	) {
 		const newNPC = npcModel.Clone();
@@ -67,6 +68,7 @@ export class NPC {
 		const presentWorth = getPresentValue(this.presentRarity);
 		this.presentWorth = math.random(presentWorth!.min, presentWorth!.max);
 		newPresent.SetAttribute("value", this.presentWorth);
+		newPresent.SetAttribute("chance", this.chanceDisplay);
 
 		const torso = this.entity!.Torso;
 		newPresent.Parent = torso;

@@ -1,9 +1,12 @@
 import { Dependency } from "@flamework/core";
 import Object from "@rbxts/object-utils";
+import { Profile } from "@rbxts/profileservice/globals";
 import { HttpService, ReplicatedStorage, ServerStorage, Workspace } from "@rbxts/services";
 import { t } from "@rbxts/t";
 import { DataService } from "server/services/DataService";
+import { InventoryService } from "server/services/InventoryService";
 import * as HousesConfig from "shared/config/house.json";
+import { ProfileData } from "shared/types/profile";
 import { doesHouseExist, isModelIntersecting } from "shared/utils/generictils";
 import { getHouseCost } from "shared/utils/houseutils";
 import { doesPlayerOwnHouse, getPlayerHouseObject } from "shared/utils/playertils";
@@ -16,11 +19,13 @@ export class Plot {
 	constructor(readonly player: Player) {
 		this.plot = this.createPlot();
 	}
+	private inventoryService = Dependency<InventoryService>();
 	private dataService = Dependency<DataService>();
 
 	private plot: PlotFolder;
 	private plotBaseplate?: BasePart;
-	private grid = new Map<string, Vector3>();
+	private grid = new Map<string, CFrame>();
+	private housesFolder?: Folder;
 
 	public getPlotFolder(): PlotFolder {
 		return this.plot;
@@ -30,6 +35,29 @@ export class Plot {
 		const houseFolder = this.getPlotFolder().FindFirstChild("houses") as Partial<PlotFolder>["houses"];
 
 		return houseFolder;
+	}
+
+	public loadData() {
+		const profile = this.dataService.getProfile(this.player);
+
+		if (!profile) {
+			return;
+		}
+		const placement = profile.Data.plot.placed;
+		Object.entries(placement).forEach((entry) => {
+			const encoded = entry[1];
+
+			print(encoded);
+
+			//position and rotation
+			const rotation = CFrame.Angles(encoded[3], encoded[4], encoded[5]);
+			const cframe = new CFrame(encoded[0], encoded[1], encoded[2]).mul(rotation);
+
+			print(this.plotBaseplate?.Position);
+
+			const houseid = entry[0].split("-")[0];
+			this.placeHouse(houseid, cframe.add(this.plotBaseplate!.Position), true);
+		});
 	}
 
 	private createPlot() {
@@ -58,25 +86,32 @@ export class Plot {
 		const houseFolder = new Instance("Folder");
 		houseFolder.Name = "houses";
 		houseFolder.Parent = plotFolder;
+		this.housesFolder = houseFolder;
 
 		const npcFolder = new Instance("Folder");
 		npcFolder.Name = "NPC";
 		npcFolder.Parent = plotFolder;
+
+		this.loadData();
 
 		return plotFolder as PlotFolder;
 	}
 
 	/**
 	 * Place void miner and define it's position by model's center
-	 * @param pos
+	 * @param houseId
+	 * @param cframe
+	 * @param bypassOwnership
+	 *
 	 */
-	private placeHouse(houseId: string, cframe: CFrame) {
+	private placeHouse(houseId: string, cframe: CFrame, bypassOwnership?: boolean) {
 		if (
 			!doesHouseExist(houseId) ||
 			!this.plotBaseplate ||
-			!doesPlayerOwnHouse(this.player, houseId) ||
+			!(bypassOwnership || doesPlayerOwnHouse(this.player, houseId)) ||
 			!this.player.Character
 		) {
+			warn(this.plotBaseplate, doesPlayerOwnHouse(this.player, houseId), this.player.Character);
 			warn(`A severe issue cancelled placing ${this.player}'s ${houseId}`);
 			return;
 		}
@@ -99,7 +134,7 @@ export class Plot {
 		selectionBox.Color3 = Color3.fromRGB(255, 255, 255);
 		selectionBox.Parent = newHouse;
 
-		newHouse!.Parent = this.getHouseFolder();
+		newHouse!.Parent = this.housesFolder;
 
 		//Ensure nothing exists in its spot
 		if (isModelIntersecting(newHouse)) {
@@ -108,7 +143,7 @@ export class Plot {
 		}
 
 		//place on grid
-		this.grid.set(newHouse?.Name, cframe.Position.sub(newHouse.GetPivot().Position));
+		this.grid.set(newHouse?.Name, cframe.sub(this.plotBaseplate!.Position));
 
 		//remove from inventory
 		const houseObject = getPlayerHouseObject(this.player, houseId);
@@ -121,6 +156,10 @@ export class Plot {
 		}
 	}
 
+	public getGrid() {
+		return this.grid;
+	}
+
 	/**
 	 * Pickup house from plot and add back to inventory
 	 * @param houseid
@@ -130,7 +169,7 @@ export class Plot {
 		const success = this.removeHouse(houseid);
 		if (success) {
 			const parsedHouseId = houseid.split("-")[0];
-			this.dataService.addHouseToInventory(this.player, parsedHouseId, 1);
+			this.inventoryService.addHouseToInventory(this.player, parsedHouseId, 1);
 		}
 	}
 
@@ -144,7 +183,7 @@ export class Plot {
 			const parsedHouseId = houseid.split("-")[0];
 			const worth = getHouseCost(parsedHouseId);
 			if (t.number(worth)) {
-				this.dataService.getMoneyStat(this.player).Value += worth;
+				this.player.stats.Money.Value += worth;
 			}
 		}
 	}
@@ -184,7 +223,7 @@ export class Plot {
 			case "place":
 				//ensure there are two args and follow the correct types
 				if (!(args.size() > 1) || !t.string(args[0]) || !t.CFrame(args[1])) {
-					return;
+					break;
 				}
 
 				this.placeHouse(args[0], args[1]);
@@ -192,7 +231,7 @@ export class Plot {
 
 			case "pickup": {
 				if (!t.string(args[0])) {
-					return;
+					break;
 				}
 
 				const houseid = args[0];
@@ -201,13 +240,16 @@ export class Plot {
 			}
 			case "sell": {
 				if (!t.string(args[0])) {
-					return;
+					break;
 				}
 
 				const houseid = args[0];
 				this.sellHouse(houseid);
+				break;
 			}
 		}
+
+		this.dataService.savePlots(this.player, this);
 	}
 
 	/**
@@ -229,7 +271,7 @@ export class Plot {
 	}
 }
 
-type PlotFolder = Folder & {
+export type PlotFolder = Folder & {
 	plot: Model;
 	houses: Folder & Model[];
 };

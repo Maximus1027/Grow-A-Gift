@@ -54,7 +54,7 @@ export function Inventory() {
 						Size={UDim2.fromScale(0.897, 0.707)}
 					>
 						{houseids
-							.filter((house) => house.GetAttribute("equip") !== true)
+							.filter((house) => house.GetAttribute("equip") === undefined)
 							.map((house) => {
 								const model = getHouseModel(house.Name);
 
