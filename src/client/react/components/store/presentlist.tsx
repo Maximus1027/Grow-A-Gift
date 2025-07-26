@@ -1,13 +1,13 @@
 import Object from "@rbxts/object-utils";
 import React from "@rbxts/react";
-import { LootTable } from "shared/utils/loot";
+import { RarityLootTable } from "shared/utils/loot";
 import { PresentDisplay } from "./presentdisplay";
 import { Rarity } from "shared/enums/Rarity";
 import { useProducer, useSelector } from "@rbxts/react-reflex";
 import { RootStore } from "client/react/store/store";
 
 export interface PresentListProps {
-	lootTable: LootTable;
+	lootTable: RarityLootTable;
 	houseid: string;
 }
 
@@ -37,9 +37,9 @@ export function PresentList(props: PresentListProps) {
 			/>
 
 			{Object.entries(props.lootTable)
-				.sort((a, b) => a[1] < b[1])
+				.sort((a, b) => (a[1] as number) < (b[1] as number))
 				.map((rarity) => (
-					<PresentDisplay distance={2.3} key={rarity[0]} rarity={rarity[0]} />
+					<PresentDisplay distance={2.3} key={rarity[0] as string} rarity={rarity[0] as Rarity} />
 				))}
 		</frame>
 	);

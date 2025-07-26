@@ -4,7 +4,7 @@ import Object from "@rbxts/object-utils";
 import * as HouseConfig from "shared/config/house.json";
 import { Players } from "@rbxts/services";
 import { NPC } from "shared/npc/npc";
-import { convertChanceToStringMarkup, getLootTable, LootTable, returnRandomRarity } from "shared/utils/loot";
+import { convertChanceToStringMarkup, getLootTable, RarityLootTable, returnRandomRarity } from "shared/utils/loot";
 import { Rarity } from "shared/enums/Rarity";
 
 interface Attributes {
@@ -23,7 +23,7 @@ export class House extends BaseComponent<Attributes, Model> implements OnStart, 
 	private spawn?: BasePart;
 	private end: BasePart = this.instance.FindFirstChild("drop") as BasePart;
 	private owner?: Player;
-	private lootTable?: LootTable;
+	private lootTable?: RarityLootTable;
 
 	onStart() {
 		this.owner = Players.GetPlayers().find((player) => player.Name === this.attributes.owner);
@@ -43,7 +43,7 @@ export class House extends BaseComponent<Attributes, Model> implements OnStart, 
 			(this.instance.Parent?.Parent!.FindFirstChild("plot") as Model).FindFirstChild("spawn") as Model
 		).PrimaryPart;
 
-		this.lootTable = getLootTable(this.houseId);
+		this.lootTable = getLootTable(this.houseId) as RarityLootTable;
 	}
 
 	onTick(dt: number): void {

@@ -5,13 +5,11 @@ import { RootState, RootStore, store } from "client/react/store/store";
 
 import * as HouseConfig from "shared/config/house.json";
 import * as CrateConfig from "shared/config/crate.json";
-import { StoreSlot } from "./storeslot";
 import { Events } from "client/network";
 import { CountdownTimer } from "./countdown";
 import { ExitButton } from "../inventory/exit";
 import { useMotion } from "@rbxts/pretty-react-hooks";
-import { PresentList } from "./presentlist";
-import { getLootTable } from "shared/utils/loot";
+import { HouseSlot } from "./storeslot";
 
 export type storeType = "house" | "crate" | "booster";
 
@@ -22,7 +20,6 @@ export type storeConfig = {
 };
 
 //store map so list is cached
-
 const getConfigMap = (storeType: storeType, config: Record<string, storeConfig>) => {
 	const orderNum = 0;
 	return Object.entries(config)
@@ -31,15 +28,14 @@ const getConfigMap = (storeType: storeType, config: Record<string, storeConfig>)
 		})
 		.map(([key, config]) => {
 			return (
-				<StoreSlot
+				<HouseSlot
 					key={key}
 					houseid={key}
 					cost={config.cost}
-					robuxprice={25}
 					layoutorder={orderNum}
 					displayName={config.displayName}
 					stock={store.getState().store.stock[key] ?? 0}
-					productid={config.productid}
+					productid={tostring(config.productid)}
 					onBuy={() => {
 						Events.onStoreAction.fire(storeType, key);
 					}}

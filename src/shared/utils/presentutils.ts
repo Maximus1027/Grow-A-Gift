@@ -1,5 +1,3 @@
-import { Ore } from "shared/enums/Ore";
-
 import * as Presents from "shared/config/presents.json";
 import Object from "@rbxts/object-utils";
 

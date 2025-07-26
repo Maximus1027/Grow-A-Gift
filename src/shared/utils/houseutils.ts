@@ -21,5 +21,5 @@ export const getHouseCost = (houseid: string) => {
 };
 
 export const getHouseDisplayName = (houseid: string) => {
-	return (Houses as HouseConfig)[houseid].displayName;
+	return (Houses as unknown as HouseConfig)[houseid].displayName;
 };

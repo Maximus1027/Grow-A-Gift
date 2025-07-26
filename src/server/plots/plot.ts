@@ -3,28 +3,35 @@ import Object from "@rbxts/object-utils";
 import { Profile } from "@rbxts/profileservice/globals";
 import { HttpService, ReplicatedStorage, ServerStorage, Workspace } from "@rbxts/services";
 import { t } from "@rbxts/t";
+import { CrateService } from "server/services/CrateService";
 import { DataService } from "server/services/DataService";
 import { InventoryService } from "server/services/InventoryService";
 import * as HousesConfig from "shared/config/house.json";
 import { ProfileData } from "shared/types/profile";
 import { doesHouseExist, isModelIntersecting } from "shared/utils/generictils";
 import { getHouseCost } from "shared/utils/houseutils";
+import { getCrateConfig } from "shared/utils/loot";
 import { doesPlayerOwnHouse, getPlayerHouseObject } from "shared/utils/playertils";
 
 const serverAssets = ServerStorage.WaitForChild("assets") as Folder;
 const sharedAssets = ReplicatedStorage.WaitForChild("assets") as Folder;
 const houseFolder = sharedAssets.WaitForChild("houses") as Folder & Model[];
 const plotSquare = serverAssets.WaitForChild("plot") as Model;
+
+const CrateConfig = getCrateConfig();
+
 export class Plot {
 	constructor(readonly player: Player) {
 		this.plot = this.createPlot();
 	}
 	private inventoryService = Dependency<InventoryService>();
 	private dataService = Dependency<DataService>();
+	private crateService = Dependency<CrateService>();
 
 	private plot: PlotFolder;
 	private plotBaseplate?: BasePart;
 	private grid = new Map<string, CFrame>();
+	private crateTick = new Map<string, number>();
 	private housesFolder?: Folder;
 
 	public getPlotFolder(): PlotFolder {
@@ -45,18 +52,19 @@ export class Plot {
 		}
 		const placement = profile.Data.plot.placed;
 		Object.entries(placement).forEach((entry) => {
-			const encoded = entry[1];
+			const position = entry[1].pos;
 
-			print(encoded);
+			//if a tick is assigned
 
 			//position and rotation
-			const rotation = CFrame.Angles(encoded[3], encoded[4], encoded[5]);
-			const cframe = new CFrame(encoded[0], encoded[1], encoded[2]).mul(rotation);
+			const rotation = CFrame.Angles(position[3], position[4], position[5]);
+			const cframe = new CFrame(position[0], position[1], position[2]).mul(rotation);
 
 			print(this.plotBaseplate?.Position);
 
 			const houseid = entry[0].split("-")[0];
-			this.placeHouse(houseid, cframe.add(this.plotBaseplate!.Position), true);
+			const ticks = entry[1].tick;
+			const placement = this.placeHouse(houseid, cframe.add(this.plotBaseplate!.Position), true, ticks);
 		});
 	}
 
@@ -104,12 +112,11 @@ export class Plot {
 	 * @param bypassOwnership
 	 *
 	 */
-	private placeHouse(houseId: string, cframe: CFrame, bypassOwnership?: boolean) {
+	private placeHouse(houseId: string, cframe: CFrame, bypassOwnership?: boolean, ticks?: number) {
 		if (
 			!doesHouseExist(houseId) ||
 			!this.plotBaseplate ||
-			!(bypassOwnership || doesPlayerOwnHouse(this.player, houseId)) ||
-			!this.player.Character
+			!(bypassOwnership || doesPlayerOwnHouse(this.player, houseId))
 		) {
 			warn(this.plotBaseplate, doesPlayerOwnHouse(this.player, houseId), this.player.Character);
 			warn(`A severe issue cancelled placing ${this.player}'s ${houseId}`);
@@ -134,6 +141,18 @@ export class Plot {
 		selectionBox.Color3 = Color3.fromRGB(255, 255, 255);
 		selectionBox.Parent = newHouse;
 
+		//Add crate attributes if this is a crate
+		if (CrateConfig[houseId] !== undefined) {
+			const t = ticks ?? tick();
+
+			newHouse.SetAttribute("placed", t);
+			this.crateTick.set(newHouse.Name, t);
+
+			newHouse.AddTag("Crate");
+		} else {
+			newHouse.AddTag("House");
+		}
+
 		newHouse!.Parent = this.housesFolder;
 
 		//Ensure nothing exists in its spot
@@ -154,10 +173,16 @@ export class Plot {
 				houseObject.Destroy();
 			}
 		}
+
+		return newHouse;
 	}
 
 	public getGrid() {
 		return this.grid;
+	}
+
+	public getCrateTick() {
+		return this.crateTick;
 	}
 
 	/**
@@ -210,12 +235,31 @@ export class Plot {
 	}
 
 	/**
+	 * Open a crate
+	 * @param crateid
+	 */
+	private openCrate(crateid: string) {
+		if (!this.crateTick.has(crateid)) {
+			return;
+		}
+
+		this.removeHouse(crateid);
+
+		const parsedCrate = crateid.split("-")[0];
+
+		this.crateService.openCrate(this.player, parsedCrate);
+
+		return;
+	}
+
+	/**
 	 * Handles actions & args sent from client and calls the respective method
 	 * @param action
 	 * @param args
 	 */
 	public dispatch(action: string, args: unknown[]) {
 		if (!args || !(args.size() > 0)) {
+			warn(`Something went wrong with ${this.player.Name}'s plot dispatch. Action & Args:`, action, args);
 			return;
 		}
 
@@ -246,6 +290,15 @@ export class Plot {
 				const houseid = args[0];
 				this.sellHouse(houseid);
 				break;
+			}
+			case "open": {
+				//for crate openings
+
+				if (!t.string(args[0])) {
+					return;
+				}
+
+				this.openCrate(args[0]);
 			}
 		}
 

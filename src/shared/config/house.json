@@ -4,6 +4,7 @@
         "cost": 100,
         "displayName": "Tiki Hut",
         "stock": 4,
+        "rarity": "Common",
         "loot": {
             "Common": 2,
             "Rare": 10,
@@ -12,35 +13,87 @@
             "Mythic": 1000
         }
     },
-    "trailer": {
-        "rate": 8,
-        "cost": 5000,
-        "displayName": "Trailer",
-        "stock": 6,
-        "loot": {
-            "Rare": 3,
-            "Epic": 25,
-            "Legendary": 80,
-            "Mythic": 800
-        }
-    },
+
     "tinyhouse": {
         "rate": 8,
         "cost": 10000000,
         "displayName": "Tiny House",
+        "rarity": "Epic",
         "stock": 3,
         "loot": {
             "Legendary": 2,
             "Mythic": 5
         }
     },
-    "tinyhouse2": {
-        "rate": 1,
-        "cost": 10000,
-        "displayName": "Tiny House TEST",
-        "stock": 3,
+
+    "igloo": {
+        "rate": 5,
+        "cost": 100,
+        "displayName": "Igloo",
+        "stock": 4,
+        "rarity": "Epic",
         "loot": {
-            "Mythic": 1
+            "Common": 2,
+            "Rare": 10,
+            "Epic": 30,
+            "Legendary": 100,
+            "Mythic": 1000
+        }
+    },
+    "barrack": {
+        "rate": 5,
+        "cost": 200,
+        "displayName": "Barrack",
+        "stock": 4,
+        "rarity": "Epic",
+        "loot": {
+            "Common": 2,
+            "Rare": 10,
+            "Epic": 30,
+            "Legendary": 100,
+            "Mythic": 1000
+        }
+    },
+    "pyramid": {
+        "rate": 5,
+        "cost": 300,
+        "displayName": "Pyramid",
+        "stock": 4,
+        "rarity": "Epic",
+        "loot": {
+            "Common": 2,
+            "Rare": 10,
+            "Epic": 30,
+            "Legendary": 100,
+            "Mythic": 1000
+        }
+    },
+    "tent": {
+        "rate": 5,
+        "cost": 400,
+        "displayName": "Tent",
+        "stock": 4,
+        "rarity": "Epic",
+        "loot": {
+            "Common": 2,
+            "Rare": 10,
+            "Epic": 30,
+            "Legendary": 100,
+            "Mythic": 1000
+        }
+    },
+    "sandhouse": {
+        "rate": 5,
+        "cost": 500,
+        "displayName": "Sand House",
+        "stock": 4,
+        "rarity": "Mythic",
+        "loot": {
+            "Common": 2,
+            "Rare": 10,
+            "Epic": 30,
+            "Legendary": 100,
+            "Mythic": 1000
         }
     }
 }

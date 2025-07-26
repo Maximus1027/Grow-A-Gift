@@ -8,6 +8,7 @@ interface ClientToServerEvents {
 
 interface ServerToClientEvents {
 	onStock: (newStock: Record<string, number>) => void;
+	onReward: (crateid: string, houseid: string) => void;
 }
 
 interface ClientToServerFunctions {}

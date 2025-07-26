@@ -1,30 +1,22 @@
 {
-    "tiki": {
-        "rate": 5,
-        "cost": 1000000,
-        "rarity": "legendary",
-        "displayName": "Tiki Hut Fortnite",
-
+    "basic": {
+        "timeInSeconds": 5,
+        "cost": 100,
+        "displayName": "Basic Crate",
         "loot": {
-            "Common": 50,
-            "Rare": 25,
-            "Epic": 10,
-            "Legendary": 5,
-            "Mythic": 10
+           "tiki": 5,
+           "tinyhouse": 25
+       
         }
     },
-    "trailer": {
-        "rate": 1,
-        "cost": 100,
-        "rarity": "common",
-        "displayName": "Trailer",
-      
-         "loot": {
-            "Common": 50,
-            "Rare": 25,
-            "Epic": 10,
-            "Legendary": 5,
-            "Mythic": 1
+   "epic": {
+        "timeInSeconds": 25,
+        "cost": 1000,
+        "displayName": "Epic Crate",
+        "loot": {
+           "tiki": 2,
+           "tinyhouse": 25
+           
         }
-    } 
+    }
 } 

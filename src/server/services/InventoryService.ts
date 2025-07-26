@@ -27,6 +27,9 @@ export class InventoryService implements OnStart {
 
 			print(getInventoryFolder(player).GetChildren());
 			this.PlayerLoaded.Fire(player);
+
+			print("+++++++++++");
+			this.addHouseToInventory(player, "basic", 5);
 		});
 
 		Events.onInventoryAction.connect((player: Player, action: unknown, ...args: unknown[]) => {
@@ -66,7 +69,7 @@ export class InventoryService implements OnStart {
 			const object = getPlayerHouseObject(player, houseid) as NumberValue;
 			object.Value += amount ?? 1;
 
-			const equipHouse = false;
+			print("ADDED", object.Name, amount);
 
 			//this.inventoryService.equipHouse(player, houseid, equipHouse);
 

@@ -2,7 +2,7 @@ import Object from "@rbxts/object-utils";
 import React, { useEffect, useMemo, useState } from "@rbxts/react";
 import { useSelector } from "@rbxts/react-reflex";
 import { RootState } from "client/react/store/store";
-import { convertChanceToString, getLootTable, getOrderedLoottable, LootTable } from "shared/utils/loot";
+import { convertChanceToString, getLootTable, getOrderedLoottable } from "shared/utils/loot";
 import { Chance } from "./chance";
 import { Rarity } from "shared/enums/Rarity";
 import { PresentDisplay } from "../store/presentdisplay";

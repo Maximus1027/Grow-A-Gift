@@ -1,0 +1,9 @@
+{
+    "crates": {
+        "Common": "rbxassetid://103411233844981",
+        "Rare" : "rbxassetid://135031166335883",
+        "Epic": "rbxassetid://137874828636062",
+        "Legendary": "rbxassetid://116436070286807",
+        "Mythic": "rbxassetid://103500731460787"
+    }
+}

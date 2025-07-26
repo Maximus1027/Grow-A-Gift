@@ -9,6 +9,8 @@ import Object from "@rbxts/object-utils";
 import { Plot, PlotFolder } from "server/plots/plot";
 import { t } from "@rbxts/t";
 import Signal from "@rbxts/lemon-signal";
+import { getCrateConfig } from "shared/utils/loot";
+import { getPlayerPlotFolder } from "shared/utils/generictils";
 
 const defaultProfile: ProfileData = {
 	money: 10000000,
@@ -18,6 +20,8 @@ const defaultProfile: ProfileData = {
 		placed: {},
 	},
 };
+
+const crateConfig = getCrateConfig();
 
 @Service({
 	loadOrder: 0,
@@ -103,20 +107,20 @@ export class DataService implements OnStart {
 			return;
 		}
 
-		profile.Data.money = getMoneyStat(player).Value;
-		this.saveInventory(player);
-
-		profile.Release();
-		this.loadedProfiles.delete(player);
-
-		print(`Saved profile for ${player.Name}`);
+		this.saveInventory(player)
+			.andThen(() => {
+				profile.Data.money = getMoneyStat(player).Value;
+			})
+			.andThen(() => profile.Release())
+			.andThen(() => this.loadedProfiles.delete(player))
+			.finallyCall(print, `Saved profile for ${player.Name}`);
 	}
 
 	/**
 	 *
 	 * @param player
 	 */
-	private saveInventory(player: Player) {
+	private async saveInventory(player: Player) {
 		const profile = this.loadedProfiles.get(player);
 
 		if (!profile) {
@@ -130,6 +134,8 @@ export class DataService implements OnStart {
 			.GetChildren()
 			.forEach((item) => {
 				newInventory[item.Name] = (item as NumberValue).Value;
+
+				print(item.Name);
 
 				if (item.GetAttribute("equip") !== undefined) {
 					equip.push(item.Name);
@@ -156,12 +162,20 @@ export class DataService implements OnStart {
 		const placed = {} as ProfileData["plot"]["placed"];
 
 		const grid = plot.getGrid();
+		const ticks = plot.getCrateTick();
+		const plotFolder = getPlayerPlotFolder(player);
+
 		grid.forEach((cframe, house) => {
 			if (t.string(house)) {
 				const rotation = cframe.ToEulerAnglesXYZ();
 				const cframeEncode = [cframe.X, cframe.Y, cframe.Z, rotation[0], rotation[1], rotation[2]];
 
-				placed[house] = cframeEncode;
+				if (ticks.has(house)) {
+					//if saving a crate
+					placed[house] = { pos: cframeEncode, tick: (ticks.get(house) as number) ?? 0 };
+				} else {
+					placed[house] = { pos: cframeEncode };
+				}
 			}
 		});
 
