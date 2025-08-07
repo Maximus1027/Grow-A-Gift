@@ -9,7 +9,7 @@ export type CrateLootTable = Record<string, number>;
 
 export type Config<O> = Record<string, O>;
 export type HouseConfig = Config<{ loot: RarityLootTable; displayName: string; rarity?: string; stock?: number }>;
-export type CrateConfig = Config<{ loot: CrateLootTable; displayName: string; timeInSeconds: number }>;
+export type CrateConfig = Config<{ loot: CrateLootTable; displayName: string; timeInMinutes: number }>;
 
 const rarityOrderCache: Record<string, Rarity[]> = {};
 

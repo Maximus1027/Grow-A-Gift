@@ -10,7 +10,7 @@ export = hoarcekat(() => {
 		trailer: 5,
 	});
 	store.setLastStock(os.time());
-	store.toggleStore("house");
+	store.toggleStore("crate");
 	task.delay(3, () =>
 		store.setStock({
 			tiki: 10,

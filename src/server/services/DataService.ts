@@ -14,6 +14,7 @@ import { getPlayerPlotFolder } from "shared/utils/generictils";
 
 const defaultProfile: ProfileData = {
 	money: 10000000,
+	village: "dirt",
 	inventory: {},
 	equipped: [],
 	plot: {
@@ -84,14 +85,14 @@ export class DataService implements OnStart {
 		inventory.Name = "inventory";
 		inventory.Parent = dataFolder;
 
+		const village = new Instance("StringValue");
+		village.Name = "village";
+		village.Parent = dataFolder;
+
 		/** Load Data */
 		money.Value = profile.Data.money;
-
-		// this.addHouseToInventory(player, "tiki", 5, true);
-		// this.addHouseToInventory(player, "trailer", 5);
-
+		village.Value = profile.Data.village ?? "dirt";
 		/** Done Loading */
-
 		this.PlayerLoaded.Fire(player, profile);
 	}
 
@@ -110,6 +111,7 @@ export class DataService implements OnStart {
 		this.saveInventory(player)
 			.andThen(() => {
 				profile.Data.money = getMoneyStat(player).Value;
+				profile.Data.village = player.stats.village.Value;
 			})
 			.andThen(() => profile.Release())
 			.andThen(() => this.loadedProfiles.delete(player))

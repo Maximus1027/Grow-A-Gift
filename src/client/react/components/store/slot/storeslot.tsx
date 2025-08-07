@@ -2,28 +2,21 @@ import Abbreviator from "@rbxts/abbreviate";
 import React, { useEffect, useState } from "@rbxts/react";
 import * as Houses from "shared/config/house.json";
 import { getLootTable, HouseConfig, RarityLootTable } from "shared/utils/loot";
-import { PresentList } from "./presentlist";
-import { BaseSlot } from "./baseslot";
+import { PresentList } from "../presentlist";
+import { BaseSlot, StoreSlotProps } from "./baseslot";
 
-export interface HouseSlotProps {
-	cost: number;
-	houseid: string;
-	displayName: string;
-	layoutorder: number;
+export interface HouseSlotProps extends StoreSlotProps {
 	stock: number;
-	productid?: string;
-	onBuy: () => void;
-	onRobuxBuy: () => void;
 }
 
 export function HouseSlot(props: HouseSlotProps) {
 	const abv = new Abbreviator();
 	// eslint-disable-next-line roblox-ts/no-any
-	const maxStock = (Houses as unknown as HouseConfig)[props.houseid].stock;
+	const maxStock = (Houses as unknown as HouseConfig)[props.itemid].stock;
 
 	return (
-		<BaseSlot actionType="house" devProductId={props.productid ?? ""} itemid={props.houseid}>
-			{<PresentList houseid={props.houseid} lootTable={getLootTable(props.houseid) as RarityLootTable} />}
+		<BaseSlot actionType="house" devProductId={props.productid ?? ""} itemid={props.itemid}>
+			{<PresentList houseid={props.itemid} lootTable={getLootTable(props.itemid) as RarityLootTable} />}
 
 			<textlabel
 				key={"house"}

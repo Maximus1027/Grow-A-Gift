@@ -1,22 +1,25 @@
 import * as Houses from "shared/config/house.json";
 import Object from "@rbxts/object-utils";
-import { HouseConfig } from "./loot";
+import { getCrateConfig, getHouseConfig, HouseConfig } from "./loot";
 
 /**
  * <House, Integer> $$ map
  */
-const valueMap: Map<string, number> = new Map(
-	Object.entries(Houses).map((val) => {
-		return [val[0], val[1].cost];
-	}),
-);
+const valueMap: Map<string, number> = new Map();
+
+// Combine entries from Houses and getCrateConfig, then populate valueMap
+[...Object.entries(Houses), ...Object.entries(getCrateConfig())].forEach(([key, val]) => {
+	if ("cost" in val) {
+		valueMap.set(key, val.cost);
+	}
+});
 
 /**
  * Get house cost
  * @param house
  * @returns $ worth
  */
-export const getHouseCost = (houseid: string) => {
+export const getItemCost = (houseid: string) => {
 	return valueMap.get(houseid);
 };
 

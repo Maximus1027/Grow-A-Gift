@@ -9,45 +9,44 @@ import { Events } from "client/network";
 import { CountdownTimer } from "./countdown";
 import { ExitButton } from "../inventory/exit";
 import { useMotion } from "@rbxts/pretty-react-hooks";
-import { HouseSlot } from "./storeslot";
+import { HouseSlot, HouseSlotProps } from "./slot/storeslot";
+import { SmartSlot } from "./slot/smartslot";
+import { getCrateConfig } from "shared/utils/loot";
 
 export type storeType = "house" | "crate" | "booster";
 
 export type storeConfig = {
 	cost: number;
-	productid?: number;
+	productid: number;
 	displayName: string;
 };
 
 //store map so list is cached
 const getConfigMap = (storeType: storeType, config: Record<string, storeConfig>) => {
-	const orderNum = 0;
+	let orderNum = 0;
 	return Object.entries(config)
 		.sort((a, b) => {
 			return a[1].cost < b[1].cost;
 		})
 		.map(([key, config]) => {
+			orderNum++;
 			return (
-				<HouseSlot
+				<SmartSlot
 					key={key}
-					houseid={key}
-					cost={config.cost}
-					layoutorder={orderNum}
-					displayName={config.displayName}
-					stock={store.getState().store.stock[key] ?? 0}
-					productid={tostring(config.productid)}
-					onBuy={() => {
-						Events.onStoreAction.fire(storeType, key);
-					}}
-					onRobuxBuy={() => {
-						print("robux!");
+					storetype={storeType}
+					props={{
+						itemid: key,
+						cost: config.cost,
+						layoutorder: orderNum,
+						displayName: config.displayName,
+						productid: tostring(config.productid),
 					}}
 				/>
 			);
 		});
 };
 
-const storeRecord: Record<storeType, Record<string, storeConfig>> = {
+const storeRecord: Record<storeType, typeof CrateConfig | typeof HouseConfig> = {
 	house: HouseConfig,
 	crate: CrateConfig,
 	booster: HouseConfig,
@@ -128,7 +127,7 @@ export function Store() {
 					}}
 				/>
 
-				{countdown}
+				{storeState.storeOpen === "house" && countdown}
 			</imagelabel>
 		</screengui>
 	);

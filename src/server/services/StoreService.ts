@@ -1,13 +1,11 @@
 import { Service, OnStart, Dependency } from "@flamework/core";
 import { DataService } from "./DataService";
-import { getHouseCost } from "shared/utils/houseutils";
+import { getItemCost } from "shared/utils/houseutils";
 import { Events } from "server/network";
 import { t } from "@rbxts/t";
 import { Players, RunService } from "@rbxts/services";
 import Object from "@rbxts/object-utils";
-
 import { timeToStock } from "shared/config/main.json";
-
 import * as HouseConfig from "shared/config/house.json";
 import { InventoryService } from "./InventoryService";
 
@@ -26,6 +24,10 @@ export class StoreService implements OnStart {
 			switch (action) {
 				case "house": {
 					this.onHousePurchase(player, id);
+					break;
+				}
+				case "crate": {
+					this.onCratePurchase(player, id);
 					break;
 				}
 			}
@@ -84,7 +86,7 @@ export class StoreService implements OnStart {
 	 * @returns
 	 */
 	onHousePurchase(player: Player, houseid: string) {
-		const getHousePrice = getHouseCost(houseid);
+		const getHousePrice = getItemCost(houseid);
 
 		if (getHousePrice === undefined || !this.playerStock.has(player)) {
 			return;
@@ -110,6 +112,21 @@ export class StoreService implements OnStart {
 			this.playerStock.set(player, stock);
 
 			Events.onStock.fire(player, stock);
+		}
+	}
+
+	onCratePurchase(player: Player, crateid: string) {
+		const getCrateCost = getItemCost(crateid);
+
+		const playerValue = player.stats.Money;
+
+		if (!playerValue || !t.number(getCrateCost)) {
+			return;
+		}
+
+		if (playerValue.Value >= getCrateCost) {
+			this.inventoryService.addHouseToInventory(player, crateid, 1, true);
+			playerValue.Value -= getCrateCost;
 		}
 	}
 }

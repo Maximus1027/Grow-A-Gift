@@ -2,7 +2,8 @@
     "tiki": {
         "rate": 8,
         "cost": 100,
-        "displayName": "Tiki Hut",
+        "displayName": "Tiki Hut", 
+        "productid": 123,
         "stock": 4,
         "rarity": "Common",
         "loot": {
@@ -17,6 +18,7 @@
     "tinyhouse": {
         "rate": 8,
         "cost": 10000000,
+        "productid": 123,
         "displayName": "Tiny House",
         "rarity": "Epic",
         "stock": 3,
@@ -30,6 +32,7 @@
         "rate": 5,
         "cost": 100,
         "displayName": "Igloo",
+        "productid": 123,
         "stock": 4,
         "rarity": "Epic",
         "loot": {
@@ -44,6 +47,7 @@
         "rate": 5,
         "cost": 200,
         "displayName": "Barrack",
+        "productid": 123,
         "stock": 4,
         "rarity": "Epic",
         "loot": {
@@ -58,6 +62,7 @@
         "rate": 5,
         "cost": 300,
         "displayName": "Pyramid",
+        "productid": 123,
         "stock": 4,
         "rarity": "Epic",
         "loot": {
@@ -72,6 +77,7 @@
         "rate": 5,
         "cost": 400,
         "displayName": "Tent",
+        "productid": 123,
         "stock": 4,
         "rarity": "Epic",
         "loot": {
@@ -86,6 +92,7 @@
         "rate": 5,
         "cost": 500,
         "displayName": "Sand House",
+        "productid": 123,
         "stock": 4,
         "rarity": "Mythic",
         "loot": {

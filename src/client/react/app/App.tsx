@@ -11,6 +11,7 @@ import { HouseSelect } from "../components/houseselect/SelectHouse";
 import { Store } from "../components/store/Store";
 import { PresentChancesHover } from "../components/hover/PresentHover";
 import { Crates } from "../components/crates/Crates";
+import { PreloadAssets } from "../components/preloader/preloadassets";
 
 const player = Players.LocalPlayer;
 const stats = player.WaitForChild("stats");
@@ -28,6 +29,7 @@ export function App() {
 			<HouseSelect />
 			<PresentChancesHover />
 			<Crates />
+			<PreloadAssets />
 		</ReflexProvider>
 	);
 }

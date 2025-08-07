@@ -83,10 +83,10 @@ export function CrateSpin(props: SpinProps) {
 
 		setpos.onComplete(() => {
 			setcompleteReward(props.chosenHouseid);
-			//clear
-			//task.delay(3, () => setcompleteReward(undefined));
 		});
 	}, [listRef]);
+
+	useEffect(() => {}, [display.size()]);
 
 	return reward === undefined ? (
 		<screengui
@@ -132,20 +132,6 @@ export function CrateSpin(props: SpinProps) {
 						ref={listRef}
 					>
 						{display}
-						{/* <imagelabel
-						key={"imageLabel"}
-						Image={"rbxasset://textures/ui/GuiImagePlaceholder.png"}
-						ScaleType={Enum.ScaleType.Fit}
-						AnchorPoint={new Vector2(0.5, 0.5)}
-						BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-						BackgroundTransparency={1}
-						BorderColor3={Color3.fromRGB(0, 0, 0)}
-						BorderSizePixel={0}
-						Position={UDim2.fromScale(0.0885, 0.502)}
-						Size={UDim2.fromScale(0.173, 0.973)}
-					>
-						<uiaspectratioconstraint key={"uIAspectRatioConstraint"} AspectRatio={1} />
-					</imagelabel> */}
 
 						<uiaspectratioconstraint key={"uIAspectRatioConstraint1"} AspectRatio={5.675} />
 					</frame>

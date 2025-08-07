@@ -13,6 +13,6 @@ export class ReactMount implements OnStart {
 
 		const playerGui = Players.LocalPlayer.WaitForChild("PlayerGui");
 
-		root.render(<StrictMode>{createPortal(<App />, playerGui)}</StrictMode>);
+		task.delay(3, () => root.render(<StrictMode>{createPortal(<App />, playerGui)}</StrictMode>));
 	}
 }

@@ -64,3 +64,13 @@ export const formatSecondsToMinutesAndSeconds = (totalSeconds: number): string =
 
 	return `${minutes}:${formattedSeconds}`;
 };
+
+export const formatMinutesToDisplay = (minutes: number): string => {
+	if (minutes >= 60) {
+		const hours = minutes / 60;
+
+		return `${minutes / 60} Hour${hours >= 2 ? "s" : ""}`;
+	} else {
+		return `${minutes} Minutes`;
+	}
+};

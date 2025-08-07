@@ -8,7 +8,12 @@ import {
 	Workspace,
 } from "@rbxts/services";
 import { store } from "client/react/store/store";
-import { getHouseAssetsFolder, getPlayerPlot, isModelIntersecting } from "shared/utils/generictils";
+import {
+	getHouseAssetsFolder,
+	getPlayerPlot,
+	getPlayerPlotFolder,
+	isModelIntersecting,
+} from "shared/utils/generictils";
 import * as MainConfig from "shared/config/main.json";
 import { Events } from "client/network";
 
@@ -45,7 +50,8 @@ export class PlacementController implements OnStart, OnInit {
 
 		const character = player.Character ?? player.CharacterAdded.Wait()[0];
 		const head = character.PrimaryPart as Part;
-		const plot = getPlayerPlot(player);
+		const plot = getPlayerPlotFolder(player);
+		const plotModel = plot?.FindFirstChild(player.stats.village.Value);
 
 		const gridSize = MainConfig.gridSize as number;
 
@@ -59,7 +65,7 @@ export class PlacementController implements OnStart, OnInit {
 
 			if (this.tempMachine) {
 				const raycastParams = new RaycastParams();
-				raycastParams.AddToFilter(plot.FindFirstChild("baseplate") as BasePart);
+				raycastParams.AddToFilter(plotModel!.FindFirstChild("baseplate") as BasePart);
 				raycastParams.FilterType = Enum.RaycastFilterType.Include;
 
 				const origin = Workspace.CurrentCamera!.CFrame.Position;

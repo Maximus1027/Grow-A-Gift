@@ -9,33 +9,49 @@ import { InventoryService } from "server/services/InventoryService";
 import * as HousesConfig from "shared/config/house.json";
 import { ProfileData } from "shared/types/profile";
 import { doesHouseExist, isModelIntersecting } from "shared/utils/generictils";
-import { getHouseCost } from "shared/utils/houseutils";
+import { getItemCost } from "shared/utils/houseutils";
 import { getCrateConfig } from "shared/utils/loot";
 import { doesPlayerOwnHouse, getPlayerHouseObject } from "shared/utils/playertils";
 
 const serverAssets = ServerStorage.WaitForChild("assets") as Folder;
 const sharedAssets = ReplicatedStorage.WaitForChild("assets") as Folder;
 const houseFolder = sharedAssets.WaitForChild("houses") as Folder & Model[];
-const plotSquare = serverAssets.WaitForChild("plot") as Model;
+const villages = serverAssets.WaitForChild("villages") as Folder & PlotModel[];
+
+export type PlotModel = Model & {
+	spawn: Model & BasePart;
+	baseplate: BasePart;
+};
+
+export type PlotFolder = BasePart &
+	PlotModel & {
+		houses: Folder & Model[];
+	};
 
 const CrateConfig = getCrateConfig();
 
 export class Plot {
 	constructor(readonly player: Player) {
-		this.plot = this.createPlot();
+		const plot = this.createPlot();
+
+		if (plot) {
+			this.plot = plot;
+		} else {
+			player.Kick("Couldn't locate village");
+		}
 	}
 	private inventoryService = Dependency<InventoryService>();
 	private dataService = Dependency<DataService>();
 	private crateService = Dependency<CrateService>();
 
-	private plot: PlotFolder;
+	private plot?: PlotFolder;
 	private plotBaseplate?: BasePart;
 	private grid = new Map<string, CFrame>();
 	private crateTick = new Map<string, number>();
 	private housesFolder?: Folder;
 
 	public getPlotFolder(): PlotFolder {
-		return this.plot;
+		return this.plot as PlotFolder;
 	}
 
 	public getHouseFolder(): Partial<PlotFolder>["houses"] {
@@ -60,8 +76,6 @@ export class Plot {
 			const rotation = CFrame.Angles(position[3], position[4], position[5]);
 			const cframe = new CFrame(position[0], position[1], position[2]).mul(rotation);
 
-			print(this.plotBaseplate?.Position);
-
 			const houseid = entry[0].split("-")[0];
 			const ticks = entry[1].tick;
 			const placement = this.placeHouse(houseid, cframe.add(this.plotBaseplate!.Position), true, ticks);
@@ -69,26 +83,31 @@ export class Plot {
 	}
 
 	private createPlot() {
+		print("CREATING");
+
 		const PlotsFolder = Workspace.WaitForChild("Plots") as Folder & Folder[];
 
 		//get next available plot
-		const plotFolder = PlotsFolder.GetChildren().find((folder) => folder.GetAttribute("player") === undefined);
+		const plotFolder = PlotsFolder.GetChildren().find(
+			(folder) => folder.GetAttribute("player") === undefined,
+		) as PlotFolder;
 		plotFolder?.SetAttribute("player", this.player.Name);
 
-		// const plotFolder = new Instance("Folder");
-		// plotFolder.Name = `${this.player.Name}`;
+		//cleanup any possible artifacts
+		plotFolder.ClearAllChildren();
 
-		// plotFolder.Parent = Workspace.WaitForChild("Plots");
+		const currentVillage = this.player.stats.village.Value;
 
-		// const plotBaseplate = plotSquare.Clone();
-		// plotBaseplate.PivotTo(new CFrame(0, 0, 0));
-		// plotBaseplate.PrimaryPart!.Size = new Vector3(125, 1, 125);
-		// plotBaseplate.Parent = plotFolder;
+		const villageModel = this.placeVillage(currentVillage, plotFolder);
 
-		const placementGrid = plotFolder?.FindFirstChild("plot");
+		if (!villageModel) {
+			return;
+		}
 
-		if (placementGrid?.IsA("Model")) {
-			this.plotBaseplate = placementGrid.PrimaryPart;
+		const baseplate = villageModel!.FindFirstChild("baseplate");
+
+		if (baseplate!.IsA("BasePart")) {
+			this.plotBaseplate = baseplate;
 		}
 
 		const houseFolder = new Instance("Folder");
@@ -103,6 +122,21 @@ export class Plot {
 		this.loadData();
 
 		return plotFolder as PlotFolder;
+	}
+
+	private placeVillage(village: string, plotFolder: PlotFolder): Model | undefined {
+		const villageAsset = villages.FindFirstChild(village);
+
+		if (!villageAsset) {
+			warn("Something went wrong, couldn't locate village model");
+			return;
+		}
+
+		const villageModel = villageAsset.Clone() as Model;
+		villageModel.Parent = plotFolder;
+		villageModel.PivotTo(plotFolder.CFrame);
+
+		return villageModel;
 	}
 
 	/**
@@ -206,7 +240,7 @@ export class Plot {
 		const success = this.removeHouse(houseid);
 		if (success) {
 			const parsedHouseId = houseid.split("-")[0];
-			const worth = getHouseCost(parsedHouseId);
+			const worth = getItemCost(parsedHouseId);
 			if (t.number(worth)) {
 				this.player.stats.Money.Value += worth;
 			}
@@ -309,22 +343,12 @@ export class Plot {
 	 * When player leaves the game cleanup anything relating to player
 	 */
 	public destroy() {
-		const houses = this.getPlotFolder().FindFirstChild("houses");
-		const npcs = this.getPlotFolder().FindFirstChild("NPC");
+		const plotFolder = this.getPlotFolder();
+		plotFolder.ClearAllChildren();
 
-		if (houses) {
-			houses.Destroy();
-		}
-
-		if (npcs) {
-			npcs.Destroy();
-		}
+		//add default plot
+		this.placeVillage("dirt", plotFolder);
 
 		this.getPlotFolder().SetAttribute("player", undefined);
 	}
 }
-
-export type PlotFolder = Folder & {
-	plot: Model;
-	houses: Folder & Model[];
-};

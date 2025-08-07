@@ -9,7 +9,7 @@ export interface StoreState {
 }
 
 const initialState: StoreState = {
-	storeOpen: "house",
+	storeOpen: "crate",
 	stock: {},
 	lastStock: 0,
 	hovering: undefined,

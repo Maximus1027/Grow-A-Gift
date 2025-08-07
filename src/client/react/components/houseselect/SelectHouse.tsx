@@ -5,7 +5,7 @@ import { ExitButton } from "../inventory/exit";
 import { useMotion } from "@rbxts/pretty-react-hooks";
 import { Events } from "client/network";
 import { SellButton } from "./sellbutton";
-import { getHouseCost, getHouseDisplayName } from "shared/utils/houseutils";
+import { getItemCost, getHouseDisplayName } from "shared/utils/houseutils";
 
 export function HouseSelect() {
 	const pickup = useSelector((state: RootState) => state.inventory.promptHouseid);
@@ -99,7 +99,7 @@ export function HouseSelect() {
 						<uiaspectratioconstraint key={"uIAspectRatioConstraint1"} AspectRatio={2.68} />
 					</imagebutton> */}
 					<SellButton
-						sellValue={getHouseCost(title) ?? 0}
+						sellValue={getItemCost(title) ?? 0}
 						onSell={() => {
 							Events.onPlotAction("sell", pickup);
 							dispatch.promptHouse(undefined);

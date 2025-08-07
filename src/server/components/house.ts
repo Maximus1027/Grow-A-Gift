@@ -32,16 +32,14 @@ export class House extends BaseComponent<Attributes, Model> implements OnStart, 
 			return val[0] === this.houseId;
 		});
 
-		print(foundHouse?.[0]);
-
 		this.spawnRate = foundHouse?.[1].rate as number;
 
 		//random timer offset so when people load a save, npcs arent synchronised
 		this.lastSpawnTick = tick() - math.random(1, 5);
 
-		this.spawn = (
-			(this.instance.Parent?.Parent!.FindFirstChild("plot") as Model).FindFirstChild("spawn") as Model
-		).PrimaryPart;
+		const spawnPoint = this.instance.Parent?.Parent?.GetDescendants().filter((child) => child.HasTag("Spawn"))[0];
+
+		this.spawn = spawnPoint as BasePart;
 
 		this.lootTable = getLootTable(this.houseId) as RarityLootTable;
 	}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "@rbxts/react";
-import { CollectionService, Players } from "@rbxts/services";
+import { CollectionService, Players, Workspace } from "@rbxts/services";
 import { getPlayerPlotFolder } from "shared/utils/generictils";
 import { getCrateConfig } from "shared/utils/loot";
 import { CrateTimer } from "./timer";
@@ -49,7 +49,7 @@ export function TimeManager() {
 		crates.map((crate: Model) => {
 			const placed = crate.GetAttribute("placed") as number;
 			const crateid = crate.GetAttribute("crateid") as string;
-			const crateDelay = config[crateid].timeInSeconds;
+			const crateDelay = config[crateid].timeInMinutes;
 
 			return createPortal(
 				<CrateTimer crateModel={crate} crateid={crate.Name} crateTimer={crateDelay} placedTick={placed} />,

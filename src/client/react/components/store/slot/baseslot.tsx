@@ -1,12 +1,21 @@
 import React, { Children } from "@rbxts/react";
-import { HouseDisplay } from "../crates/housedisplay";
+import { HouseDisplay } from "../../crates/housedisplay";
 import { Events } from "client/network";
-import { storeType } from "./Store";
+import { storeType } from "../Store";
 
 export interface BaseSlotProps extends React.PropsWithChildren {
 	itemid: string;
 	actionType: storeType;
 	devProductId: string;
+}
+
+//To be extended by other slots
+export interface StoreSlotProps {
+	cost: number;
+	itemid: string;
+	displayName: string;
+	layoutorder: number;
+	productid: string;
 }
 
 export function BaseSlot(props: BaseSlotProps) {
