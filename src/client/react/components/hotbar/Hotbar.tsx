@@ -6,12 +6,15 @@ import { t } from "@rbxts/t";
 import { InventoryOpener } from "../inventory/inventoryopener";
 import { useSelector } from "@rbxts/react-reflex";
 import { RootState } from "client/react/store/store";
+import { Window } from "client/react/store/producer/windowproducer";
 
 const houseModels = ReplicatedStorage.WaitForChild("assets").WaitForChild("houses") as Folder;
 const player = Players.LocalPlayer;
 
 export function Hotbar() {
 	const houseids = useSelector((state: RootState) => state.inventory.inventory);
+
+	const window = useSelector((state: RootState) => state.windowManager.windows.hud);
 
 	return (
 		<screengui
@@ -20,6 +23,7 @@ export function Hotbar() {
 			ScreenInsets={Enum.ScreenInsets.DeviceSafeInsets}
 			ZIndexBehavior={Enum.ZIndexBehavior.Global}
 			ResetOnSpawn={false}
+			Enabled={window === true}
 		>
 			<frame
 				key={"frame"}

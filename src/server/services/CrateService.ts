@@ -10,6 +10,7 @@ import { InventoryService } from "./InventoryService";
 export class CrateService implements OnStart {
 	onStart() {}
 
+	private rateLimits = new Array<Player>();
 	constructor(readonly inventoryService: InventoryService) {}
 
 	/**
@@ -18,6 +19,12 @@ export class CrateService implements OnStart {
 	 * @param crateid
 	 */
 	openCrate(player: Player, crate: string) {
+		if (this.rateLimits.indexOf(player) !== -1) {
+			return;
+		}
+		this.rateLimits.push(player);
+		task.delay(5, () => this.rateLimits.remove(this.rateLimits.indexOf(player)));
+
 		const lootTable = getCrateLootTable(crate);
 
 		if (lootTable === undefined) {

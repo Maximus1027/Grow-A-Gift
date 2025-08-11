@@ -1,5 +1,6 @@
 import { Controller, OnInit, OnStart } from "@flamework/core";
 import {
+	CollectionService,
 	ContextActionService,
 	Players,
 	ReplicatedStorage,
@@ -36,6 +37,12 @@ export class PlacementController implements OnStart, OnInit {
 		this.temp = machineFolder;
 	}
 	onStart() {
+		Events.onDataLoaded.connect(() => this.setupPlacementListener());
+	}
+
+	private setupPlacementListener() {
+		task.wait(5);
+
 		UserInputService.InputBegan.Connect((input) => {
 			if (input.UserInputType === Enum.UserInputType.MouseButton1) {
 				this.confirmPlacement();
@@ -51,7 +58,9 @@ export class PlacementController implements OnStart, OnInit {
 		const character = player.Character ?? player.CharacterAdded.Wait()[0];
 		const head = character.PrimaryPart as Part;
 		const plot = getPlayerPlotFolder(player);
-		const plotModel = plot?.FindFirstChild(player.stats.village.Value);
+		const plotModel = plot?.WaitForChild(player.stats.village.Value, 10);
+
+		print("Plot Part", plotModel);
 
 		const gridSize = MainConfig.gridSize as number;
 
@@ -100,6 +109,7 @@ export class PlacementController implements OnStart, OnInit {
 			}
 		});
 	}
+
 	/**
 	 * Toggle build mode on client
 	 */

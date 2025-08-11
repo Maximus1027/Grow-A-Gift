@@ -2,6 +2,7 @@ import { Controller, OnStart } from "@flamework/core";
 import React, { StrictMode } from "@rbxts/react";
 import { createPortal, createRoot } from "@rbxts/react-roblox";
 import { Players } from "@rbxts/services";
+import { Events } from "client/network";
 import { App } from "client/react/app/App";
 
 @Controller({
@@ -13,6 +14,8 @@ export class ReactMount implements OnStart {
 
 		const playerGui = Players.LocalPlayer.WaitForChild("PlayerGui");
 
-		task.delay(3, () => root.render(<StrictMode>{createPortal(<App />, playerGui)}</StrictMode>));
+		Events.onDataLoaded.connect(() => {
+			root.render(<StrictMode>{createPortal(<App />, playerGui)}</StrictMode>);
+		});
 	}
 }

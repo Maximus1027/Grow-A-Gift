@@ -12,6 +12,7 @@ import { useMotion } from "@rbxts/pretty-react-hooks";
 import { HouseSlot, HouseSlotProps } from "./slot/storeslot";
 import { SmartSlot } from "./slot/smartslot";
 import { getCrateConfig } from "shared/utils/loot";
+import { Window } from "client/react/store/producer/windowproducer";
 
 export type storeType = "house" | "crate" | "booster";
 
@@ -81,8 +82,10 @@ export function Store() {
 
 	useEffect(() => {}, [storeState.stock]);
 
+	const window = useSelector((state: RootState) => state.windowManager.windows.shop);
+
 	return (
-		<screengui key={"sTOREDEV"} ZIndexBehavior={Enum.ZIndexBehavior.Sibling}>
+		<screengui key={"sTOREDEV"} Enabled={window === true} ZIndexBehavior={Enum.ZIndexBehavior.Sibling}>
 			<imagelabel
 				key={"imageLabel"}
 				Image={"rbxassetid://104627235588011"}

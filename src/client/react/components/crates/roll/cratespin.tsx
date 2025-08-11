@@ -18,6 +18,9 @@ import { CrateDisplay } from "./CrateDisplay";
 import * as Icons from "shared/config/ui.json";
 import * as Houses from "shared/config/house.json";
 import { HouseReward } from "./housereward";
+import { useProducer, useSelector } from "@rbxts/react-reflex";
+import { RootState, RootStore } from "client/react/store/store";
+import { Window } from "client/react/store/producer/windowproducer";
 
 export interface SpinProps {
 	crateid: string;
@@ -90,9 +93,9 @@ export function CrateSpin(props: SpinProps) {
 
 	return reward === undefined ? (
 		<screengui
-			Enabled={setpos.isComplete()}
 			key={"CRATE-ROLL-PRODUCTION"}
 			ZIndexBehavior={Enum.ZIndexBehavior.Sibling}
+			Enabled={setpos.isComplete()}
 		>
 			<imagelabel
 				key={"main"}

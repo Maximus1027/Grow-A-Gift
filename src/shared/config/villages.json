@@ -1,8 +1,50 @@
 {
     "dirt": {
-        "cost": 100
+        "cost": 100,
+        "displayName": "Dusty Downs",
+        "luck": 10,
+        "iconid": "rbxassetid://128732933526166"
     },
     "sand": {
-        "cost": 1000
+        "cost": 300,
+        "displayName": "Sandy Suburbs",
+        "luck": 10,
+        "iconid": "rbxassetid://121848553215191"
+    },
+    "flora": {
+        "cost": 600,
+        "displayName": "Gardeners Grove",
+        "luck": 10,
+        "iconid": "rbxassetid://91129668979065"
+    },
+    "stone": {
+        "cost": 1000,
+        "displayName": "Boulder Burroughs",
+        "luck": 10,
+        "iconid": "rbxassetid://84484387644156"
+    },
+    "snow": {
+        "cost": 1600,
+        "displayName": "Snowdrop Summit",
+        "luck": 10,
+        "iconid": "rbxassetid://108484254834116"
+    },
+    "lava": {
+        "cost": 2300,
+        "displayName": "Molten Meadows",
+        "luck": 10,
+        "iconid": "rbxassetid://117194101531312"
+    },
+    "emerald": {
+        "cost": 3100,
+        "displayName": "Emerald Estates",
+        "luck": 10,
+        "iconid": "rbxassetid://128732933526166"
+    },
+    "astro": {
+        "cost": 4000,
+        "displayName": "Astro Acres",
+        "luck": 10,
+        "iconid": "rbxassetid://122034927173429"
     }
 }

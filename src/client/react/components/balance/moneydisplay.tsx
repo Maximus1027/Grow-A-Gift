@@ -1,7 +1,10 @@
 import Abbreviator from "@rbxts/abbreviate";
 import { useMotion } from "@rbxts/pretty-react-hooks";
 import React, { useEffect } from "@rbxts/react";
+import { useSelector } from "@rbxts/react-reflex";
 import { t } from "@rbxts/t";
+import { Window } from "client/react/store/producer/windowproducer";
+import { RootState } from "client/react/store/store";
 
 export interface MoneyProps {
 	value: ValueBase;
@@ -22,6 +25,9 @@ export function MoneyDisplay(props: MoneyProps) {
 		});
 		setMoney.immediate((props.value.Value as number) ?? 0);
 	}, []);
+
+	const window = useSelector((state: RootState) => state.windowManager.windows.hud);
+
 	return (
 		<screengui
 			key={"MONEY DISPLAY"}
@@ -29,6 +35,7 @@ export function MoneyDisplay(props: MoneyProps) {
 			ScreenInsets={Enum.ScreenInsets.DeviceSafeInsets}
 			ZIndexBehavior={Enum.ZIndexBehavior.Sibling}
 			ResetOnSpawn={false}
+			Enabled={window === true}
 		>
 			<imagelabel
 				key={"imageLabel"}

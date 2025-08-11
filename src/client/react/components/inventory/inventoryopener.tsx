@@ -1,15 +1,17 @@
 import React, { useEffect, useRef, useState } from "@rbxts/react";
 import { useProducer, useSelector } from "@rbxts/react-reflex";
 import { RunService } from "@rbxts/services";
+import { Window } from "client/react/store/producer/windowproducer";
 import { RootState, RootStore } from "client/react/store/store";
 
 export function InventoryOpener() {
 	const dispatch = useProducer<RootStore>();
 	const inventoryState = useSelector((state: RootState) => state.inventory);
+	const window = useSelector((state: RootState) => state.windowManager.windows.inventory);
 
 	return (
 		(inventoryState.inventory.filter((house) => house.GetAttribute("equip") === undefined).size() > 0 ||
-			inventoryState.inventoryOpen) && (
+			window === true) && (
 			<imagebutton
 				key={"openinv"}
 				Image={"rbxassetid://130138970079871"}
@@ -24,7 +26,7 @@ export function InventoryOpener() {
 				Size={UDim2.fromScale(0.171, 1)}
 				Event={{
 					Activated: () => {
-						dispatch.toggleInventory();
+						dispatch.setWindowState(Window.inventory, true);
 					},
 				}}
 			/>

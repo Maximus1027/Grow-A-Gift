@@ -3,7 +3,8 @@ import { ReplicatedStorage, Workspace } from "@rbxts/services";
 import * as houseConfig from "shared/config/house.json";
 import * as crateConfig from "shared/config/crate.json";
 import { Rarity } from "shared/enums/Rarity";
-import { HouseConfig } from "./loot";
+
+import * as VillageConfig from "shared/config/villages.json";
 
 /**
  * Check if two models are intersecting in the same place
@@ -73,4 +74,20 @@ export const formatMinutesToDisplay = (minutes: number): string => {
 	} else {
 		return `${minutes} Minutes`;
 	}
+};
+
+const VillageOrdered = Object.entries(VillageConfig).sort((a, b) => a[1].cost < b[1].cost);
+
+export const getNextVillageUnlock = (currentVillage: string): string | undefined => {
+	const currentIndex = VillageOrdered.findIndex(([key]) => key === currentVillage);
+
+	const nextEntry = VillageOrdered[currentIndex + 1];
+	return nextEntry ? nextEntry[0] : undefined;
+};
+
+export const getVillage = (village: string) => {
+	const currentIndex = VillageOrdered.findIndex(([key]) => key === village);
+
+	const entry = VillageOrdered[currentIndex];
+	return entry ?? undefined;
 };

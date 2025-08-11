@@ -3,6 +3,7 @@ import { BuildActions } from "./producer/buildproducer";
 import { InventoryActions } from "./producer/inventoryproducer";
 import { StoreActions } from "./producer/storeproducer";
 import { CrateActions } from "./producer/crateproducer";
+import { WindowActions } from "./producer/windowproducer";
 
 export function createStore() {
 	const store = combineProducers({
@@ -10,6 +11,7 @@ export function createStore() {
 		inventory: InventoryActions,
 		store: StoreActions,
 		crate: CrateActions,
+		windowManager: WindowActions,
 	});
 
 	return store;

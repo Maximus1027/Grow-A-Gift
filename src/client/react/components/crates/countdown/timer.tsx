@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "@rbxts/react";
+import { useSelector } from "@rbxts/react-reflex";
 import { createPortal } from "@rbxts/react-roblox";
 import { RunService } from "@rbxts/services";
 import { Events } from "client/network";
+import { RootState } from "client/react/store/store";
 import { formatSecondsToMinutesAndSeconds } from "shared/utils/generictils";
 
 import { CrateConfig, getCrateConfig } from "shared/utils/loot";
@@ -17,6 +19,7 @@ const Crates = getCrateConfig();
 
 export function CrateTimer(props: CrateTimeProps) {
 	const [timeUntil, setTime] = useState(0);
+	const isCurrentlyRolling = useSelector((state: RootState) => state.windowManager.windows.crateopen);
 
 	useEffect(() => {
 		const placed = props.placedTick;
@@ -48,7 +51,7 @@ export function CrateTimer(props: CrateTimeProps) {
 					<proximityprompt
 						Event={{
 							Triggered: () => {
-								if (timeUntil > 0) {
+								if (timeUntil > 0 || isCurrentlyRolling === true) {
 									return;
 								}
 

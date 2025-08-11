@@ -25,10 +25,9 @@ export class InventoryService implements OnStart {
 				this.addHouseToInventory(player, houseid, amount, wasEquipped);
 			}
 
-			print(getInventoryFolder(player).GetChildren());
 			this.PlayerLoaded.Fire(player);
+			Events.onDataLoaded.fire(player);
 
-			print("+++++++++++");
 			this.addHouseToInventory(player, "basic", 5);
 		});
 

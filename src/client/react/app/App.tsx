@@ -12,6 +12,8 @@ import { Store } from "../components/store/Store";
 import { PresentChancesHover } from "../components/hover/PresentHover";
 import { Crates } from "../components/crates/Crates";
 import { PreloadAssets } from "../components/preloader/preloadassets";
+import { Hud } from "../components/hud/hud";
+import { Township } from "../components/township/TownshipHandler";
 
 const player = Players.LocalPlayer;
 const stats = player.WaitForChild("stats");
@@ -20,6 +22,7 @@ const moneyValue = stats.WaitForChild("Money") as NumberValue;
 export function App() {
 	return (
 		<ReflexProvider producer={store}>
+			<PreloadAssets />
 			<Version />
 			<Presents />
 			<MoneyDisplay value={moneyValue} />
@@ -29,7 +32,8 @@ export function App() {
 			<HouseSelect />
 			<PresentChancesHover />
 			<Crates />
-			<PreloadAssets />
+			<Hud />
+			<Township />
 		</ReflexProvider>
 	);
 }

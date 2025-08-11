@@ -1,5 +1,6 @@
 import { Controller, OnStart } from "@flamework/core";
 import { ContextActionService, Players, RunService, UserInputService } from "@rbxts/services";
+import { Window } from "client/react/store/producer/windowproducer";
 import { store } from "client/react/store/store";
 import { getPlayerPlotFolder } from "shared/utils/generictils";
 
@@ -59,5 +60,6 @@ export class PickupController implements OnStart {
 		}
 
 		store.promptHouse(this.currentselection!.Parent!.Name);
+		store.setWindowState(Window.houseselect, true);
 	}
 }

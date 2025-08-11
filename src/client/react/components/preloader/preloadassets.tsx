@@ -37,6 +37,21 @@ export function PreloadAssets() {
 			<imagelabel Image={"rbxassetid://116436070286807"} Size={UDim2.fromOffset(1, 1)} />
 			<imagelabel Image={"rbxassetid://103500731460787"} Size={UDim2.fromOffset(1, 1)} />
 			<imagelabel Image={"rbxassetid://128740229126942"} Size={UDim2.fromOffset(1, 1)} />
+
+			<imagelabel Image={"rbxassetid://128002358167749"} Size={UDim2.fromOffset(1, 1)} />
+			<imagelabel Image={"rbxassetid://88088338934962"} Size={UDim2.fromOffset(1, 1)} />
+			<imagelabel Image={"rbxassetid://99603570912100"} Size={UDim2.fromOffset(1, 1)} />
+
+			{/** TOWN ICONS */}
+			<imagelabel Image={"rbxassetid://128732933526166"} Size={UDim2.fromOffset(1, 1)} />
+			<imagelabel Image={"rbxassetid://84484387644156"} Size={UDim2.fromOffset(1, 1)} />
+			<imagelabel Image={"rbxassetid://121848553215191"} Size={UDim2.fromOffset(1, 1)} />
+			<imagelabel Image={"rbxassetid://108484254834116"} Size={UDim2.fromOffset(1, 1)} />
+			<imagelabel Image={"rbxassetid://117194101531312"} Size={UDim2.fromOffset(1, 1)} />
+			<imagelabel Image={"rbxassetid://122034927173429"} Size={UDim2.fromOffset(1, 1)} />
+			<imagelabel Image={"rbxassetid://116989522422833"} Size={UDim2.fromOffset(1, 1)} />
+			<imagelabel Image={"rbxassetid://91129668979065"} Size={UDim2.fromOffset(1, 1)} />
+			<imagelabel Image={"rbxassetid://95546525399732"} Size={UDim2.fromOffset(1, 1)} />
 		</screengui>
 	);
 }

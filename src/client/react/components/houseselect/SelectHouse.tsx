@@ -6,9 +6,11 @@ import { useMotion } from "@rbxts/pretty-react-hooks";
 import { Events } from "client/network";
 import { SellButton } from "./sellbutton";
 import { getItemCost, getHouseDisplayName } from "shared/utils/houseutils";
+import { Window } from "client/react/store/producer/windowproducer";
 
 export function HouseSelect() {
 	const pickup = useSelector((state: RootState) => state.inventory.promptHouseid);
+	const window = useSelector((state: RootState) => state.windowManager.windows.houseselect);
 	const dispatch = useProducer<RootStore>();
 
 	const [pos, setpos] = useMotion(1.5);
@@ -29,7 +31,10 @@ export function HouseSelect() {
 		});
 
 		if (pickup === undefined) {
-			task.delay(0.2, () => setvisible(false));
+			task.delay(0.2, () => {
+				dispatch.setWindowState(Window.houseselect, false);
+				setvisible(false);
+			});
 		} else {
 			setHouseTitle(pickup.split("-")[0]);
 		}
@@ -38,7 +43,12 @@ export function HouseSelect() {
 	return (
 		visible &&
 		title !== "" && (
-			<screengui key={"HOUSESELECTION" + pickup} ResetOnSpawn={false} ZIndexBehavior={Enum.ZIndexBehavior.Global}>
+			<screengui
+				key={"HOUSESELECTION" + pickup}
+				Enabled={window === true}
+				ResetOnSpawn={false}
+				ZIndexBehavior={Enum.ZIndexBehavior.Global}
+			>
 				<imagelabel
 					key={"mansion"}
 					Image={"rbxassetid://106981462577987"}
@@ -52,7 +62,9 @@ export function HouseSelect() {
 					Size={UDim2.fromScale(0.326, 0.345)}
 				>
 					<ExitButton
-						onClick={() => dispatch.promptHouse(undefined)}
+						onClick={() => {
+							dispatch.promptHouse(undefined);
+						}}
 						Position={UDim2.fromScale(0.938, 0.0583)}
 						Size={UDim2.fromScale(0.187, 0.313)}
 					/>

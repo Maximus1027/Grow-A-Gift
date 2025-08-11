@@ -1,4 +1,7 @@
 import React from "@rbxts/react";
+import { useSelector } from "@rbxts/react-reflex";
+import { Window } from "client/react/store/producer/windowproducer";
+import { RootState } from "client/react/store/store";
 
 export interface ConfirmProps {
 	confirm: () => {};
@@ -7,8 +10,10 @@ export interface ConfirmProps {
 }
 
 export function Confirm(props: ConfirmProps) {
+	const window = useSelector((state: RootState) => state.windowManager.windows.confirm);
+
 	return (
-		<screengui key={"CONFIRM DECISION"} ZIndexBehavior={Enum.ZIndexBehavior.Sibling}>
+		<screengui key={"CONFIRM DECISION"} Enabled={window === true} ZIndexBehavior={Enum.ZIndexBehavior.Sibling}>
 			<imagelabel
 				key={"main"}
 				Image={"rbxassetid://72947143360155"}
