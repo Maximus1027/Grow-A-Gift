@@ -5,6 +5,7 @@ import { getVillage } from "shared/utils/generictils";
 import { useProducer } from "@rbxts/react-reflex";
 import { RootStore } from "client/react/store/store";
 import { Window } from "client/react/store/producer/windowproducer";
+import { Events } from "client/network";
 
 export interface TownshipProps {
 	nextTown: string;
@@ -73,7 +74,7 @@ export function UpgradeTown(props: TownshipProps) {
 					<React.Fragment>
 						<imagelabel
 							key={"icon"}
-							Image={"rbxassetid://128732933526166"}
+							Image={nextVillage[1].iconid}
 							ScaleType={Enum.ScaleType.Fit}
 							AnchorPoint={new Vector2(0.5, 0.5)}
 							BackgroundColor3={Color3.fromRGB(255, 255, 255)}
@@ -92,6 +93,8 @@ export function UpgradeTown(props: TownshipProps) {
 							Size={UDim2.fromScale(0.345, 0.213)}
 							onClick={() => {
 								print("Upgrade!");
+								dispatch.setWindowState(Window.township, false);
+								Events.onPlotAction.fire("upgrade", nextVillage[0]);
 							}}
 						/>
 

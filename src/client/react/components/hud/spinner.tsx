@@ -1,6 +1,12 @@
 import React from "@rbxts/react";
+import { Button } from "../generic/button";
+import { useProducer } from "@rbxts/react-reflex";
+import { Window, WindowState } from "client/react/store/producer/windowproducer";
+import { RootStore } from "client/react/store/store";
 
 export function SpinnerButton() {
+	const dispatch = useProducer<RootStore>();
+
 	return (
 		<frame
 			key={"spinner"}
@@ -23,19 +29,17 @@ export function SpinnerButton() {
 				BorderSizePixel={0}
 				Position={UDim2.fromScale(0.765, 0.474)}
 				Size={UDim2.fromScale(0.339, 0.692)}
+				ZIndex={15}
 			/>
 
-			<imagelabel
+			<Button
 				key={"spin"}
 				Image={"rbxassetid://105458860026898"}
-				ScaleType={Enum.ScaleType.Fit}
-				AnchorPoint={new Vector2(0.5, 0.5)}
-				BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-				BackgroundTransparency={1}
-				BorderColor3={Color3.fromRGB(0, 0, 0)}
-				BorderSizePixel={0}
 				Position={UDim2.fromScale(0.766, 0.768)}
 				Size={UDim2.fromScale(0.674, 0.717)}
+				onClick={() => {
+					dispatch.toggleWindowState(Window.spin);
+				}}
 			/>
 
 			<textlabel

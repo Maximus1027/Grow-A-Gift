@@ -7,11 +7,10 @@ import { RootState, RootStore } from "client/react/store/store";
 export function InventoryOpener() {
 	const dispatch = useProducer<RootStore>();
 	const inventoryState = useSelector((state: RootState) => state.inventory);
-	const window = useSelector((state: RootState) => state.windowManager.windows.inventory);
+	const window = useSelector((state: RootState) => state.windowManager.windows.hud);
 
 	return (
-		(inventoryState.inventory.filter((house) => house.GetAttribute("equip") === undefined).size() > 0 ||
-			window === true) && (
+		window === true && (
 			<imagebutton
 				key={"openinv"}
 				Image={"rbxassetid://130138970079871"}

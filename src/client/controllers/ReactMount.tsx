@@ -4,6 +4,7 @@ import { createPortal, createRoot } from "@rbxts/react-roblox";
 import { Players } from "@rbxts/services";
 import { Events } from "client/network";
 import { App } from "client/react/app/App";
+import { getPlayerPlotFolder } from "shared/utils/generictils";
 
 @Controller({
 	loadOrder: 2,

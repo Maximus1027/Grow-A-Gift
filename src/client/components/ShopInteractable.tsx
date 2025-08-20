@@ -3,6 +3,7 @@ import { Component, BaseComponent } from "@flamework/components";
 import { store } from "client/react/store/store";
 import { t } from "@rbxts/t";
 import { storeType } from "client/react/components/store/Store";
+import { Window } from "client/react/store/producer/windowproducer";
 
 interface Attributes {
 	shopType: string;
@@ -32,6 +33,7 @@ export class ShopInteractable extends BaseComponent<Attributes> implements OnSta
 
 		proximityPrompt.Triggered.Connect(() => {
 			store.toggleStore(this.attributes.shopType as storeType);
+			store.setWindowState(Window.shop, true);
 		});
 
 		proximityPrompt.Parent = this.instance;

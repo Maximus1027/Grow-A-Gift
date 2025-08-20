@@ -20,7 +20,7 @@ animation.AnimationId = "rbxassetid://95117573488710";
  */
 export class NPC {
 	private entity?: EntityNPC;
-	private presentWorth?: number;
+	private presentWorth: number;
 
 	constructor(
 		readonly parent: Folder,
@@ -36,7 +36,14 @@ export class NPC {
 
 		this.entity = newNPC;
 
+		const presentWorth = getPresentValue(this.presentRarity);
+		this.presentWorth = math.random(presentWorth!.min, presentWorth!.max);
+
 		this.spawn();
+	}
+
+	public getPresentWorth() {
+		return this.presentWorth;
 	}
 
 	public getEntity() {

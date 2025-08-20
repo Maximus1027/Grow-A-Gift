@@ -87,4 +87,19 @@ export class PlotService implements OnStart, OnInit {
 
 		return plot;
 	}
+
+	/**
+	 * Teleport player to plot spawn
+	 * @param player
+	 * @returns
+	 */
+	public summonPlayer(player: Player) {
+		const plot = this.plotMap.get(player);
+
+		if (!plot) {
+			return;
+		}
+
+		plot.summonPlayer();
+	}
 }

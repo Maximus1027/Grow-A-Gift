@@ -6,8 +6,8 @@ export function PreloadAssets() {
 			<imagelabel Image={"rbxassetid://104627235588011"} Size={UDim2.fromOffset(1, 1)} />
 			<imagelabel Image={"rbxassetid://92884394960407"} Size={UDim2.fromOffset(1, 1)} />
 			<imagelabel Image={"rbxassetid://92149459636986"} Size={UDim2.fromOffset(1, 1)} />
-			<imagelabel Image={"rbxassetid://126615963509378"} Size={UDim2.fromOffset(1, 1)} />
-			<imagelabel Image={"rbxassetid://138469023746536"} Size={UDim2.fromOffset(1, 1)} />
+			<imagelabel Image={"rbxassetid://140390112233945"} Size={UDim2.fromOffset(1, 1)} />
+			<imagelabel Image={"rbxassetid://99748332865136"} Size={UDim2.fromOffset(1, 1)} />
 			<imagelabel Image={"rbxassetid://105940033785986"} Size={UDim2.fromOffset(1, 1)} />
 			<imagelabel Image={"rbxassetid://87477564493751"} Size={UDim2.fromOffset(1, 1)} />
 			<imagelabel Image={"rbxassetid://105056767479291"} Size={UDim2.fromOffset(1, 1)} />

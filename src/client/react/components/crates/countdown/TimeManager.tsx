@@ -49,7 +49,7 @@ export function TimeManager() {
 		crates.map((crate: Model) => {
 			const placed = crate.GetAttribute("placed") as number;
 			const crateid = crate.GetAttribute("crateid") as string;
-			const crateDelay = config[crateid].timeInMinutes;
+			const crateDelay = config[crateid].timeInMinutes * 60;
 
 			return createPortal(
 				<CrateTimer crateModel={crate} crateid={crate.Name} crateTimer={crateDelay} placedTick={placed} />,

@@ -123,12 +123,35 @@ export function Store() {
 				</scrollingframe>
 				<uiaspectratioconstraint key={"uIAspectRatioConstraint6"} AspectRatio={1.7} />
 				<ExitButton
-					Position={UDim2.fromScale(0.952, 0.0472)}
-					Size={UDim2.fromScale(0.12, 0.205)}
+					Position={UDim2.fromScale(0.961, 0.049)}
+					Size={UDim2.fromScale(0.138, 0.235)}
 					onClick={function (): void {
 						dispatch.toggleStore(undefined);
 					}}
 				/>
+
+				<textlabel
+					key={"shopid"}
+					FontFace={new Font("rbxasset://fonts/families/FredokaOne.json")}
+					Text={
+						storeState.storeOpen &&
+						storeState.storeOpen.sub(0, 1).upper() + storeState.storeOpen.sub(2) + "s"
+					}
+					TextColor3={Color3.fromRGB(255, 255, 255)}
+					TextScaled={true}
+					TextSize={14}
+					TextWrapped={true}
+					AnchorPoint={new Vector2(0.5, 0.5)}
+					BackgroundColor3={Color3.fromRGB(255, 255, 255)}
+					BackgroundTransparency={1}
+					BorderColor3={Color3.fromRGB(0, 0, 0)}
+					BorderSizePixel={0}
+					Position={UDim2.fromScale(0.167, 0.0041)}
+					Rotation={-3}
+					Size={UDim2.fromScale(0.488, 0.259)}
+				>
+					<uistroke key={"uIStroke"} Thickness={6} />
+				</textlabel>
 
 				{storeState.storeOpen === "house" && countdown}
 			</imagelabel>

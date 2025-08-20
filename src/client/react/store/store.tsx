@@ -4,6 +4,7 @@ import { InventoryActions } from "./producer/inventoryproducer";
 import { StoreActions } from "./producer/storeproducer";
 import { CrateActions } from "./producer/crateproducer";
 import { WindowActions } from "./producer/windowproducer";
+import { SpinActions } from "./producer/spinproducer";
 
 export function createStore() {
 	const store = combineProducers({
@@ -12,6 +13,7 @@ export function createStore() {
 		store: StoreActions,
 		crate: CrateActions,
 		windowManager: WindowActions,
+		spin: SpinActions,
 	});
 
 	return store;
@@ -23,5 +25,6 @@ export type RootStore = typeof store;
 export type RootState = InferState<RootStore>;
 
 store.subscribe((state: RootState) => {
-	//	print(state);
+	//print(state.windowManager.windows);
+	//print(state.inventory.inputKey);
 });

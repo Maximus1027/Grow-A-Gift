@@ -2,6 +2,7 @@ import { Dependency } from "@flamework/core";
 import React, { useEffect, useRef, useState } from "@rbxts/react";
 import { useProducer, useSelector } from "@rbxts/react-reflex";
 import { RunService } from "@rbxts/services";
+import { t } from "@rbxts/t";
 import { PlacementController } from "client/controllers/PlacementController";
 import { Events } from "client/network";
 import { RootStore, RootState } from "client/react/store/store";
@@ -10,12 +11,15 @@ export interface HotbarProps {
 	houseId: string;
 	houseModel: Model;
 	valueBase: NumberValue;
+	layoutorder: number;
 }
 
 export function HotbarSlot(props: HotbarProps) {
 	const dispatch = useProducer<RootStore>();
 	const selectedMachine = useSelector((state: RootState) => state.build.selectedMachine);
-	const inventoryOpen = useSelector((state: RootState) => state.inventory.inventoryOpen);
+	const inventoryOpen = useSelector((state: RootState) => state.windowManager.windows.inventory);
+	const selectedKey = useSelector((state: RootState) => state.inventory.inputKey);
+
 	const camera = useRef();
 	const [houseAmount, setAmount] = useState<number>(props.valueBase.Value);
 	const placementController = Dependency<PlacementController>();
@@ -49,6 +53,36 @@ export function HotbarSlot(props: HotbarProps) {
 		};
 	}, []);
 
+	const slotPressed = () => {
+		if (inventoryOpen === true) {
+			Events.onInventoryAction("addInventory", props.houseId);
+			return;
+		}
+
+		if (selectedMachine === props.houseId) {
+			dispatch.selectMachine("");
+			placementController.stopPlacingMachine();
+
+			return;
+		}
+
+		if (selectedMachine !== "") {
+			placementController.stopPlacingMachine();
+		}
+
+		dispatch.selectMachine(props.houseId);
+		placementController.beginPlacingMachine(props.houseId);
+	};
+
+	useEffect(() => {
+		if (!t.number(selectedKey) || props.layoutorder !== selectedKey) {
+			return;
+		}
+
+		slotPressed();
+		dispatch.setInputKey();
+	}, [selectedKey]);
+
 	return (
 		<imagebutton
 			key={"equip" + props.houseId}
@@ -62,26 +96,7 @@ export function HotbarSlot(props: HotbarProps) {
 			Position={UDim2.fromScale(0.0856, 0.5)}
 			Size={UDim2.fromScale(0.171, 1)}
 			Event={{
-				MouseButton1Click: () => {
-					if (inventoryOpen) {
-						Events.onInventoryAction("addInventory", props.houseId);
-						return;
-					}
-
-					if (selectedMachine === props.houseId) {
-						dispatch.selectMachine("");
-						placementController.stopPlacingMachine();
-
-						return;
-					}
-
-					if (selectedMachine !== "") {
-						placementController.stopPlacingMachine();
-					}
-
-					dispatch.selectMachine(props.houseId);
-					placementController.beginPlacingMachine(props.houseId);
-				},
+				MouseButton1Click: () => slotPressed(),
 			}}
 		>
 			<viewportframe
@@ -112,6 +127,28 @@ export function HotbarSlot(props: HotbarProps) {
 			>
 				<uitextsizeconstraint key={"uITextSizeConstraint"} MaxTextSize={50} />
 				<uiaspectratioconstraint />
+			</textlabel>
+			<textlabel
+				key={"keyboardid"}
+				FontFace={new Font("rbxasset://fonts/families/FredokaOne.json")}
+				Text={props.layoutorder + ""}
+				TextColor3={Color3.fromRGB(255, 255, 255)}
+				TextScaled={true}
+				TextSize={14}
+				TextTransparency={0.2}
+				TextWrapped={true}
+				AnchorPoint={new Vector2(0.5, 0.5)}
+				BackgroundColor3={Color3.fromRGB(255, 255, 255)}
+				BackgroundTransparency={1}
+				BorderColor3={Color3.fromRGB(0, 0, 0)}
+				BorderSizePixel={0}
+				Position={UDim2.fromScale(0.304, 0.259)}
+				Rotation={3}
+				Size={UDim2.fromScale(0.301, 0.311)}
+			>
+				<uiaspectratioconstraint />
+
+				<uistroke key={"uIStroke"} Thickness={2} />
 			</textlabel>
 		</imagebutton>
 	);

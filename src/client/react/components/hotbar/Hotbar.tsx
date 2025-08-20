@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "@rbxts/react";
 import { HotbarSlot } from "./slot";
-import { Players, ReplicatedStorage } from "@rbxts/services";
+import { Players, ReplicatedStorage, UserInputService } from "@rbxts/services";
 
 import { t } from "@rbxts/t";
 import { InventoryOpener } from "../inventory/inventoryopener";
-import { useSelector } from "@rbxts/react-reflex";
-import { RootState } from "client/react/store/store";
+import { useProducer, useSelector } from "@rbxts/react-reflex";
+import { RootState, RootStore } from "client/react/store/store";
 import { Window } from "client/react/store/producer/windowproducer";
 
 const houseModels = ReplicatedStorage.WaitForChild("assets").WaitForChild("houses") as Folder;
@@ -24,6 +24,7 @@ export function Hotbar() {
 			ZIndexBehavior={Enum.ZIndexBehavior.Global}
 			ResetOnSpawn={false}
 			Enabled={window === true}
+			DisplayOrder={-1}
 		>
 			<frame
 				key={"frame"}
@@ -61,7 +62,7 @@ export function Hotbar() {
 					{houseids
 						.filter((house) => house.GetAttribute("equip") !== undefined)
 						.sort((a, b) => (a.GetAttribute("equip") as number) < (b.GetAttribute("equip") as number))
-						.map((house: NumberValue) => {
+						.map((house: NumberValue, index: number) => {
 							const model = houseModels.FindFirstChild(house.Name);
 							if (!model || !model.IsA("Model")) return <></>;
 							return (
@@ -70,6 +71,7 @@ export function Hotbar() {
 									houseModel={model}
 									houseId={house.Name}
 									valueBase={house}
+									layoutorder={index + 1}
 								/>
 							);
 						})}

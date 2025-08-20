@@ -1,6 +1,6 @@
 {
     "basic": {
-        "timeInMinutes": 5,
+        "timeInMinutes": 0.083,
         "cost": 100,
         "displayName": "Basic Crate",
         "productid": 123,
@@ -10,14 +10,14 @@
         }
     },
    "epic": {
-        "timeInMinutes": 60,
+        "timeInMinutes": 0.06,
         "cost": 10000000,
         "displayName": "Epic Crate",
         "productid": 123,
         "loot": {
-           "tiki": 2,
-           "tinyhouse": 3,
-           "sandhouse": 100
+       
+           "barrack": 2,
+           "sandhouse": 1000
         }
     }
 } 

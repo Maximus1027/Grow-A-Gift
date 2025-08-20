@@ -11,11 +11,14 @@ import { t } from "@rbxts/t";
 import Signal from "@rbxts/lemon-signal";
 import { getCrateConfig } from "shared/utils/loot";
 import { getPlayerPlotFolder } from "shared/utils/generictils";
+import { Boost } from "shared/enums/Boost";
 
 const defaultProfile: ProfileData = {
 	money: 10000000,
 	village: "dirt",
 	inventory: {},
+	rebirths: 0,
+	spins: 0,
 	equipped: [],
 	plot: {
 		placed: {},
@@ -28,7 +31,7 @@ const crateConfig = getCrateConfig();
 	loadOrder: 0,
 })
 export class DataService implements OnStart {
-	private profileStore = ProfileService.GetProfileStore("PlayerData", defaultProfile);
+	private profileStore = ProfileService.GetProfileStore("PlayerDB", defaultProfile);
 	private loadedProfiles = new Map<Player, Profile<ProfileData>>();
 
 	public PlayerLoaded = new Signal<[Player, Profile<ProfileData>]>();
@@ -46,6 +49,11 @@ export class DataService implements OnStart {
 	 * @returns
 	 */
 	private createProfile(player: Player) {
+		if (this.loadedProfiles.has(player)) {
+			print("Profile already exists for player", player.Name);
+			return;
+		}
+
 		const userid = player.UserId;
 		const key = `profile_${userid}`;
 
@@ -85,13 +93,34 @@ export class DataService implements OnStart {
 		inventory.Name = "inventory";
 		inventory.Parent = dataFolder;
 
+		const boosts = new Instance("Folder");
+		boosts.Name = "boosts";
+		boosts.Parent = dataFolder;
+
 		const village = new Instance("StringValue");
 		village.Name = "village";
 		village.Parent = dataFolder;
 
+		const rebirths = new Instance("IntValue");
+		rebirths.Name = "rebirths";
+		rebirths.Parent = dataFolder;
+
+		const spins = new Instance("IntValue");
+		spins.Name = "spins";
+		spins.Parent = dataFolder;
+
+		//Load booster types
+		for (const boost of Object.keys(Boost)) {
+			const booster = new Instance("NumberValue");
+			booster.Name = boost;
+			booster.Parent = boosts;
+		}
+
 		/** Load Data */
 		money.Value = profile.Data.money;
 		village.Value = profile.Data.village ?? "dirt";
+		rebirths.Value = profile.Data.rebirths;
+		spins.Value = profile.Data.spins;
 		/** Done Loading */
 		this.PlayerLoaded.Fire(player, profile);
 	}
@@ -112,6 +141,8 @@ export class DataService implements OnStart {
 			.andThen(() => {
 				profile.Data.money = getMoneyStat(player).Value;
 				profile.Data.village = player.stats.village.Value;
+				profile.Data.rebirths = player.stats.rebirths.Value;
+				profile.Data.spins = player.stats.spins.Value;
 			})
 			.andThen(() => profile.Release())
 			.andThen(() => this.loadedProfiles.delete(player))
@@ -136,8 +167,6 @@ export class DataService implements OnStart {
 			.GetChildren()
 			.forEach((item) => {
 				newInventory[item.Name] = (item as NumberValue).Value;
-
-				print(item.Name);
 
 				if (item.GetAttribute("equip") !== undefined) {
 					equip.push(item.Name);

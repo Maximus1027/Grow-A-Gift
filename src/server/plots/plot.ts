@@ -3,12 +3,20 @@ import Object from "@rbxts/object-utils";
 import { Profile } from "@rbxts/profileservice/globals";
 import { HttpService, ReplicatedStorage, ServerStorage, Workspace } from "@rbxts/services";
 import { t } from "@rbxts/t";
+import { Events } from "server/network";
 import { CrateService } from "server/services/CrateService";
 import { DataService } from "server/services/DataService";
 import { InventoryService } from "server/services/InventoryService";
 import * as HousesConfig from "shared/config/house.json";
 import { ProfileData } from "shared/types/profile";
-import { doesHouseExist, isModelIntersecting } from "shared/utils/generictils";
+import {
+	doesHouseExist,
+	getNextVillageUnlock,
+	getVillage,
+	isModelIntersecting,
+	isModelWithinBounds,
+	tick,
+} from "shared/utils/generictils";
 import { getItemCost } from "shared/utils/houseutils";
 import { getCrateConfig } from "shared/utils/loot";
 import { doesPlayerOwnHouse, getPlayerHouseObject } from "shared/utils/playertils";
@@ -36,6 +44,7 @@ export class Plot {
 
 		if (plot) {
 			this.plot = plot;
+			task.delay(2, () => Events.onDataLoaded.fire(this.player));
 		} else {
 			player.Kick("Couldn't locate village");
 		}
@@ -46,6 +55,7 @@ export class Plot {
 
 	private plot?: PlotFolder;
 	private plotBaseplate?: BasePart;
+	private spawnPlate?: BasePart;
 	private grid = new Map<string, CFrame>();
 	private crateTick = new Map<string, number>();
 	private housesFolder?: Folder;
@@ -83,8 +93,6 @@ export class Plot {
 	}
 
 	private createPlot() {
-		print("CREATING");
-
 		const PlotsFolder = Workspace.WaitForChild("Plots") as Folder & Folder[];
 
 		//get next available plot
@@ -94,7 +102,11 @@ export class Plot {
 		plotFolder?.SetAttribute("player", this.player.Name);
 
 		//cleanup any possible artifacts
-		plotFolder.ClearAllChildren();
+
+		plotFolder
+			.GetChildren()
+			.filter((child) => !child.HasTag("baseplate"))
+			.forEach((child) => child.Destroy());
 
 		const currentVillage = this.player.stats.village.Value;
 
@@ -102,12 +114,6 @@ export class Plot {
 
 		if (!villageModel) {
 			return;
-		}
-
-		const baseplate = villageModel!.FindFirstChild("baseplate");
-
-		if (baseplate!.IsA("BasePart")) {
-			this.plotBaseplate = baseplate;
 		}
 
 		const houseFolder = new Instance("Folder");
@@ -119,12 +125,14 @@ export class Plot {
 		npcFolder.Name = "NPC";
 		npcFolder.Parent = plotFolder;
 
+		this.plotBaseplate = plotFolder.WaitForChild("baseplate") as BasePart;
+
 		this.loadData();
 
 		return plotFolder as PlotFolder;
 	}
 
-	private placeVillage(village: string, plotFolder: PlotFolder): Model | undefined {
+	private placeVillage(village: string, folder?: PlotFolder): Model | undefined {
 		const villageAsset = villages.FindFirstChild(village);
 
 		if (!villageAsset) {
@@ -132,11 +140,29 @@ export class Plot {
 			return;
 		}
 
+		const plotFolder = folder ?? this.getPlotFolder();
+
 		const villageModel = villageAsset.Clone() as Model;
 		villageModel.Parent = plotFolder;
 		villageModel.PivotTo(plotFolder.CFrame);
 
+		const spawn = villageModel.GetDescendants().find((child) => child.HasTag("Spawn")) as BasePart;
+		this.spawnPlate = spawn ?? this.plotBaseplate;
+
 		return villageModel;
+	}
+
+	/**
+	 * Teleport player to plot home spawn
+	 * @returns
+	 */
+	public summonPlayer() {
+		const character = this.player.Character || this.player.CharacterAdded.Wait()[0];
+
+		if (!character || !this.spawnPlate) {
+			return;
+		}
+		character.PivotTo(this.spawnPlate.CFrame.add(new Vector3(0, character.GetExtentsSize().Y, 0)));
 	}
 
 	/**
@@ -161,6 +187,11 @@ export class Plot {
 		const newHouse = houseFolder.FindFirstChild(houseId)?.Clone() as Model;
 		newHouse!.Name = newHouse?.Name + "-" + HttpService.GenerateGUID(false);
 		newHouse!.PivotTo(cframe);
+
+		if (!isModelWithinBounds(newHouse, this.plotBaseplate)) {
+			warn("House could not be placed due to out of bounds");
+			return;
+		}
 
 		//	newHouse.AddTag("Drill");
 		newHouse.SetAttribute("owner", this.player.Name);
@@ -199,12 +230,13 @@ export class Plot {
 		this.grid.set(newHouse?.Name, cframe.sub(this.plotBaseplate!.Position));
 
 		//remove from inventory
-		const houseObject = getPlayerHouseObject(this.player, houseId);
-
-		if (t.instanceIsA("NumberValue")(houseObject)) {
-			houseObject.Value -= 1;
-			if (houseObject.Value <= 0) {
-				houseObject.Destroy();
+		if (!bypassOwnership) {
+			const houseObject = getPlayerHouseObject(this.player, houseId);
+			if (t.instanceIsA("NumberValue")(houseObject)) {
+				houseObject.Value -= 1;
+				if (houseObject.Value <= 0) {
+					houseObject.Destroy();
+				}
 			}
 		}
 
@@ -230,6 +262,23 @@ export class Plot {
 			const parsedHouseId = houseid.split("-")[0];
 			this.inventoryService.addHouseToInventory(this.player, parsedHouseId, 1);
 		}
+	}
+
+	/**
+	 * Reset player stats and inventory
+	 */
+	private rebirth() {
+		this.player.stats.inventory.ClearAllChildren();
+		this.housesFolder?.ClearAllChildren();
+		this.getPlotFolder().FindFirstChild("NPC")?.ClearAllChildren();
+		this.grid.clear();
+
+		this.player.stats.Money.Value = 0;
+		this.player.stats.village.Value = "dirt";
+		this.player.stats.rebirths.Value += 1;
+
+		this.removeCurrentVillage();
+		this.placeVillage("dirt");
 	}
 
 	/**
@@ -273,17 +322,45 @@ export class Plot {
 	 * @param crateid
 	 */
 	private openCrate(crateid: string) {
-		if (!this.crateTick.has(crateid)) {
+		const parsedCrate = crateid.split("-")[0];
+		const crateData = CrateConfig[parsedCrate];
+
+		if (
+			!this.crateTick.has(crateid) ||
+			(this.crateTick.get(crateid) as number) + crateData.timeInMinutes * 60 > tick()
+		) {
 			return;
 		}
 
 		this.removeHouse(crateid);
 
-		const parsedCrate = crateid.split("-")[0];
-
 		this.crateService.openCrate(this.player, parsedCrate);
 
 		return;
+	}
+
+	/**
+	 * Upgrade the player's village
+	 * @param player
+	 */
+	private upgradeVillage() {
+		const currentVillage = this.player.stats.village.Value;
+		const nextVillage = getNextVillageUnlock(currentVillage);
+
+		if (!t.string(nextVillage)) {
+			warn(nextVillage, "-- Next village not found. maybe player hit max?");
+			return;
+		}
+
+		const villageData = getVillage(nextVillage);
+
+		if (this.player.stats.Money.Value >= villageData[1].cost) {
+			this.player.stats.Money.Value -= villageData[1].cost;
+			this.player.stats.village.Value = nextVillage;
+
+			this.removeCurrentVillage();
+			this.placeVillage(nextVillage);
+		}
 	}
 
 	/**
@@ -292,7 +369,7 @@ export class Plot {
 	 * @param args
 	 */
 	public dispatch(action: string, args: unknown[]) {
-		if (!args || !(args.size() > 0)) {
+		if (!args) {
 			warn(`Something went wrong with ${this.player.Name}'s plot dispatch. Action & Args:`, action, args);
 			return;
 		}
@@ -333,10 +410,31 @@ export class Plot {
 				}
 
 				this.openCrate(args[0]);
+				break;
+			}
+			case "upgrade": {
+				//upgrading the village
+
+				this.upgradeVillage();
+				break;
+			}
+			case "rebirth": {
+				this.rebirth();
+				break;
 			}
 		}
 
 		this.dataService.savePlots(this.player, this);
+	}
+
+	private removeCurrentVillage() {
+		const foundModel = this.getPlotFolder()
+			.GetChildren()
+			.find((inst) => inst.HasTag("Village"));
+
+		if (foundModel) {
+			foundModel.Destroy();
+		}
 	}
 
 	/**
@@ -344,10 +442,13 @@ export class Plot {
 	 */
 	public destroy() {
 		const plotFolder = this.getPlotFolder();
-		plotFolder.ClearAllChildren();
+		plotFolder
+			.GetChildren()
+			.filter((child) => !child.HasTag("baseplate"))
+			.forEach((child) => child.Destroy());
 
 		//add default plot
-		this.placeVillage("dirt", plotFolder);
+		this.placeVillage("dirt");
 
 		this.getPlotFolder().SetAttribute("player", undefined);
 	}

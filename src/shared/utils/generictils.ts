@@ -15,8 +15,6 @@ export const isModelIntersecting = function (model1: Model): boolean {
 		.filter((part) => part.Transparency !== 1)
 		.filter((part) => !part.HasTag("baseplate"));
 
-	print(parts, parts.size());
-
 	//does region area have more parts inside than the model itself
 	return (
 		parts.size() >
@@ -90,4 +88,44 @@ export const getVillage = (village: string) => {
 
 	const entry = VillageOrdered[currentIndex];
 	return entry ?? undefined;
+};
+
+export const tick = () => {
+	return DateTime.now().UnixTimestampMillis / 1000;
+};
+
+export const isModelWithinBounds = (model: Model, boundingPart: BasePart): boolean => {
+	const extentsSize = model.GetExtentsSize();
+	const [cframe, boundingSize] = model.GetBoundingBox();
+
+	const corner1 = cframe.Position.add(new Vector3(extentsSize.X / 2, 0, extentsSize.Z / 2));
+	const corner2 = cframe.Position.sub(new Vector3(extentsSize.X / 2, 0, extentsSize.Z / 2));
+
+	const boundingCorner1 = boundingPart.CFrame.PointToWorldSpace(
+		new Vector3(boundingPart.Size.X / 2, 12, boundingPart.Size.Z / 2),
+	);
+	const boundingCorner2 = boundingPart.CFrame.PointToWorldSpace(
+		new Vector3(-boundingPart.Size.X / 2, 12, -boundingPart.Size.Z / 2),
+	);
+
+	const checkCorner = (corner: Vector3) => {
+		if (
+			corner.X <= math.max(boundingCorner1.X, boundingCorner2.X) &&
+			corner.X >= math.min(boundingCorner1.X, boundingCorner2.X)
+		) {
+			if (
+				corner.Z <= math.max(boundingCorner1.Z, boundingCorner2.Z) &&
+				corner.Z >= math.min(boundingCorner1.Z, boundingCorner2.Z)
+			) {
+				return true;
+			}
+		}
+		return false;
+	};
+
+	if (checkCorner(corner1) && checkCorner(corner2)) {
+		return true;
+	}
+
+	return false;
 };

@@ -14,12 +14,17 @@ import { Crates } from "../components/crates/Crates";
 import { PreloadAssets } from "../components/preloader/preloadassets";
 import { Hud } from "../components/hud/hud";
 import { Township } from "../components/township/TownshipHandler";
-
-const player = Players.LocalPlayer;
-const stats = player.WaitForChild("stats");
-const moneyValue = stats.WaitForChild("Money") as NumberValue;
+import { HouseIncomeManager } from "../components/income/houseincome";
+import { RebirthManager } from "../components/rebirth/rebirthmanager";
+import { InviteFriends } from "../components/invite/invitefriends";
+import { Spin } from "../components/spinner/spin";
+import { FocusEffects } from "../components/windows/focuseffects";
 
 export function App() {
+	const player = Players.LocalPlayer;
+	const stats = player.WaitForChild("stats");
+	const moneyValue = stats.WaitForChild("Money") as NumberValue;
+
 	return (
 		<ReflexProvider producer={store}>
 			<PreloadAssets />
@@ -34,6 +39,11 @@ export function App() {
 			<Crates />
 			<Hud />
 			<Township />
+			<HouseIncomeManager />
+			<RebirthManager />
+			<InviteFriends />
+			<Spin />
+			<FocusEffects />
 		</ReflexProvider>
 	);
 }

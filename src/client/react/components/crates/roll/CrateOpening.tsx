@@ -15,8 +15,8 @@ export function CrateOpening() {
 	const window = useSelector((state: RootState) => state.windowManager.windows.crateopen);
 
 	useEffect(() => {
-		const onOpen = Events.onReward.connect((crateid, houseid) => {
-			if (crate !== undefined) {
+		const onOpen = Events.onReward.connect((rewardType, crateid, houseid) => {
+			if (crate !== undefined || rewardType !== "crate") {
 				return;
 			}
 

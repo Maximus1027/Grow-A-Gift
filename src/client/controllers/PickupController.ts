@@ -17,8 +17,10 @@ export class PickupController implements OnStart {
 			if (input.UserInputType === Enum.UserInputType.MouseButton1) {
 				const state = store.getState();
 
+				const windows = state.windowManager.windows;
+
 				//Ensure not currently placing
-				if (state.build.selectedMachine !== "" || state.inventory.inventoryOpen) {
+				if (state.build.selectedMachine !== "" || windows.inventory === true) {
 					return;
 				}
 				this.promptPickup();

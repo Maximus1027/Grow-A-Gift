@@ -24,7 +24,7 @@ export function Inventory() {
 		>
 			<imagelabel
 				key={"main"}
-				Image={"rbxassetid://138469023746536"}
+				Image={"rbxassetid://99748332865136"}
 				ScaleType={Enum.ScaleType.Fit}
 				AnchorPoint={new Vector2(0.5, 0.5)}
 				BackgroundColor3={Color3.fromRGB(255, 255, 255)}
@@ -37,7 +37,7 @@ export function Inventory() {
 				<uiaspectratioconstraint key={"uIAspectRatioConstraint"} AspectRatio={1.55} />
 				<ExitButton
 					onClick={() => dispatch.setWindowState(Window.inventory, false)}
-					Position={UDim2.fromScale(0.93, 0.106)}
+					Position={UDim2.fromScale(0.93, 0.119)}
 					Size={UDim2.fromScale(0.137, 0.212)}
 				/>
 				<scrollingframe
@@ -52,8 +52,8 @@ export function Inventory() {
 					BackgroundTransparency={1}
 					BorderColor3={Color3.fromRGB(0, 0, 0)}
 					BorderSizePixel={0}
-					Position={UDim2.fromScale(0.499, 0.566)}
-					Size={UDim2.fromScale(0.897, 0.707)}
+					Position={UDim2.fromScale(0.511, 0.567)}
+					Size={UDim2.fromScale(0.874, 0.683)}
 				>
 					{houseids
 						.filter((house) => house.GetAttribute("equip") === undefined)
@@ -82,7 +82,7 @@ export function Inventory() {
 					/>
 				</scrollingframe>
 
-				<imagelabel
+				{/* <imagelabel
 					key={"imageLabel"}
 					Image={"rbxassetid://105940033785986"}
 					ScaleType={Enum.ScaleType.Fit}
@@ -146,7 +146,7 @@ export function Inventory() {
 
 						<uiaspectratioconstraint key={"uIAspectRatioConstraint6"} AspectRatio={0.921} />
 					</frame>
-				</imagelabel>
+				</imagelabel> */}
 			</imagelabel>
 		</screengui>
 	);

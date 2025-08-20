@@ -1,0 +1,60 @@
+{
+    "1": {
+        "rewardType": "stats",
+        "reward": "Money",
+        "displayName": "$%s",
+        "image": "rbxassetid://95994691620048",
+        "amount": 25000,
+        "chance": 25
+    },
+    "2": {
+        "rewardType": "stats",
+        "reward": "Money",
+        "displayName": "$%s",
+        "image": "rbxassetid://95994691620048",
+        "amount": 10000,
+        "chance": 20
+    },
+    "3": {
+        "rewardType": "boost",
+        "reward": "Income",
+        "displayName": "x%s Money",
+        "amount": 2,
+        "chance": 10
+    },
+    "4": {
+        "rewardType": "boost",
+        "reward": "Income",
+        "displayName": "x%s Money",
+        "amount": 3,
+        "chance": 8
+    },
+    "5": {
+        "rewardType": "stats",
+        "reward": "spins",
+        "displayName": "+%s Spins",
+        "amount": 3,
+        "chance": 12
+    },
+    "6": {
+        "rewardType": "boost",
+        "reward": "NPCSPEED",
+        "displayName": "%sx NPC Speed",
+        "amount": 2,
+        "chance": 8
+    },
+    "7": {
+        "rewardType": "boost",
+        "reward": "GiftLuck",
+        "displayName": "x%s Gift Luck",
+        "amount": 5,
+        "chance": 7
+    },
+    "8": {
+        "rewardType": "inventory",
+        "reward": "igloo",
+        "displayName": "Igloo",
+        "amount": 1,
+        "chance": 2
+    }
+}

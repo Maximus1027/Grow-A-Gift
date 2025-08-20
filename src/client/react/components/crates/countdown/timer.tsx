@@ -4,7 +4,7 @@ import { createPortal } from "@rbxts/react-roblox";
 import { RunService } from "@rbxts/services";
 import { Events } from "client/network";
 import { RootState } from "client/react/store/store";
-import { formatSecondsToMinutesAndSeconds } from "shared/utils/generictils";
+import { formatSecondsToMinutesAndSeconds, tick } from "shared/utils/generictils";
 
 import { CrateConfig, getCrateConfig } from "shared/utils/loot";
 
@@ -49,6 +49,8 @@ export function CrateTimer(props: CrateTimeProps) {
 			{timeUntil <= 0 &&
 				createPortal(
 					<proximityprompt
+						ActionText={"Open"}
+						HoldDuration={1}
 						Event={{
 							Triggered: () => {
 								if (timeUntil > 0 || isCurrentlyRolling === true) {

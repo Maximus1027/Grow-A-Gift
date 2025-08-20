@@ -13,7 +13,7 @@ export function ExitButton(props: ExitButtonProps) {
 	return (
 		<imagebutton
 			key={"exit"}
-			Image={"rbxassetid://126615963509378"}
+			Image={"rbxassetid://140390112233945"}
 			ScaleType={Enum.ScaleType.Fit}
 			AnchorPoint={new Vector2(0.5, 0.5)}
 			BackgroundColor3={Color3.fromRGB(255, 255, 255)}

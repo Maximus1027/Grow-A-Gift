@@ -14,9 +14,11 @@ import {
 	getPlayerPlot,
 	getPlayerPlotFolder,
 	isModelIntersecting,
+	isModelWithinBounds,
 } from "shared/utils/generictils";
 import * as MainConfig from "shared/config/main.json";
 import { Events } from "client/network";
+import { PricePopup } from "client/react/components/houseselect/pricepopup";
 
 const houses = getHouseAssetsFolder();
 const player = Players.LocalPlayer;
@@ -29,6 +31,8 @@ export class PlacementController implements OnStart, OnInit {
 	private temp?: Folder;
 	private tempMachine?: Model;
 	private placementRotation: CFrame = new CFrame();
+
+	private baseplate?: BasePart;
 	onInit() {
 		const machineFolder = new Instance("Folder");
 		machineFolder.Name = "temp";
@@ -41,8 +45,6 @@ export class PlacementController implements OnStart, OnInit {
 	}
 
 	private setupPlacementListener() {
-		task.wait(5);
-
 		UserInputService.InputBegan.Connect((input) => {
 			if (input.UserInputType === Enum.UserInputType.MouseButton1) {
 				this.confirmPlacement();
@@ -58,9 +60,12 @@ export class PlacementController implements OnStart, OnInit {
 		const character = player.Character ?? player.CharacterAdded.Wait()[0];
 		const head = character.PrimaryPart as Part;
 		const plot = getPlayerPlotFolder(player);
-		const plotModel = plot?.WaitForChild(player.stats.village.Value, 10);
+		const baseplate = plot?.WaitForChild("baseplate", 10) as BasePart;
+		this.baseplate = baseplate;
 
-		print("Plot Part", plotModel);
+		const raycastParams = new RaycastParams();
+		raycastParams.AddToFilter(baseplate);
+		raycastParams.FilterType = Enum.RaycastFilterType.Include;
 
 		const gridSize = MainConfig.gridSize as number;
 
@@ -73,10 +78,6 @@ export class PlacementController implements OnStart, OnInit {
 			const fixedAngle = math.round(angle / rot) * rot;
 
 			if (this.tempMachine) {
-				const raycastParams = new RaycastParams();
-				raycastParams.AddToFilter(plotModel!.FindFirstChild("baseplate") as BasePart);
-				raycastParams.FilterType = Enum.RaycastFilterType.Include;
-
 				const origin = Workspace.CurrentCamera!.CFrame.Position;
 
 				const ray = Workspace.Raycast(origin, mouse.Hit.Position.sub(origin).Unit.mul(1000), raycastParams);
@@ -129,7 +130,11 @@ export class PlacementController implements OnStart, OnInit {
 	 * Place object on grid
 	 */
 	public confirmPlacement() {
-		if (!this.tempMachine || isModelIntersecting(this.tempMachine)) {
+		if (!this.tempMachine || isModelIntersecting(this.tempMachine) || !this.baseplate) {
+			return;
+		}
+
+		if (!isModelWithinBounds(this.tempMachine, this.baseplate)) {
 			return;
 		}
 
@@ -153,7 +158,7 @@ export class PlacementController implements OnStart, OnInit {
 
 		const machineDisplay = houses.FindFirstChild(machineId)?.Clone() as Model;
 		machineDisplay.Name = `${machineDisplay}`;
-		machineDisplay.PivotTo(mouse.Hit);
+		//machineDisplay.PivotTo(mouse.Hit);
 		machineDisplay!.Parent = this.temp;
 
 		const selectionBox = new Instance("SelectionBox");

@@ -1,13 +1,51 @@
 import { Controller, OnStart } from "@flamework/core";
-import { Players } from "@rbxts/services";
+import { Players, UserInputService } from "@rbxts/services";
+import { t } from "@rbxts/t";
 import { store } from "client/react/store/store";
 import { getInventoryFolder } from "shared/utils/playertils";
 
 const player = Players.LocalPlayer;
 const inventoryFolder = getInventoryFolder(player);
+
+const keyMap: Record<string, number> = {
+	One: 1,
+	Two: 2,
+	Three: 3,
+	Four: 4,
+	Five: 5,
+	Six: 6,
+	Seven: 7,
+	Eight: 8,
+	Nine: 9,
+};
+
 @Controller({})
 export class InventoryController implements OnStart {
 	onStart() {
+		//keyboard manager for hotbar
+		UserInputService.InputBegan.Connect((input) => {
+			if (input.UserInputType === Enum.UserInputType.Keyboard) {
+				const state = store.getState();
+
+				if (state.windowManager.windows.hud !== true) {
+					//dont do shit if the hotbar slots arent visible
+					return;
+				}
+
+				const layoutKey = keyMap[input.KeyCode.Name];
+
+				if (
+					!t.number(layoutKey) ||
+					layoutKey >
+						state.inventory.inventory.filter((val) => val.GetAttribute("equip") !== undefined).size()
+				) {
+					return;
+				}
+
+				store.setInputKey(layoutKey);
+			}
+		});
+
 		inventoryFolder.ChildAdded.Connect((child) => {
 			if (!child.IsA("NumberValue")) {
 				return;

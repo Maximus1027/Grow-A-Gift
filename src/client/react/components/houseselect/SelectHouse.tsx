@@ -31,9 +31,9 @@ export function HouseSelect() {
 		});
 
 		if (pickup === undefined) {
-			task.delay(0.2, () => {
-				dispatch.setWindowState(Window.houseselect, false);
+			task.delay(0.1, () => {
 				setvisible(false);
+				dispatch.setWindowState(Window.houseselect, visible);
 			});
 		} else {
 			setHouseTitle(pickup.split("-")[0]);

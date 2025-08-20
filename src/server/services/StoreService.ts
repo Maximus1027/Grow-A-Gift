@@ -65,7 +65,6 @@ export class StoreService implements OnStart {
 	 * @param player
 	 */
 	onStockRefresh(player: Player) {
-		print("refreshing player", player);
 		const stockTable: Record<string, number> = {};
 
 		Object.entries(HouseConfig).forEach((house) => (stockTable[house[0]] = house[1].stock));

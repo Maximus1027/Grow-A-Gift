@@ -29,6 +29,8 @@
     "@flamework/core": "^1.2.2",
     "@flamework/networking": "^1.2.2",
     "@rbxts/abbreviate": "^3.0.4",
+    "@rbxts/centurion": "^1.0.1",
+    "@rbxts/centurion-ui": "^1.0.8",
     "@rbxts/lemon-signal": "^1.2.0",
     "@rbxts/object-utils": "^1.0.4",
     "@rbxts/pretty-react-hooks": "^0.6.4",

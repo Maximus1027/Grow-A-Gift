@@ -21,6 +21,7 @@ import { HouseReward } from "./housereward";
 import { useProducer, useSelector } from "@rbxts/react-reflex";
 import { RootState, RootStore } from "client/react/store/store";
 import { Window } from "client/react/store/producer/windowproducer";
+import { RunService } from "@rbxts/services";
 
 export interface SpinProps {
 	crateid: string;
@@ -76,8 +77,6 @@ export function CrateSpin(props: SpinProps) {
 		const xDiff = winner.AbsolutePosition.X + winner.AbsoluteSize.X / 2 - main.AbsolutePosition.X;
 		const landPos = UDim2.fromScale(1, 0.5).sub(UDim2.fromOffset(xDiff, 0));
 
-		print(landPos, winner.AbsolutePosition);
-
 		setpos.tween(landPos, {
 			time: 5,
 			style: Enum.EasingStyle.Quart,
@@ -94,9 +93,50 @@ export function CrateSpin(props: SpinProps) {
 	return reward === undefined ? (
 		<screengui
 			key={"CRATE-ROLL-PRODUCTION"}
-			ZIndexBehavior={Enum.ZIndexBehavior.Sibling}
+			ZIndexBehavior={Enum.ZIndexBehavior.Global}
+			IgnoreGuiInset={true}
 			Enabled={setpos.isComplete()}
 		>
+			<textlabel
+				key={"rollinglabel"}
+				FontFace={new Font("rbxasset://fonts/families/FredokaOne.json")}
+				RichText={true}
+				Text={pos.map((x) => {
+					const progress = math.abs(x.X.Offset);
+					const maxDots = 4;
+					const maxOffset = 1500; // adjust this value for how fast dots cycle
+					const dotCount = math.clamp(
+						math.floor((progress / maxOffset) * maxDots) % (maxDots + 1),
+						1,
+						maxDots,
+					);
+
+					let trail = "";
+
+					for (let i = 0; i < dotCount; i++) {
+						trail += ".";
+					}
+
+					return `OPENING${trail}`;
+				})}
+				TextColor3={Color3.fromRGB(255, 255, 255)}
+				TextScaled={true}
+				TextSize={14}
+				TextWrapped={true}
+				AnchorPoint={new Vector2(0.5, 0.5)}
+				BackgroundColor3={Color3.fromRGB(255, 255, 255)}
+				BackgroundTransparency={1}
+				BorderColor3={Color3.fromRGB(0, 0, 0)}
+				BorderSizePixel={0}
+				Position={UDim2.fromScale(0.3, 0.392)}
+				Rotation={-2}
+				Size={UDim2.fromScale(0.146, 0.0794)}
+				TextXAlignment={Enum.TextXAlignment.Left}
+				ZIndex={2}
+			>
+				<uistroke key={"uIStroke"} Thickness={4} />
+			</textlabel>
+
 			<imagelabel
 				key={"main"}
 				Image={"rbxassetid://128740229126942"}
@@ -153,6 +193,7 @@ export function CrateSpin(props: SpinProps) {
 				BorderSizePixel={0}
 				Position={UDim2.fromScale(0.5, 0.401)}
 				Size={UDim2.fromScale(0.05, 0.0609)}
+				ZIndex={3}
 			>
 				<uiaspectratioconstraint key={"uIAspectRatioConstraint"} AspectRatio={1.46} />
 			</imagelabel>
@@ -167,9 +208,20 @@ export function CrateSpin(props: SpinProps) {
 				BorderSizePixel={0}
 				Position={UDim2.fromScale(0.5, 0.598)}
 				Size={UDim2.fromScale(0.05, 0.0596)}
+				ZIndex={3}
 			>
 				<uiaspectratioconstraint key={"uIAspectRatioConstraint"} AspectRatio={1.49} />
 			</imagelabel>
+			<imagelabel
+				key={"bar"}
+				Image={"rbxassetid://112357406645827"}
+				BackgroundColor3={Color3.fromRGB(255, 255, 255)}
+				BorderColor3={Color3.fromRGB(0, 0, 0)}
+				BorderSizePixel={0}
+				Position={UDim2.fromScale(0.497, 0.421)}
+				Size={UDim2.fromScale(0.00586, 0.156)}
+				ZIndex={2}
+			/>
 		</screengui>
 	) : (
 		<HouseReward

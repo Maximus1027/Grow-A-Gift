@@ -25,8 +25,6 @@ export function Township() {
 		if (window === true && t.string(currentVillage)) {
 			const nextUnlock = getNextVillageUnlock(currentVillage);
 
-			print(nextUnlock);
-
 			if (nextUnlock !== undefined) {
 				setVillage({
 					nextVillage: nextUnlock,
@@ -38,9 +36,7 @@ export function Township() {
 		}
 	}, [window]);
 
-	useEffect(() => {
-		print(village);
-	}, [village]);
+	useEffect(() => {}, [village]);
 
 	return (
 		window === true &&

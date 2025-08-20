@@ -14,6 +14,9 @@ export enum Window {
 	"store" = "store",
 	"township" = "township",
 	"houseselect" = "houseselect",
+	"rebirth" = "rebirth",
+	"invite" = "invite",
+	"spin" = "spin",
 }
 
 export interface WindowState {
@@ -27,7 +30,6 @@ const initialState: WindowState = {
 	inFocus: false,
 	windows: {
 		hud: true,
-		township: true,
 	},
 };
 
@@ -39,8 +41,6 @@ export const WindowActions = createProducer(initialState, {
 			//save windows open before close
 			savedWindows = state.windows;
 		}
-
-		print("focusing WINDOw", window);
 
 		return {
 			...state,
@@ -63,6 +63,19 @@ export const WindowActions = createProducer(initialState, {
 			windows: {
 				...state.windows,
 				[window]: enabled,
+			},
+		};
+	},
+	toggleWindowState: (state: WindowState, window: Window) => {
+		if (state.inFocus) {
+			return state;
+		}
+
+		return {
+			...state,
+			windows: {
+				...state.windows,
+				[window]: !state.windows[window],
 			},
 		};
 	},

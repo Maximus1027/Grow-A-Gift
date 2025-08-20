@@ -7,6 +7,7 @@ import MainConfig from "shared/config/main.json";
 import { DataService } from "./DataService";
 import Object from "@rbxts/object-utils";
 import Signal from "@rbxts/lemon-signal";
+import { Workspace } from "@rbxts/services";
 
 @Service({
 	loadOrder: 1,
@@ -19,16 +20,23 @@ export class InventoryService implements OnStart {
 	onStart() {
 		this.dataService.PlayerLoaded.Connect((player, profile) => {
 			const equippedHouses = profile.Data.equipped;
+
 			for (const [houseid, amount] of Object.entries(profile.Data.inventory)) {
 				const wasEquipped = equippedHouses.includes(houseid);
 
-				this.addHouseToInventory(player, houseid, amount, wasEquipped);
+				this.addHouseToInventory(
+					player,
+					houseid,
+					amount,
+					wasEquipped,
+					wasEquipped ? equippedHouses.indexOf(houseid) : undefined,
+				);
 			}
 
 			this.PlayerLoaded.Fire(player);
-			Events.onDataLoaded.fire(player);
+			//Events.onDataLoaded.fire(player);
 
-			this.addHouseToInventory(player, "basic", 5);
+			//this.addHouseToInventory(player, "basic", 5);
 		});
 
 		Events.onInventoryAction.connect((player: Player, action: unknown, ...args: unknown[]) => {
@@ -63,12 +71,17 @@ export class InventoryService implements OnStart {
 	 * @param hotbar if true, house is automatically placed in hotbar
 	 * @returns
 	 */
-	public addHouseToInventory(player: Player, houseid: string, amount?: number, hotbar?: boolean) {
+	public addHouseToInventory(
+		player: Player,
+		houseid: string,
+		amount?: number,
+		hotbar?: boolean,
+		customTime?: number,
+	) {
+		//	print("adding house", houseid);
 		if (doesPlayerOwnHouse(player, houseid)) {
 			const object = getPlayerHouseObject(player, houseid) as NumberValue;
 			object.Value += amount ?? 1;
-
-			print("ADDED", object.Name, amount);
 
 			//this.inventoryService.equipHouse(player, houseid, equipHouse);
 
@@ -81,7 +94,53 @@ export class InventoryService implements OnStart {
 
 		house.Parent = getInventoryFolder(player);
 
-		if (hotbar) this.equipHouse(player, houseid, true);
+		if (hotbar) this.equipHouse(player, houseid, true, customTime);
+	}
+
+	/**
+	 * Removes a house to the player's inventory
+	 * @param player
+	 * @param houseId
+	 * @param amount
+	 * @returns
+	 */
+	public removeHouseFromInventory(player: Player, houseid: string, amount?: number) {
+		//	print("adding house", houseid);
+		if (doesPlayerOwnHouse(player, houseid)) {
+			const object = getPlayerHouseObject(player, houseid) as NumberValue;
+			object.Value -= amount ?? 1;
+
+			if (object.Value <= 0) {
+				object.Destroy();
+			}
+
+			//this.inventoryService.equipHouse(player, houseid, equipHouse);
+
+			return;
+		}
+	}
+
+	/**
+	 * Sets the house amount in player's inventory
+	 * @param player
+	 * @param houseId
+	 * @param amount
+	 * @returns
+	 */
+	public setHouseInInventory(player: Player, houseid: string, amount: number) {
+		//	print("adding house", houseid);
+		if (doesPlayerOwnHouse(player, houseid)) {
+			const object = getPlayerHouseObject(player, houseid) as NumberValue;
+			object.Value = amount;
+
+			if (object.Value <= 0) {
+				object.Destroy();
+			}
+
+			//this.inventoryService.equipHouse(player, houseid, equipHouse);
+
+			return;
+		}
 	}
 
 	/**
@@ -91,7 +150,7 @@ export class InventoryService implements OnStart {
 	 * @param doEquip true to equip, false to unequip
 	 * @returns
 	 */
-	public equipHouse(player: Player, houseid: string, doEquip: boolean) {
+	public equipHouse(player: Player, houseid: string, doEquip: boolean, customSlot?: number) {
 		const houseValue = getPlayerHouseObject(player, houseid) as NumberValue;
 
 		if (!houseValue) {
@@ -111,15 +170,13 @@ export class InventoryService implements OnStart {
 		if (this.getEquippedHouses(player).size() >= MainConfig.hotbar) {
 			const lastSlotItem = this.findLastEquippedHouse(player);
 
-			print(lastSlotItem);
-
 			if (lastSlotItem !== undefined) {
 				this.unequipHouse(player, lastSlotItem);
 			}
 		}
 
 		//equip or unequip -> attribute
-		houseValue.SetAttribute("equip", os.time());
+		houseValue.SetAttribute("equip", os.time() - (customSlot ?? 0));
 	}
 
 	/**
@@ -144,6 +201,8 @@ export class InventoryService implements OnStart {
 			.filter((child) => child.GetAttribute("equip") !== undefined)
 			.sort((a, b) => (a.GetAttribute("equip") as number) > (b.GetAttribute("equip") as number))
 			.pop();
+
+		print("popped", lastItem);
 
 		return lastItem ? lastItem.Name : undefined;
 	}

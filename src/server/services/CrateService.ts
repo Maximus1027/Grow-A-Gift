@@ -34,7 +34,7 @@ export class CrateService implements OnStart {
 
 		const reward = returnRandomRarity(lootTable, crate);
 
-		Events.onReward.fire(player, crate, reward);
+		Events.onReward.fire(player, "crate", crate, reward);
 
 		this.inventoryService.addHouseToInventory(player, reward, 1, false);
 	}
