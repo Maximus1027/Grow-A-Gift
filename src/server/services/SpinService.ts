@@ -20,12 +20,11 @@ export class SpinService implements OnStart {
 			record[reward] = ((record[reward] || 0) as number) + 1;
 		}
 
-		const size = Object.values(record).reduce((acc, value) => acc + value, 0);
+		// const size = Object.values(record).reduce((acc, value) => acc + value, 0);
 
-		print(record, size);
-		for (const [reward, amount] of Object.entries(record)) {
-			print(`Reward: ${reward}, Amount: ${amount}`, "occurence" + amount / size);
-		}
+		// for (const [reward, amount] of Object.entries(record)) {
+		// 	print(`Reward: ${reward}, Amount: ${amount}`, "occurence" + amount / size);
+		// }
 	}
 
 	getReward(Player: Player) {

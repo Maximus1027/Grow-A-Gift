@@ -69,7 +69,7 @@ export function Store() {
 
 		setvisible(true);
 
-		const goal = storeState.storeOpen === undefined ? 1.5 : 0.5;
+		const goal = storeState.storeOpen === undefined ? 1.5 : 0.47;
 		setpos.spring(goal, {
 			frequency: 0.3,
 			damping: 0.8,
@@ -96,7 +96,7 @@ export function Store() {
 				BorderColor3={Color3.fromRGB(0, 0, 0)}
 				BorderSizePixel={0}
 				Position={pos.map((y) => UDim2.fromScale(0.5, y))}
-				Size={UDim2.fromScale(0.432, 0.452)}
+				Size={UDim2.fromScale(0.506, 0.528)}
 			>
 				<scrollingframe
 					key={"scrollingFrame"}

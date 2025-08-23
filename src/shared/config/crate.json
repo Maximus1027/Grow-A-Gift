@@ -14,8 +14,7 @@
         "cost": 10000000,
         "displayName": "Epic Crate",
         "productid": 123,
-        "loot": {
-       
+        "loot": { 
            "barrack": 2,
            "sandhouse": 1000
         }

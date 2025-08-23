@@ -92,7 +92,6 @@ export function UpgradeTown(props: TownshipProps) {
 							Position={UDim2.fromScale(0.739, 0.775)}
 							Size={UDim2.fromScale(0.345, 0.213)}
 							onClick={() => {
-								print("Upgrade!");
 								dispatch.setWindowState(Window.township, false);
 								Events.onPlotAction.fire("upgrade", nextVillage[0]);
 							}}

@@ -1,4 +1,5 @@
 import { number } from "@rbxts/react/src/prop-types";
+import { Boost, TimedBoost } from "shared/enums/Boost";
 
 export interface ProfileData {
 	money: number;
@@ -10,4 +11,10 @@ export interface ProfileData {
 	plot: {
 		placed: Record<string, { pos: number[]; tick?: number }>;
 	};
+	boosters: {
+		namespace: string;
+		boostType: Boost;
+		boostValue: number;
+		timeleft: number;
+	}[];
 }

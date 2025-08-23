@@ -19,6 +19,7 @@ import { RebirthManager } from "../components/rebirth/rebirthmanager";
 import { InviteFriends } from "../components/invite/invitefriends";
 import { Spin } from "../components/spinner/spin";
 import { FocusEffects } from "../components/windows/focuseffects";
+import { Boost } from "../components/boosts/boost";
 
 export function App() {
 	const player = Players.LocalPlayer;
@@ -44,6 +45,7 @@ export function App() {
 			<InviteFriends />
 			<Spin />
 			<FocusEffects />
+			<Boost />
 		</ReflexProvider>
 	);
 }

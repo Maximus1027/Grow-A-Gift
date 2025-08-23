@@ -17,6 +17,7 @@ export enum Window {
 	"rebirth" = "rebirth",
 	"invite" = "invite",
 	"spin" = "spin",
+	"hotbar" = "hotbar",
 }
 
 export interface WindowState {

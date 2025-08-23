@@ -57,11 +57,14 @@ const mappedSpinnerLoot: SpinnerLootTable = Object.entries(SpinnerConfig as Spin
 export const returnRandomRarity = (loot: RarityLootTable | CrateLootTable, houseid: string, luck?: number): Rarity => {
 	const rarities = rarityOrderCache[houseid];
 
+	//luck must be not nil and at least 1
+	const adjustedLuck = luck !== undefined && luck >= 1 ? luck : 1;
+
 	for (const rarity of rarities) {
 		const chance = loot[rarity];
 
 		//const adjustedChance = math.max(1, (chance as number) - (luck ?? 0));
-		const adjustedChance = math.max(1, math.round((chance as number) / (luck ?? 1)));
+		const adjustedChance = math.max(1, math.round((chance as number) / adjustedLuck));
 
 		if (math.random(1, adjustedChance) === 1) {
 			return rarity;

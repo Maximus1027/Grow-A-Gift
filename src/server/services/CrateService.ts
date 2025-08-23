@@ -5,6 +5,8 @@ import { getPlayerPlotFolder } from "shared/utils/generictils";
 import { convertChanceToString, getCrateLootTable, returnRandomRarity } from "shared/utils/loot";
 import { getPlayerHouseObject } from "shared/utils/playertils";
 import { InventoryService } from "./InventoryService";
+import { Boost } from "shared/enums/Boost";
+import { t } from "@rbxts/t";
 
 @Service({})
 export class CrateService implements OnStart {
@@ -31,8 +33,8 @@ export class CrateService implements OnStart {
 			warn("Could not find loot table for crate", crate);
 			return;
 		}
-
-		const reward = returnRandomRarity(lootTable, crate);
+		const luck = player.GetAttribute(Boost.GiftLuck);
+		const reward = returnRandomRarity(lootTable, crate, t.number(luck) ? luck : 1);
 
 		Events.onReward.fire(player, "crate", crate, reward);
 

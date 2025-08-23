@@ -31,7 +31,6 @@ export function CrateTimer(props: CrateTimeProps) {
 		});
 
 		return () => {
-			print("DISCONNECT");
 			count.Disconnect();
 		};
 	}, []);

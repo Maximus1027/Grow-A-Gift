@@ -10,8 +10,8 @@ import { Plot, PlotFolder } from "server/plots/plot";
 import { t } from "@rbxts/t";
 import Signal from "@rbxts/lemon-signal";
 import { getCrateConfig } from "shared/utils/loot";
-import { getPlayerPlotFolder } from "shared/utils/generictils";
-import { Boost } from "shared/enums/Boost";
+import { getPlayerPlotFolder, tick } from "shared/utils/generictils";
+import { Boost, TimedBoost } from "shared/enums/Boost";
 
 const defaultProfile: ProfileData = {
 	money: 10000000,
@@ -23,6 +23,7 @@ const defaultProfile: ProfileData = {
 	plot: {
 		placed: {},
 	},
+	boosters: [],
 };
 
 const crateConfig = getCrateConfig();
@@ -109,13 +110,6 @@ export class DataService implements OnStart {
 		spins.Name = "spins";
 		spins.Parent = dataFolder;
 
-		//Load booster types
-		for (const boost of Object.keys(Boost)) {
-			const booster = new Instance("NumberValue");
-			booster.Name = boost;
-			booster.Parent = boosts;
-		}
-
 		/** Load Data */
 		money.Value = profile.Data.money;
 		village.Value = profile.Data.village ?? "dirt";
@@ -138,6 +132,7 @@ export class DataService implements OnStart {
 		}
 
 		this.saveInventory(player)
+			.andThen(() => this.saveTimedBoosters(player))
 			.andThen(() => {
 				profile.Data.money = getMoneyStat(player).Value;
 				profile.Data.village = player.stats.village.Value;
@@ -211,6 +206,43 @@ export class DataService implements OnStart {
 		});
 
 		profile.Data.plot.placed = placed;
+	}
+
+	/**
+	 * Save active boosters
+	 * @param player
+	 * @param boosters
+	 */
+	public saveTimedBoosters(player: Player) {
+		const profile = this.getProfile(player);
+		const boosterFolder = player.stats.boosts;
+
+		if (!profile || !boosterFolder) {
+			warn(`Could not save boosters for ${player}`);
+			return;
+		}
+
+		// endtick becomes time left on booster
+		const adjustedBoosters = boosterFolder
+			.GetChildren()
+			.map((boosterValue) => {
+				const timed = boosterValue.GetAttribute("endtick");
+				const boostType = boosterValue.GetAttribute("boost");
+
+				if (!t.number(timed) || !t.string(boostType) || !boosterValue.IsA("NumberValue")) {
+					return undefined;
+				}
+
+				return {
+					namespace: boosterValue.Name,
+					boostType: boostType as Boost,
+					boostValue: boosterValue.Value,
+					timeleft: timed - tick(),
+				};
+			})
+			.filterUndefined();
+
+		profile.Data.boosters = adjustedBoosters;
 	}
 
 	public getProfile(player: Player) {

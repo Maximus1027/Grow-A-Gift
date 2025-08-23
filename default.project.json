@@ -1,5 +1,5 @@
 {
-	"name": "planet-drillers",
+	"name": "Plates",
 	"globIgnorePaths": [
 		"**/package.json",
 		"**/tsconfig.json"

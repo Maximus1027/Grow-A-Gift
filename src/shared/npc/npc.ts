@@ -1,6 +1,7 @@
 import { Dependency } from "@flamework/core";
 import { HttpService, ReplicatedStorage, ServerStorage, TweenService } from "@rbxts/services";
 import { t } from "@rbxts/t";
+import { Boost } from "shared/enums/Boost";
 import { Rarity } from "shared/enums/Rarity";
 import { EntityNPC } from "shared/types/entity";
 import { getMoneyStat } from "shared/utils/playertils";
@@ -36,8 +37,10 @@ export class NPC {
 
 		this.entity = newNPC;
 
+		const moneyBoost = this.owner.GetAttribute(Boost.Income) ?? 1;
+
 		const presentWorth = getPresentValue(this.presentRarity);
-		this.presentWorth = math.random(presentWorth!.min, presentWorth!.max);
+		this.presentWorth = math.random(presentWorth!.min, presentWorth!.max) * (moneyBoost as number);
 
 		this.spawn();
 	}
@@ -71,9 +74,6 @@ export class NPC {
 				part.CollisionGroup = "npc";
 			}
 		});
-
-		const presentWorth = getPresentValue(this.presentRarity);
-		this.presentWorth = math.random(presentWorth!.min, presentWorth!.max);
 		newPresent.SetAttribute("value", this.presentWorth);
 		newPresent.SetAttribute("chance", this.chanceDisplay);
 
@@ -97,6 +97,7 @@ export class NPC {
 		});
 
 		const money = getMoneyStat(this.owner);
+
 		if (t.number(this.presentWorth)) {
 			money.Value += this.presentWorth;
 		}

@@ -14,6 +14,9 @@ import {
 import { Rarity } from "shared/enums/Rarity";
 import Abbreviator from "@rbxts/abbreviate";
 import { tick } from "shared/utils/generictils";
+import { Boost } from "shared/enums/Boost";
+import { bool } from "@rbxts/react/src/prop-types";
+import { t } from "@rbxts/t";
 
 interface Attributes {
 	houseid?: string;
@@ -35,6 +38,7 @@ export class House extends BaseComponent<Attributes, Model> implements OnStart, 
 	private end: BasePart = this.instance.FindFirstChild("drop") as BasePart;
 	private owner?: Player;
 	private lootTable?: RarityLootTable;
+	private attributeChanged?: RBXScriptConnection;
 
 	private lastIncome: number[] = new Array<number>();
 
@@ -43,7 +47,9 @@ export class House extends BaseComponent<Attributes, Model> implements OnStart, 
 
 		const foundHouse = getHouseConfig()[this.houseId];
 
-		this.spawnRate = foundHouse.rate as number;
+		const npcSpeedAttr = this.owner?.GetAttribute(Boost.NPCSpeed);
+		const npcSpeed = t.number(npcSpeedAttr) ? npcSpeedAttr : 1;
+		this.spawnRate = (foundHouse.rate as number) / npcSpeed;
 
 		//random timer offset so when people load a save, npcs arent synchronised
 		this.lastSpawnTick = tick() - math.random(1, 5);
@@ -53,6 +59,17 @@ export class House extends BaseComponent<Attributes, Model> implements OnStart, 
 		this.spawn = spawnPoint as BasePart;
 
 		this.lootTable = getLootTable(this.houseId) as RarityLootTable;
+
+		this.attributeChanged = this.owner?.AttributeChanged.Connect((attribute) => {
+			if (attribute === Boost.NPCSpeed) {
+				const npscpeed = this.owner?.GetAttribute(attribute);
+				if (!t.number(npscpeed)) {
+					return;
+				}
+
+				this.spawnRate = foundHouse.rate / npscpeed;
+			}
+		});
 	}
 
 	onTick(dt: number): void {
@@ -72,7 +89,9 @@ export class House extends BaseComponent<Attributes, Model> implements OnStart, 
 			return;
 		}
 
-		const randomRarity = returnRandomRarity(this.lootTable, this.houseId, 1000);
+		const luck = this.owner?.GetAttribute(Boost.GiftLuck) ?? 1;
+
+		const randomRarity = returnRandomRarity(this.lootTable, this.houseId, luck as number);
 
 		const spawnLocation = this.spawn!.Position;
 
@@ -107,5 +126,7 @@ export class House extends BaseComponent<Attributes, Model> implements OnStart, 
 		this.attributes.avg = abv.commify(math.ceil(average));
 	}
 
-	destroy(): void {}
+	destroy(): void {
+		this.attributeChanged?.Disconnect();
+	}
 }

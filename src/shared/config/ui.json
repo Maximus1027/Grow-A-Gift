@@ -5,6 +5,11 @@
         "Epic": "rbxassetid://137874828636062",
         "Legendary": "rbxassetid://116436070286807",
         "Mythic": "rbxassetid://103500731460787"
+    },
+    "boost": {
+        "Income": "rbxassetid://139659539145818",
+        "NPCSpeed": "rbxassetid://71654187893858",
+        "GiftLuck": "rbxassetid://114417829323362",
+        "InviteFriend": "rbxassetid://116266812649967"
     }
-   
 }

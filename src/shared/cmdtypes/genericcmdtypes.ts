@@ -1,5 +1,6 @@
 import { BaseRegistry, TransformResult, TypeBuilder } from "@rbxts/centurion";
 import Object from "@rbxts/object-utils";
+import { Boost } from "shared/enums/Boost";
 import { getCrateConfig, getHouseConfig, HouseConfig } from "shared/utils/loot";
 
 const assetList: string[] = [...Object.keys(getHouseConfig()), ...Object.keys(getCrateConfig())];
@@ -47,8 +48,46 @@ const asset = TypeBuilder.create<string>("item")
 	.markForRegistration()
 	.build();
 
+const boostEnumKeys = Object.keys(Boost);
+
+const boosts = TypeBuilder.create<string>("boost")
+	.transform((text, executor) => {
+		const foundBoost = boostEnumKeys.find((boost) => boost === text);
+
+		if (!foundBoost) {
+			return TransformResult.err("That is not a valid boost");
+		}
+
+		return TransformResult.ok(foundBoost);
+	})
+	.suggestions(() => boostEnumKeys)
+	.markForRegistration()
+	.build();
+
+const getBoostNamespace = (player: Player): string[] => {
+	const namespaces = player.stats.boosts.GetChildren().map((boost) => boost.Name);
+
+	return namespaces;
+};
+
+const namespaceBoosts = TypeBuilder.create<string>("boostid")
+	.transform((text, executor) => {
+		const namespaces = getBoostNamespace(executor);
+
+		if (namespaces.includes(text)) {
+			return TransformResult.ok(text);
+		}
+
+		return TransformResult.err("Could not find booster with that namespace");
+	})
+	.suggestions((t, player) => getBoostNamespace(player))
+	.markForRegistration()
+	.build();
+
 export = (registry: BaseRegistry) => {
 	registry.registerType(asset);
 	registry.registerType(inventoryAction);
 	registry.registerType(stats);
+	registry.registerType(boosts);
+	registry.registerType(namespaceBoosts);
 };
