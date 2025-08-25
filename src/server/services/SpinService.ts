@@ -68,7 +68,7 @@ export class SpinService implements OnStart {
 			case "boost": {
 				this.boostService.addBoost(
 					player,
-					"SPINPRIZE_" + reward.reward,
+					`SPINPRIZE_${reward.reward}_${reward.amount}`,
 					reward.reward as Boost,
 					reward.amount,
 					reward.timed,

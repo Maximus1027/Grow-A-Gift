@@ -6,7 +6,7 @@ import { formatSecondsToMinutesAndSeconds, tick } from "shared/utils/generictils
 export interface BoosterProps {
 	imageid: string;
 	value: number;
-	endtick?: number;
+	endtick: number;
 }
 
 export function Booster(props: BoosterProps) {
@@ -26,6 +26,7 @@ export function Booster(props: BoosterProps) {
 
 		return () => {
 			stepped.Disconnect();
+			print("Booster disconnected");
 		};
 	}, []);
 

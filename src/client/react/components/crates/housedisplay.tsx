@@ -36,7 +36,7 @@ export function HouseDisplay(props: HouseDisplayProps) {
 		}
 
 		//Rotate display
-		const spin = RunService.RenderStepped.Connect((dt) => {
+		const spin = RunService.Heartbeat.Connect((dt) => {
 			newModel.PivotTo(newModel.GetPivot().mul(CFrame.fromEulerAnglesXYZ(0, dt, 0)));
 		});
 
