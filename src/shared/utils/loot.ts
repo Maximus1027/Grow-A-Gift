@@ -4,28 +4,11 @@ import { getRarityColor, Rarity } from "shared/enums/Rarity";
 import * as HousesConfig from "shared/config/house.json";
 import * as CratesConfig from "shared/config/crate.json";
 import * as SpinnerConfig from "shared/config/spinner.json";
+import { HouseConfig, CrateConfig, SpinConfig } from "shared/types/config";
 
 export type RarityLootTable = Partial<Record<Rarity, number>>;
 export type CrateLootTable = Record<string, number>;
 export type SpinnerLootTable = CrateLootTable;
-
-export type Config<O> = Record<string, O>;
-export type HouseConfig = Config<{
-	loot: RarityLootTable;
-	displayName: string;
-	rarity: string;
-	stock: number;
-	rate: number;
-}>;
-export type CrateConfig = Config<{ loot: CrateLootTable; displayName: string; timeInMinutes: number }>;
-export type SpinConfig = Config<{
-	rewardType: "boost" | "stats" | "inventory";
-	reward: string;
-	displayName: string;
-	amount: number;
-	chance: number;
-	image?: string; // Optional image for spinner rewards
-}>;
 
 const rarityOrderCache: Record<string, Rarity[]> = {};
 

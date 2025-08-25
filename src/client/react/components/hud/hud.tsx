@@ -7,7 +7,7 @@ import { RootState } from "client/react/store/store";
 import { Window } from "client/react/store/producer/windowproducer";
 
 export function Hud() {
-	const focusedWindow = useSelector((state: RootState) => state.windowManager.windows.hud);
+	const window = useSelector((state: RootState) => state.windowManager.windows.hud);
 
 	return (
 		<screengui
@@ -15,7 +15,7 @@ export function Hud() {
 			IgnoreGuiInset={true}
 			ScreenInsets={Enum.ScreenInsets.DeviceSafeInsets}
 			ResetOnSpawn={false}
-			Enabled={focusedWindow === true}
+			Enabled={window === true}
 		>
 			<SideBar />
 			<TopBar />

@@ -1,7 +1,7 @@
 import { BaseRegistry, TransformResult, TypeBuilder } from "@rbxts/centurion";
 import Object from "@rbxts/object-utils";
 import { Boost } from "shared/enums/Boost";
-import { getCrateConfig, getHouseConfig, HouseConfig } from "shared/utils/loot";
+import { getCrateConfig, getHouseConfig } from "shared/utils/loot";
 
 const assetList: string[] = [...Object.keys(getHouseConfig()), ...Object.keys(getCrateConfig())];
 

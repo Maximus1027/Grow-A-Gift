@@ -38,7 +38,7 @@ export function SideBar() {
 				Image={"rbxassetid://121515043185114"}
 				Position={UDim2.fromScale(0.214, 0.476)}
 				Size={UDim2.fromScale(0.836, 0.341)}
-				onClick={() => {}}
+				onClick={() => dispatch.toggleWindowState(Window.rewards)}
 			/>
 
 			<Button
@@ -47,7 +47,7 @@ export function SideBar() {
 				Position={UDim2.fromScale(1.118, 0.473)}
 				Size={UDim2.fromScale(0.836, 0.341)}
 				onClick={() => {
-					dispatch.setWindowState(Window.rebirth, true);
+					dispatch.toggleWindowState(Window.rebirth);
 				}}
 			/>
 
@@ -57,7 +57,7 @@ export function SideBar() {
 				Position={UDim2.fromScale(1.116, 0.826)}
 				Size={UDim2.fromScale(0.833, 0.341)}
 				onClick={() => {
-					dispatch.setWindowState(Window.invite, true);
+					dispatch.toggleWindowState(Window.invite);
 				}}
 			/>
 

@@ -18,6 +18,7 @@ export enum Window {
 	"invite" = "invite",
 	"spin" = "spin",
 	"hotbar" = "hotbar",
+	"rewards" = "rewards",
 }
 
 export interface WindowState {

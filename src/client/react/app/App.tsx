@@ -20,6 +20,8 @@ import { InviteFriends } from "../components/invite/invitefriends";
 import { Spin } from "../components/spinner/spin";
 import { FocusEffects } from "../components/windows/focuseffects";
 import { Boost } from "../components/boosts/boost";
+import { Reward } from "../components/spinner/reward";
+import { Rewards } from "../components/rewards/rewards";
 
 export function App() {
 	const player = Players.LocalPlayer;
@@ -46,6 +48,7 @@ export function App() {
 			<Spin />
 			<FocusEffects />
 			<Boost />
+			<Rewards />
 		</ReflexProvider>
 	);
 }

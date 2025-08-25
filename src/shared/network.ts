@@ -5,11 +5,14 @@ interface ClientToServerEvents {
 	onInventoryAction: (action: unknown, ...args: unknown[]) => void;
 	onStoreAction: (action: unknown, id: unknown) => void;
 	onSpin: () => void;
+	onRewardClaim: (id: unknown) => void;
 }
 
 interface ServerToClientEvents {
 	onStock: (newStock: Record<string, number>) => void;
 	onReward: (rewardType: "crate" | "spin", crateid: string, houseid: string) => void;
+	onRewardsAction: (action: "unlock" | "claim", id: number) => void;
+	onBoost: () => void;
 	onDataLoaded: () => void;
 }
 

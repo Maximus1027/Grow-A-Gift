@@ -6,6 +6,7 @@ import { CrateActions } from "./producer/crateproducer";
 import { WindowActions } from "./producer/windowproducer";
 import { SpinActions } from "./producer/spinproducer";
 import { BoosterActions } from "./producer/boosterproducer";
+import { RewardActions } from "./producer/rewardproducer";
 
 export function createStore() {
 	const store = combineProducers({
@@ -16,6 +17,7 @@ export function createStore() {
 		windowManager: WindowActions,
 		spin: SpinActions,
 		boost: BoosterActions,
+		rewards: RewardActions,
 	});
 
 	return store;

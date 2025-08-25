@@ -5,6 +5,8 @@ import { Rebirth } from "./rebirth";
 import React from "@rbxts/react";
 import { Players } from "@rbxts/services";
 import { getRebirthConfig } from "shared/utils/configtils";
+import { WindowWrapper } from "../windows/windowwrapper";
+import { Window } from "client/react/store/producer/windowproducer";
 
 export function RebirthManager() {
 	const window = useSelector((state: RootState) => state.windowManager.windows.rebirth);
@@ -25,6 +27,15 @@ export function RebirthManager() {
 	}, [window]);
 
 	return (
-		window && <Rebirth cost={rebirthData[0]} income={rebirthData[1]} luck={rebirthData[2]} speed={rebirthData[3]} />
+		<screengui
+			key={"REBIRTH-PROD"}
+			IgnoreGuiInset={true}
+			ScreenInsets={Enum.ScreenInsets.DeviceSafeInsets}
+			ResetOnSpawn={false}
+		>
+			<WindowWrapper window={Window.rebirth} target={UDim2.fromScale(0.5, 1.5)}>
+				<Rebirth cost={rebirthData[0]} income={rebirthData[1]} luck={rebirthData[2]} speed={rebirthData[3]} />
+			</WindowWrapper>
+		</screengui>
 	);
 }

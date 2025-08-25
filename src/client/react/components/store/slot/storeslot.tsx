@@ -1,7 +1,7 @@
 import Abbreviator from "@rbxts/abbreviate";
 import React, { useEffect, useState } from "@rbxts/react";
 import * as Houses from "shared/config/house.json";
-import { getLootTable, HouseConfig, RarityLootTable } from "shared/utils/loot";
+import { getHouseConfig, getLootTable, RarityLootTable } from "shared/utils/loot";
 import { PresentList } from "../presentlist";
 import { BaseSlot, StoreSlotProps } from "./baseslot";
 
@@ -12,7 +12,7 @@ export interface HouseSlotProps extends StoreSlotProps {
 export function HouseSlot(props: HouseSlotProps) {
 	const abv = new Abbreviator();
 	// eslint-disable-next-line roblox-ts/no-any
-	const maxStock = (Houses as unknown as HouseConfig)[props.itemid].stock;
+	const maxStock = getHouseConfig()[props.itemid].stock;
 
 	return (
 		<BaseSlot actionType="house" devProductId={props.productid ?? ""} itemid={props.itemid}>

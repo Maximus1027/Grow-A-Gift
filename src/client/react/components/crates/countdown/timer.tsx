@@ -6,7 +6,7 @@ import { Events } from "client/network";
 import { RootState } from "client/react/store/store";
 import { formatSecondsToMinutesAndSeconds, tick } from "shared/utils/generictils";
 
-import { CrateConfig, getCrateConfig } from "shared/utils/loot";
+import { getCrateConfig } from "shared/utils/loot";
 
 export interface CrateTimeProps {
 	crateModel: Model;

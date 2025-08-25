@@ -12,9 +12,10 @@ const player = Players.LocalPlayer;
 export class BoostsController implements OnStart {
 	onStart() {
 		Events.onDataLoaded.connect(() => {
-			this.setupBoosterListener();
+			//	this.setupBoosterListener();
 			this.refreshBoosters();
 		});
+		Events.onBoost.connect(() => this.refreshBoosters());
 	}
 
 	refreshBoosters() {
@@ -49,6 +50,9 @@ export class BoostsController implements OnStart {
 	}
 
 	setupBoosterListener() {
-		player.AttributeChanged.Connect(() => this.refreshBoosters());
+		//player.AttributeChanged.Connect(() => this.refreshBoosters());
+		const boostfolder = player.stats.boosts;
+		boostfolder.ChildAdded.Connect(() => this.refreshBoosters());
+		boostfolder.ChildRemoved.Connect(() => this.refreshBoosters());
 	}
 }

@@ -20,6 +20,7 @@
         "reward": "Income",
         "displayName": "x%s Money",
         "amount": 2,
+        "timed": 300,
         "chance": 10
     },
     "4": {
@@ -27,6 +28,7 @@
         "reward": "Income",
         "displayName": "x%s Money",
         "amount": 3,
+         "timed": 300,
         "chance": 8
     },
     "5": {
@@ -38,9 +40,10 @@
     },
     "6": {
         "rewardType": "boost",
-        "reward": "NPCSPEED",
+        "reward": "NPCSpeed",
         "displayName": "%sx NPC Speed",
         "amount": 2,
+         "timed": 300,
         "chance": 8
     },
     "7": {
@@ -48,6 +51,7 @@
         "reward": "GiftLuck",
         "displayName": "x%s Gift Luck",
         "amount": 5,
+         "timed": 300,
         "chance": 7
     },
     "8": {

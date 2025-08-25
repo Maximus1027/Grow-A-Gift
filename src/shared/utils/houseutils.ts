@@ -1,6 +1,6 @@
 import * as Houses from "shared/config/house.json";
 import Object from "@rbxts/object-utils";
-import { getCrateConfig, getHouseConfig, HouseConfig } from "./loot";
+import { getCrateConfig, getHouseConfig } from "./loot";
 
 /**
  * <House, Integer> $$ map
@@ -24,5 +24,5 @@ export const getItemCost = (houseid: string) => {
 };
 
 export const getHouseDisplayName = (houseid: string) => {
-	return (Houses as unknown as HouseConfig)[houseid].displayName;
+	return getHouseConfig()[houseid].displayName;
 };

@@ -5,8 +5,8 @@ import {
 	convertCrateChanceToStringMarkup,
 	CrateLootTable,
 	getCrateLootTable,
+	getHouseConfig,
 	getLootTable,
-	HouseConfig,
 	RarityLootTable,
 	returnRandomRarity,
 } from "shared/utils/loot";
@@ -38,7 +38,7 @@ export function CrateSpin(props: SpinProps) {
 	let winnerPos = 0;
 	const randomIndex = math.random(35, 45);
 
-	const config = Houses as unknown as HouseConfig;
+	const config = getHouseConfig();
 
 	for (let i = 0; i < 50; i++) {
 		const reward = i === randomIndex ? props.chosenHouseid : returnRandomRarity(loottable, props.crateid);
@@ -226,7 +226,7 @@ export function CrateSpin(props: SpinProps) {
 	) : (
 		<HouseReward
 			houseid={reward}
-			rarity={config[reward].rarity as Rarity}
+			rarity={getHouseConfig()[reward].rarity as Rarity}
 			chance={convertCrateChanceToStringMarkup(reward, props.crateid)}
 		/>
 	);

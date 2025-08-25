@@ -5,6 +5,7 @@ import { Boost, TimedBoost } from "shared/enums/Boost";
 import { t } from "@rbxts/t";
 import Object from "@rbxts/object-utils";
 import { tick } from "shared/utils/generictils";
+import { Events } from "server/network";
 
 @Service({})
 export class BoostService implements OnStart {
@@ -131,6 +132,8 @@ export class BoostService implements OnStart {
 		for (const [boost, val] of Object.entries(boostMap)) {
 			player.SetAttribute(boost, val > 0 ? val : undefined);
 		}
+
+		Events.onBoost.fire(player);
 	}
 
 	/**
@@ -144,7 +147,7 @@ export class BoostService implements OnStart {
 	 */
 	public addBoost(player: Player, namespace: string, boost: Boost, value: number, timed?: number) {
 		if (player.stats.boosts.FindFirstChild(namespace)) {
-			warn("A booster with that namespace is already active. Namespace:", namespace);
+			if (timed !== undefined) this.extendBoost(player, namespace, timed);
 			return;
 		}
 
@@ -153,7 +156,7 @@ export class BoostService implements OnStart {
 		booster.Value = value;
 		booster.SetAttribute("boost", boost);
 
-		if (timed !== undefined) {
+		if (timed !== undefined && timed !== 0) {
 			const endtick = tick() + timed;
 			booster.SetAttribute("endtick", endtick);
 			this.timedBoosters.add({
@@ -177,5 +180,30 @@ export class BoostService implements OnStart {
 			boost.Destroy();
 			this.calculateBoosts(player);
 		}
+	}
+
+	/**
+	 * Extend an active boost
+	 * @param player
+	 * @param namespace
+	 * @param extensionTime
+	 */
+	public extendBoost(player: Player, namespace: string, extensionTime: number, extensionValue?: number) {
+		const foundBoost = player.stats.boosts.FindFirstChild(namespace);
+		if (!foundBoost?.IsA("NumberValue") || foundBoost.GetAttribute("endtick") === undefined) {
+			warn("A timed booster with that namespace does not exist. Namespace:", namespace);
+			return;
+		}
+
+		const boost = foundBoost.GetAttribute("boost") as Boost;
+		const endtick = foundBoost.GetAttribute("endtick") as number;
+		const boostLeft = endtick - tick();
+
+		//this.removeBoost(player, namespace);
+		//this.addBoost(player, namespace, boost, foundBoost.Value + (extensionValue ?? 0), boostLeft + extensionTime);
+		foundBoost.SetAttribute("endtick", boostLeft + extensionTime);
+		this.calculateBoosts(player);
+		print("Extended booster", namespace, "by", extensionTime, "seconds");
+		print(foundBoost.GetAttribute("endtick"), extensionTime);
 	}
 }

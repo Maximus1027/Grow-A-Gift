@@ -64,6 +64,7 @@ export function HouseSelect() {
 					<ExitButton
 						onClick={() => {
 							dispatch.promptHouse(undefined);
+							dispatch.setWindowState(Window.houseselect, false);
 						}}
 						Position={UDim2.fromScale(0.938, 0.0583)}
 						Size={UDim2.fromScale(0.187, 0.313)}

@@ -1,0 +1,122 @@
+{
+    "1": {
+        "rewardType": "stats",
+        "reward": "Money",
+        "displayName": "$%s",
+        "image": "rbxassetid://95994691620048",
+        "amount": 25000,
+        "timeInMinutes": 10
+    },
+    "2": {
+        "rewardType": "boost",
+        "reward": "Income",
+        "displayName": "x%s Money",
+        "image": "rbxassetid://95994691620048",
+        "amount": 3,
+        "timeInMinutes": 20
+    },
+    "3": {
+        "rewardType": "stats",
+        "reward": "spins",
+        "displayName": "+%s Spins",
+        "image": "",
+        "amount": 3,
+        "timeInMinutes": 30
+    },
+    "4": {
+        "rewardType": "inventory",
+        "reward": "igloo",
+        "displayName": "Igloo",
+        "amount": 1,
+        "timeInMinutes": 40
+    },
+    "5": {
+        "rewardType": "stats",
+        "reward": "Money",
+        "displayName": "$%s",
+        "image": "rbxassetid://95994691620048",
+        "amount": 50000,
+        "timeInMinutes": 50
+    },
+    "6": {
+        "rewardType": "stats",
+        "reward": "spins",
+        "displayName": "+%s Spins",
+        "image": "",
+        "amount": 5,
+        "timeInMinutes": 60
+    },
+    "7": {
+        "rewardType": "boost",
+        "reward": "Income",
+        "displayName": "x%s Money",
+        "image": "rbxassetid://95994691620048",
+        "amount": 5,
+        "timeInMinutes": 70
+    },
+    "8": {
+        "rewardType": "stats",
+        "reward": "Money",
+        "displayName": "$%s",
+        "image": "rbxassetid://95994691620048",
+        "amount": 75000,
+        "timeInMinutes": 80
+    },
+    "9": {
+        "rewardType": "stats",
+        "reward": "spins",
+        "displayName": "+%s Spins",
+        "image": "",
+        "amount": 7,
+        "timeInMinutes": 90
+    },
+    "10": {
+        "rewardType": "inventory",
+        "reward": "igloo",
+        "displayName": "Igloo",
+        "amount": 1,
+        "timeInMinutes": 100
+    },
+    "11": {
+        "rewardType": "stats",
+        "reward": "Money",
+        "displayName": "$%s",
+        "image": "rbxassetid://95994691620048",
+        "amount": 100000,
+        "timeInMinutes": 110
+    },
+    "12": {
+        "rewardType": "boost",
+        "reward": "Income",
+        "displayName": "x%s Money",
+        "image": "rbxassetid://95994691620048",
+        "amount": 7,
+        "timeInMinutes": 120
+    },
+    "13": {
+        "rewardType": "stats",
+        "reward": "spins",
+        "displayName": "+%s Spins",
+        "image": "",
+        "amount": 10,
+        "timeInMinutes": 130
+    },
+    "14": {
+        "rewardType": "stats",
+        "reward": "Money",
+        "displayName": "$%s",
+        "image": "rbxassetid://95994691620048",
+        "amount": 150000,
+        "timeInMinutes": 140
+    },
+    "15": {
+        "rewardType": "boost",
+        "reward": "Income",
+        "displayName": "x%s Money",
+        "image": "rbxassetid://95994691620048",
+        "amount": 10,
+        "timeInMinutes": 150
+    }
+    
+
+}
