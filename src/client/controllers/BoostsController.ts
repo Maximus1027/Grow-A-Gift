@@ -5,6 +5,7 @@ import { t } from "@rbxts/t";
 import { Events } from "client/network";
 import { store } from "client/react/store/store";
 import { Boost, optionalBoost, TimedBoost } from "shared/enums/Boost";
+import { tick } from "shared/utils/generictils";
 
 const player = Players.LocalPlayer;
 
@@ -15,7 +16,10 @@ export class BoostsController implements OnStart {
 			//	this.setupBoosterListener();
 			this.refreshBoosters();
 		});
-		Events.onBoost.connect(() => this.refreshBoosters());
+		Events.onBoost.connect(() => {
+			print("refreshing");
+			this.refreshBoosters();
+		});
 	}
 
 	refreshBoosters() {
@@ -42,6 +46,8 @@ export class BoostsController implements OnStart {
 				boostType: boostType as Boost,
 				endtick: t.number(endtick) ? endtick : undefined,
 			};
+
+			print(boost.Name, endtick, endtick ?? 0 - tick());
 
 			boosts.push(timedBoost);
 		}

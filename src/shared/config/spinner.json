@@ -1,5 +1,5 @@
 {
-    "1": {
+    "0": {
         "rewardType": "stats",
         "reward": "Money",
         "displayName": "$%s",
@@ -7,7 +7,7 @@
         "amount": 25000,
         "chance": 25
     },
-    "2": {
+    "1": {
         "rewardType": "stats",
         "reward": "Money",
         "displayName": "$%s",
@@ -15,7 +15,7 @@
         "amount": 10000,
         "chance": 20
     },
-    "3": {
+    "2": {
         "rewardType": "boost",
         "reward": "Income",
         "displayName": "x%s Money",
@@ -23,38 +23,38 @@
         "timed": 300,
         "chance": 10
     },
-    "4": {
+    "3": {
         "rewardType": "boost",
         "reward": "Income",
         "displayName": "x%s Money",
         "amount": 3,
-         "timed": 300,
+        "timed": 300,
         "chance": 8
     },
-    "5": {
+    "4": {
         "rewardType": "stats",
         "reward": "spins",
         "displayName": "+%s Spins",
         "amount": 3,
         "chance": 12
     },
-    "6": {
+    "5": {
         "rewardType": "boost",
         "reward": "NPCSpeed",
         "displayName": "%sx NPC Speed",
         "amount": 2,
-         "timed": 300,
+        "timed": 300,
         "chance": 8
     },
-    "7": {
+    "6": {
         "rewardType": "boost",
         "reward": "GiftLuck",
         "displayName": "x%s Gift Luck",
         "amount": 5,
-         "timed": 300,
+        "timed": 300,
         "chance": 7
     },
-    "8": {
+    "7": {
         "rewardType": "inventory",
         "reward": "igloo",
         "displayName": "Igloo",

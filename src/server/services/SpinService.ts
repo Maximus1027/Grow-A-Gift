@@ -18,12 +18,12 @@ export class SpinService implements OnStart {
 			this.getReward(player);
 		});
 
-		const record: Record<string, number> = {};
+		// const record: Record<string, number> = {};
 
-		for (let i = 0; i < 10000; i++) {
-			const reward = returnRandomSpinReward();
-			record[reward] = ((record[reward] || 0) as number) + 1;
-		}
+		// for (let i = 0; i < 10000; i++) {
+		// 	const reward = returnRandomSpinReward();
+		// 	record[reward] = ((record[reward] || 0) as number) + 1;
+		// }
 
 		// const size = Object.values(record).reduce((acc, value) => acc + value, 0);
 
@@ -41,6 +41,7 @@ export class SpinService implements OnStart {
 			const reward = returnRandomSpinReward();
 			const spinnerConfig = getSpinConfig();
 			const foundReward = spinnerConfig[reward];
+			print(foundReward);
 			if (foundReward) {
 				this.grantReward(Player, foundReward);
 				Events.onReward.fire(Player, "spin", reward, "");
@@ -68,7 +69,7 @@ export class SpinService implements OnStart {
 				this.boostService.addBoost(
 					player,
 					"SPINPRIZE_" + reward.reward,
-					Boost[reward.reward as keyof typeof Boost] as Boost,
+					reward.reward as Boost,
 					reward.amount,
 					reward.timed,
 				);

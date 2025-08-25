@@ -14,11 +14,11 @@ export interface SpinProps {
 const rewards = getSpinConfig();
 const rewardsMap = Object.entries(rewards);
 
-const rewardsLabels = rewardsMap
-	.sort((a, b) => (tonumber(a[0]) as number) < (tonumber(b[0]) as number))
-	.map(([reward, data]) => (
-		<Reward id={tonumber(reward) as number} title={data.displayName.format(data.amount)} image={data!.image} />
-	));
+const rewardsSorted = rewardsMap.sort((a, b) => (tonumber(a[0]) as number) < (tonumber(b[0]) as number));
+
+const rewardsLabels = rewardsSorted.map(([reward, data]) => (
+	<Reward id={tonumber(reward) as number} title={data.displayName.format(data.amount)} image={data!.image} />
+));
 
 export function SpinAnimation(props: SpinProps) {
 	const spins = 5;
@@ -30,13 +30,14 @@ export function SpinAnimation(props: SpinProps) {
 			return;
 		}
 
-		const index = Object.keys(rewards).indexOf(reward ?? "");
+		//const index = rewardsSorted.findIndex(([id]) => id === reward);
+		const index = tonumber(reward as string) as number;
 
 		const rotAngle = 360 / rewardsMap.size();
 		const randomOffset = math.random(-18, 18);
 
 		setRot.immediate(0);
-		setRot.tween(360 * spins + rotAngle * index + randomOffset, {
+		setRot.tween(360 * spins - rotAngle * index + randomOffset, {
 			style: Enum.EasingStyle.Exponential,
 			direction: Enum.EasingDirection.Out,
 			time: 6.5,

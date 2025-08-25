@@ -146,6 +146,7 @@ export class BoostService implements OnStart {
 	 * @returns
 	 */
 	public addBoost(player: Player, namespace: string, boost: Boost, value: number, timed?: number) {
+		print("Granting boost", player);
 		if (player.stats.boosts.FindFirstChild(namespace)) {
 			if (timed !== undefined) this.extendBoost(player, namespace, timed);
 			return;
@@ -201,7 +202,7 @@ export class BoostService implements OnStart {
 
 		//this.removeBoost(player, namespace);
 		//this.addBoost(player, namespace, boost, foundBoost.Value + (extensionValue ?? 0), boostLeft + extensionTime);
-		foundBoost.SetAttribute("endtick", boostLeft + extensionTime);
+		foundBoost.SetAttribute("endtick", endtick + extensionTime);
 		this.calculateBoosts(player);
 		print("Extended booster", namespace, "by", extensionTime, "seconds");
 		print(foundBoost.GetAttribute("endtick"), extensionTime);

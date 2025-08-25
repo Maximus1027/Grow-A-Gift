@@ -6,15 +6,30 @@ export interface SpinRewardProps {
 	image?: string;
 }
 
+// function getCircularPosition(id: number, total: number, centerX: number, centerY: number, radius: number) {
+// 	const angle = (2 * math.pi * (id + 1)) / total - math.pi; // Start at the top
+// 	const x = centerX + radius * math.cos(angle);
+// 	const y = centerY + radius * math.sin(angle);
+// 	return new UDim2(x, 0, y, 0);
+// }
+
+/**
+ * Returns a UDim2 position for an item placed in a circle.
+ * @param id Index of the item (0-based)
+ * @param total Total number of items
+ * @param centerX Center X (0-1)
+ * @param centerY Center Y (0-1)
+ * @param radius Distance from center (0-1)
+ */
 function getCircularPosition(id: number, total: number, centerX: number, centerY: number, radius: number) {
-	const angle = (2 * math.pi * (id + 1)) / total - math.pi; // Start at the top
+	const angle = (2 * math.pi * id) / total - math.pi / 2; // Start at the top
 	const x = centerX + radius * math.cos(angle);
 	const y = centerY + radius * math.sin(angle);
 	return new UDim2(x, 0, y, 0);
 }
 export function Reward(props: SpinRewardProps) {
 	// 45 degrees per slice for 8 rewards (360/8)
-	const rotation = (((2 * math.pi * props.id) / 8 - math.pi / 4) * 180) / math.pi;
+	const rotation = props.id * 45; //(((2 * math.pi * props.id) / 8 - math.pi / 2) * 180)) / math.pi;
 
 	return (
 		<frame

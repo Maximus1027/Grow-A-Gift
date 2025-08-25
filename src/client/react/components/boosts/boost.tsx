@@ -48,14 +48,9 @@ export function Boost() {
 				{boosts.map((boost) => {
 					const imageid = getUIConfig().boost[boost.boostType];
 
-					return (
-						<Booster
-							key={boost.namespace}
-							imageid={imageid}
-							value={boost.boostValue}
-							endtick={boost.endtick}
-						/>
-					);
+					print("Re mapping", boost);
+
+					return <Booster imageid={imageid} value={boost.boostValue} endtick={boost.endtick} />;
 				})}
 			</frame>
 		</screengui>
