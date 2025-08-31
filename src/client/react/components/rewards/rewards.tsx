@@ -72,7 +72,7 @@ export function Rewards() {
 							return (
 								<RewardSlot
 									id={nid}
-									timeInSeconds={config.timeInMinutes}
+									timeInSeconds={rewardsState.startTick + config.timeInMinutes}
 									key={id}
 									claimState={claimState}
 									// countdown={true || rewardsState.highestUnlock + 1 === nid}

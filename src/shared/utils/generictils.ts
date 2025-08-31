@@ -129,3 +129,21 @@ export const isModelWithinBounds = (model: Model, boundingPart: BasePart): boole
 
 	return false;
 };
+
+/**
+ * Calculate the time (in seconds) it should npcs to walk from start to goal
+ * @param start
+ * @param goal
+ */
+export const calculateGoalTime = (start: Vector3, goal: Vector3) => {
+	const magnitude = goal.sub(start).Magnitude;
+	const walkspeed = 16;
+
+	return magnitude / walkspeed;
+};
+
+export const getDistanceFromPlayer = (player: Player, vec: Vector3) => {
+	const char = player.Character?.PrimaryPart;
+
+	return char?.Position.sub(vec).Magnitude;
+};

@@ -13,7 +13,8 @@
         "displayName": "x%s Money",
         "image": "rbxassetid://95994691620048",
         "amount": 3,
-        "timeInMinutes": 20
+        "timeInMinutes": 20,
+        "timed": 300
     },
     "3": {
         "rewardType": "stats",
@@ -52,6 +53,7 @@
         "displayName": "x%s Money",
         "image": "rbxassetid://95994691620048",
         "amount": 5,
+        "timed": 300,
         "timeInMinutes": 70
     },
     "8": {
@@ -91,6 +93,7 @@
         "displayName": "x%s Money",
         "image": "rbxassetid://95994691620048",
         "amount": 7,
+        "timed": 300,
         "timeInMinutes": 120
     },
     "13": {
@@ -115,8 +118,7 @@
         "displayName": "x%s Money",
         "image": "rbxassetid://95994691620048",
         "amount": 10,
+        "timed": 300,
         "timeInMinutes": 150
     }
-    
-
 }

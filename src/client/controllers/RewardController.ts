@@ -9,11 +9,17 @@ export class RewardController implements OnStart {
 	onStart() {
 		const player = Players.LocalPlayer;
 
-		Events.onRewardsAction.connect((action: "unlock" | "claim", id: number) => {
-			if (action === "unlock") {
-				store.setUnlocked(id);
-			} else if (action === "claim") {
-				store.setClaimed([...store.getState().rewards.claimed, id]);
+		Events.onRewardsAction.connect((action: "unlock" | "claim" | "start", id: number) => {
+			switch (action) {
+				case "unlock":
+					store.setUnlocked(id);
+					break;
+				case "claim":
+					store.setClaimed([...store.getState().rewards.claimed, id]);
+					break;
+				case "start":
+					store.setTick(id);
+					break;
 			}
 		});
 

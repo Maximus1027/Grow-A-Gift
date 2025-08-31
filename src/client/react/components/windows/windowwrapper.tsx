@@ -17,12 +17,14 @@ export function WindowWrapper(props: WindowWrapperProps) {
 
 	const window = useSelector((state: RootState) => state.windowManager.windows[props.window]);
 	const [visible, setVisible] = useState<boolean>(true);
-	const [pos, setPos] = useMotion([target.X.Scale, target.Y.Scale]);
+	const [pos, setPos] = useMotion([0.5, 0.5]);
 
 	//const tweenOptions = { time: time, style: props.tweenStyle, direction: Enum.EasingDirection.Out };
 
 	useEffect(() => {
-		if (window === true) {
+		const status = window;
+
+		if (status === true) {
 			//setPos.tween([0.5, 0.5], tweenOptions);
 			setPos.spring([0.5, 0.5], {
 				frequency: 0.3,

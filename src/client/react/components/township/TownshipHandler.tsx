@@ -38,12 +38,9 @@ export function Township() {
 
 	useEffect(() => {}, [village]);
 
-	return (
-		window === true &&
-		(village === undefined ? (
-			<UpgradeTown nextTown="" currentTown="" />
-		) : (
-			<UpgradeTown nextTown={village!.nextVillage} currentTown={village!.current} />
-		))
+	return village === undefined ? (
+		<UpgradeTown nextTown="" currentTown="" />
+	) : (
+		<UpgradeTown nextTown={village!.nextVillage} currentTown={village!.current} />
 	);
 }

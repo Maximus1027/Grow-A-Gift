@@ -1,9 +1,9 @@
-import { OnInit, OnStart, OnTick } from "@flamework/core";
+import { Dependency, OnInit, OnStart, OnTick } from "@flamework/core";
 import { Component, BaseComponent } from "@flamework/components";
 import Object from "@rbxts/object-utils";
 import * as HouseConfig from "shared/config/house.json";
-import { Players } from "@rbxts/services";
-import { NPC } from "shared/npc/npc";
+import { Players, ReplicatedStorage } from "@rbxts/services";
+import { NPC } from "shared/npc/pernpc";
 import {
 	convertChanceToStringMarkup,
 	getHouseConfig,
@@ -13,10 +13,14 @@ import {
 } from "shared/utils/loot";
 import { Rarity } from "shared/enums/Rarity";
 import Abbreviator from "@rbxts/abbreviate";
-import { tick } from "shared/utils/generictils";
+import { calculateGoalTime, tick } from "shared/utils/generictils";
 import { Boost } from "shared/enums/Boost";
 import { bool } from "@rbxts/react/src/prop-types";
 import { t } from "@rbxts/t";
+import { ObjectPool } from "shared/utils/objectpool";
+import { ClientNPC } from "shared/types/entity";
+import { EntityService } from "server/services/EntityService";
+import { getPresentValue } from "shared/utils/presentutils";
 
 interface Attributes {
 	houseid?: string;
@@ -25,6 +29,9 @@ interface Attributes {
 }
 
 const abv = new Abbreviator();
+
+const sharedAssets = ReplicatedStorage.WaitForChild("assets") as Folder;
+const npcModel = sharedAssets.WaitForChild("npc")!.WaitForChild("default") as ClientNPC;
 
 @Component({
 	tag: "House",
@@ -41,6 +48,10 @@ export class House extends BaseComponent<Attributes, Model> implements OnStart, 
 	private attributeChanged?: RBXScriptConnection;
 
 	private lastIncome: number[] = new Array<number>();
+
+	constructor(private readonly entityService: EntityService) {
+		super();
+	}
 
 	onStart() {
 		this.owner = Players.GetPlayers().find((player) => player.Name === this.attributes.owner);
@@ -64,6 +75,8 @@ export class House extends BaseComponent<Attributes, Model> implements OnStart, 
 			if (attribute === Boost.NPCSpeed) {
 				const npscpeed = this.owner?.GetAttribute(attribute);
 				if (!t.number(npscpeed)) {
+					this.spawnRate = foundHouse.rate;
+					this.lastSpawnTick = tick() - math.random(1, 5);
 					return;
 				}
 
@@ -97,18 +110,27 @@ export class House extends BaseComponent<Attributes, Model> implements OnStart, 
 
 		const chanceDisplay = convertChanceToStringMarkup(randomRarity, this.houseId);
 
+		const moneyBoost = (this.owner?.GetAttribute(Boost.Income) as number) ?? 1;
+
+		const presentWorth = getPresentValue(randomRarity);
+		const finalWorth = math.random(presentWorth!.min, presentWorth!.max) * moneyBoost;
+
 		if (this.owner) {
-			const npc = new NPC(
-				this.NPCfolder,
+			this.entityService.spawnNPC(
+				this.owner,
 				spawnLocation,
 				this.end.Position,
+				finalWorth,
 				randomRarity,
-				chanceDisplay,
-				this.owner,
+				this.houseId,
+				tick(),
 			);
 
-			task.delay(1, () => {
-				this.lastIncome.insert(0, npc.getPresentWorth());
+			const goaltime = calculateGoalTime(spawnLocation, this.end.Position);
+
+			task.delay(goaltime, () => {
+				this.owner!.stats.Money.Value += goaltime;
+				this.lastIncome.insert(0, finalWorth);
 				if (this.lastIncome.size() > 10) this.lastIncome.pop();
 
 				this.calculateAverage();

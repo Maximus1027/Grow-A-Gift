@@ -22,6 +22,7 @@ import { FocusEffects } from "../components/windows/focuseffects";
 import { Boost } from "../components/boosts/boost";
 import { Reward } from "../components/spinner/reward";
 import { Rewards } from "../components/rewards/rewards";
+import { AutoPreload } from "../components/preloader/autopreload";
 
 export function App() {
 	const player = Players.LocalPlayer;
@@ -30,7 +31,7 @@ export function App() {
 
 	return (
 		<ReflexProvider producer={store}>
-			<PreloadAssets />
+			<AutoPreload />
 			<Version />
 			<Presents />
 			<MoneyDisplay value={moneyValue} />

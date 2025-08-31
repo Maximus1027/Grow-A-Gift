@@ -7,6 +7,7 @@ import { Events } from "client/network";
 import { SellButton } from "./sellbutton";
 import { getItemCost, getHouseDisplayName } from "shared/utils/houseutils";
 import { Window } from "client/react/store/producer/windowproducer";
+import { InteractiveButton } from "../misc/interactivebutton";
 
 export function HouseSelect() {
 	const pickup = useSelector((state: RootState) => state.inventory.promptHouseid);
@@ -70,26 +71,18 @@ export function HouseSelect() {
 						Size={UDim2.fromScale(0.187, 0.313)}
 					/>
 
-					<imagebutton
+					<InteractiveButton
 						key={"pickup"}
 						Image={"rbxassetid://136601838790547"}
-						ScaleType={Enum.ScaleType.Fit}
-						AnchorPoint={new Vector2(0.5, 0.5)}
-						BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-						BackgroundTransparency={1}
-						BorderColor3={Color3.fromRGB(0, 0, 0)}
-						BorderSizePixel={0}
 						Position={UDim2.fromScale(0.29, 0.736)}
 						Size={UDim2.fromScale(0.359, 0.225)}
-						Event={{
-							Activated: () => {
-								Events.onPlotAction("pickup", pickup);
-								dispatch.promptHouse(undefined);
-							},
+						onClick={() => {
+							Events.onPlotAction("pickup", pickup);
+							dispatch.promptHouse(undefined);
 						}}
 					>
 						<uiaspectratioconstraint key={"uIAspectRatioConstraint"} AspectRatio={2.68} />
-					</imagebutton>
+					</InteractiveButton>
 
 					{/* <imagebutton
 						key={"sell"}

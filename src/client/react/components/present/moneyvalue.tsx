@@ -1,16 +1,17 @@
-import React from "@rbxts/react";
+import React, { useEffect } from "@rbxts/react";
 import { createPortal } from "@rbxts/react-roblox";
 import { getPresentValue } from "shared/utils/presentutils";
 
 export interface MoneyValueProps {
-	presentid: string;
+	value: number;
+	chance: string;
 	parent: Instance;
 }
 
 export function MoneyValue(props: MoneyValueProps) {
 	return createPortal(
 		<billboardgui
-			key={"billboardGui"}
+			key={props.parent.Name}
 			Active={true}
 			ClipsDescendants={true}
 			ExtentsOffsetWorldSpace={new Vector3(0, 0.8, 0)}
@@ -18,11 +19,12 @@ export function MoneyValue(props: MoneyValueProps) {
 			StudsOffsetWorldSpace={new Vector3(0, 1, 0)}
 			ZIndexBehavior={Enum.ZIndexBehavior.Sibling}
 			MaxDistance={45}
+			Enabled={true}
 		>
 			<textlabel
 				key={"chance"}
 				FontFace={new Font("rbxasset://fonts/families/FredokaOne.json")}
-				Text={(props.parent.GetAttribute("chance") as string) ?? "N/A"}
+				Text={props.chance}
 				TextColor3={Color3.fromRGB(255, 255, 255)}
 				TextScaled={true}
 				TextSize={14}
@@ -40,7 +42,7 @@ export function MoneyValue(props: MoneyValueProps) {
 			<textlabel
 				key={"money"}
 				FontFace={new Font("rbxasset://fonts/families/FredokaOne.json")}
-				Text={`$` + props.parent.GetAttribute("value")}
+				Text={`$` + props.value}
 				TextColor3={Color3.fromRGB(255, 255, 255)}
 				TextScaled={true}
 				TextSize={14}

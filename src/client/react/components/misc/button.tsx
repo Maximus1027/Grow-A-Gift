@@ -5,6 +5,7 @@ export interface ButtonProps extends React.PropsWithChildren {
 	Position: UDim2;
 	Size: UDim2;
 	imageColor?: Color3;
+	ZIndex?: number;
 	onClick: () => void;
 }
 
@@ -15,7 +16,7 @@ export function Button(props: ButtonProps) {
 			Position={props.Position}
 			Size={props.Size}
 			Event={{
-				MouseButton1Up: () => props.onClick(),
+				Activated: () => props.onClick(),
 			}}
 			ScaleType={Enum.ScaleType.Fit}
 			AnchorPoint={new Vector2(0.5, 0.5)}
@@ -24,6 +25,7 @@ export function Button(props: ButtonProps) {
 			BorderSizePixel={0}
 			ImageColor3={props.imageColor}
 			AutoButtonColor={false}
+			ZIndex={props.ZIndex ?? 1}
 		>
 			{props.children}
 		</imagebutton>

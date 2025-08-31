@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "../generic/button";
+import { Button } from "../misc/button";
 import { useMotion } from "@rbxts/pretty-react-hooks";
 import { RunService } from "@rbxts/services";
+import { InteractiveButton } from "../misc/interactivebutton";
 
 export function RebirthButton({ onClick }: { onClick: () => void }) {
 	const [imageColor, setColor] = useState<[number, number, number]>([1, 1, 1]);
@@ -17,7 +18,7 @@ export function RebirthButton({ onClick }: { onClick: () => void }) {
 	}, []);
 
 	return (
-		<Button
+		<InteractiveButton
 			onClick={onClick}
 			Image="rbxassetid://89317764495043"
 			Position={UDim2.fromScale(0.294, 0.638)}

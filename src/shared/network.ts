@@ -1,4 +1,5 @@
 import { Networking } from "@flamework/networking";
+import { NPCPacket } from "./types/entity";
 
 interface ClientToServerEvents {
 	onPlotAction: (action: unknown, ...args: unknown[]) => void;
@@ -11,9 +12,10 @@ interface ClientToServerEvents {
 interface ServerToClientEvents {
 	onStock: (newStock: Record<string, number>) => void;
 	onReward: (rewardType: "crate" | "spin", crateid: string, houseid: string) => void;
-	onRewardsAction: (action: "unlock" | "claim", id: number) => void;
+	onRewardsAction: (action: "unlock" | "claim" | "start", id: number) => void;
 	onBoost: () => void;
 	onDataLoaded: () => void;
+	onNPC: (npcs: NPCPacket[]) => void;
 }
 
 interface ClientToServerFunctions {}

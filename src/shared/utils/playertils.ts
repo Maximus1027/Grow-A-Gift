@@ -25,6 +25,11 @@ export const getPlayerHouseObjectHotbar = (player: Player, houseId: string) => {
 	return getHotbarFolder(player).FindFirstChild(houseId);
 };
 
+export const getPlayerNPCFolder = (player: Player) => {
+	const folder = getPlayerPlotFolder(player);
+	return folder?.FindFirstChild("NPC");
+};
+
 export const summonPlayer = (player: Player, pos: Vector3) => {
 	const character = player.Character || player.CharacterAdded.Wait()[0];
 
@@ -32,17 +37,23 @@ export const summonPlayer = (player: Player, pos: Vector3) => {
 		return;
 	}
 
+	print(pos);
+
 	character.MoveTo(pos.add(new Vector3(0, character.GetExtentsSize().Y / 2, 0)));
 };
 
 export const sendPlayerToPlot = (player: Player) => {
 	const plot = getPlayerPlotFolder(player);
 
+	print(plot);
+
 	if (!plot) {
 		return;
 	}
 
 	const spawn = plot.GetDescendants().find((child) => child.HasTag("Spawn"));
+
+	print(spawn);
 
 	if (spawn && spawn.IsA("BasePart")) {
 		summonPlayer(player, spawn.CFrame.Position);

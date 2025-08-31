@@ -37,10 +37,8 @@ export class NPC {
 
 		this.entity = newNPC;
 
-		const moneyBoost = this.owner.GetAttribute(Boost.Income) ?? 1;
-
 		const presentWorth = getPresentValue(this.presentRarity);
-		this.presentWorth = math.random(presentWorth!.min, presentWorth!.max) * (moneyBoost as number);
+		this.presentWorth = math.random(presentWorth!.min, presentWorth!.max);
 
 		this.spawn();
 	}

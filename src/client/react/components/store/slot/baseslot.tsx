@@ -2,6 +2,7 @@ import React, { Children } from "@rbxts/react";
 import { HouseDisplay } from "../../crates/housedisplay";
 import { Events } from "client/network";
 import { storeType } from "../Store";
+import { InteractiveButton } from "../../misc/interactivebutton";
 
 export interface BaseSlotProps extends React.PropsWithChildren {
 	itemid: string;
@@ -40,35 +41,22 @@ export function BaseSlot(props: BaseSlotProps) {
 				Position={UDim2.fromScale(0.16, 0.475)}
 			/>
 
-			<imagebutton
+			<InteractiveButton
 				key={"buy"}
 				Image={"rbxassetid://131222522112144"}
-				ScaleType={Enum.ScaleType.Fit}
-				AnchorPoint={new Vector2(0.5, 0.5)}
-				BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-				BackgroundTransparency={1}
-				BorderColor3={Color3.fromRGB(0, 0, 0)}
-				BorderSizePixel={0}
 				Position={UDim2.fromScale(0.652, 0.688)}
 				Size={UDim2.fromScale(0.18, 0.288)}
-				Event={{
-					Activated: () => Events.onStoreAction.fire(props.actionType, props.itemid),
-				}}
+				onClick={() => Events.onStoreAction.fire(props.actionType, props.itemid)}
 			>
 				<uiaspectratioconstraint key={"uIAspectRatioConstraint3"} AspectRatio={2.27} />
-			</imagebutton>
+			</InteractiveButton>
 
-			<imagebutton
+			<InteractiveButton
 				key={"robux"}
 				Image={"rbxassetid://123672105383598"}
-				ScaleType={Enum.ScaleType.Fit}
-				AnchorPoint={new Vector2(0.5, 0.5)}
-				BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-				BackgroundTransparency={1}
-				BorderColor3={Color3.fromRGB(0, 0, 0)}
-				BorderSizePixel={0}
 				Position={UDim2.fromScale(0.85, 0.689)}
 				Size={UDim2.fromScale(0.178, 0.289)}
+				onClick={() => {}}
 			>
 				<imagelabel
 					key={"imageLabel1"}
@@ -105,7 +93,7 @@ export function BaseSlot(props: BaseSlotProps) {
 				</textlabel>
 
 				<uiaspectratioconstraint key={"uIAspectRatioConstraint4"} AspectRatio={2.24} />
-			</imagebutton>
+			</InteractiveButton>
 		</imagelabel>
 	);
 }

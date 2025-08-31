@@ -66,7 +66,7 @@ export class DataService implements OnStart {
 
 		profile.ListenToRelease(() => {
 			this.loadedProfiles.delete(player);
-			player.Kick("Profile released");
+			player.Kick("Profile released.");
 		});
 
 		profile.AddUserId(userid);

@@ -1,3 +1,4 @@
+/* eslint-disable roblox-ts/no-any */
 /**
  * This producer will serve as the window manager across all UI,
  */
@@ -63,7 +64,7 @@ export const WindowActions = createProducer(initialState, {
 		return {
 			...state,
 			windows: {
-				...state.windows,
+				...initialState.windows,
 				[window]: enabled,
 			},
 		};
@@ -76,7 +77,7 @@ export const WindowActions = createProducer(initialState, {
 		return {
 			...state,
 			windows: {
-				...state.windows,
+				...initialState.windows,
 				[window]: !state.windows[window],
 			},
 		};

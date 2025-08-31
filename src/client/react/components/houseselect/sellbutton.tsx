@@ -1,6 +1,7 @@
 import React, { useState } from "@rbxts/react";
 import { PricePopup } from "./pricepopup";
 import Abbreviator from "@rbxts/abbreviate";
+import { InteractiveButton } from "../misc/interactivebutton";
 export interface SellButtonProps {
 	onSell?: () => void;
 	sellValue: number;
@@ -10,29 +11,20 @@ export function SellButton(props: SellButtonProps) {
 	const [showPrice, setShow] = useState<boolean>(false);
 
 	return (
-		<imagebutton
+		<InteractiveButton
 			key={"sell"}
 			Image={"rbxassetid://122047660596559"}
-			ImageColor3={Color3.fromRGB(255, 0, 0)}
-			ScaleType={Enum.ScaleType.Fit}
-			AnchorPoint={new Vector2(0.5, 0.5)}
-			BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-			BackgroundTransparency={1}
-			BorderColor3={Color3.fromRGB(0, 0, 0)}
-			BorderSizePixel={0}
 			Position={UDim2.fromScale(0.711, 0.736)}
 			Size={UDim2.fromScale(0.359, 0.225)}
-			Event={{
-				Activated: () => {
-					if (showPrice) {
-						if (props.onSell) {
-							props.onSell();
-						}
-						return;
+			onClick={() => {
+				if (showPrice) {
+					if (props.onSell) {
+						props.onSell();
 					}
+					return;
+				}
 
-					setShow(true);
-				},
+				setShow(true);
 			}}
 		>
 			{showPrice && <PricePopup price={props.sellValue} />}
@@ -55,6 +47,6 @@ export function SellButton(props: SellButtonProps) {
 				<uistroke key={"uIStroke"} Thickness={4} />
 			</textlabel>
 			<uiaspectratioconstraint key={"uIAspectRatioConstraint"} AspectRatio={2.68} />
-		</imagebutton>
+		</InteractiveButton>
 	);
 }

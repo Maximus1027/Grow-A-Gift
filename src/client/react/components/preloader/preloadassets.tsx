@@ -52,6 +52,10 @@ export function PreloadAssets() {
 			<imagelabel Image={"rbxassetid://116989522422833"} Size={UDim2.fromOffset(1, 1)} />
 			<imagelabel Image={"rbxassetid://91129668979065"} Size={UDim2.fromOffset(1, 1)} />
 			<imagelabel Image={"rbxassetid://95546525399732"} Size={UDim2.fromOffset(1, 1)} />
+
+			{/** Spinner */}
+			<imagelabel Image={"rbxassetid://74963660050421"} Size={UDim2.fromOffset(1, 1)} />
+			<imagelabel Image={"rbxassetid://82827593712059"} Size={UDim2.fromOffset(1, 1)} />
 		</screengui>
 	);
 }

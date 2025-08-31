@@ -7,14 +7,13 @@ import { InventoryOpener } from "../inventory/inventoryopener";
 import { useProducer, useSelector } from "@rbxts/react-reflex";
 import { RootState, RootStore } from "client/react/store/store";
 import { Window } from "client/react/store/producer/windowproducer";
+import { WindowWrapper } from "../windows/windowwrapper";
 
 const houseModels = ReplicatedStorage.WaitForChild("assets").WaitForChild("houses") as Folder;
 const player = Players.LocalPlayer;
 
 export function Hotbar() {
 	const houseids = useSelector((state: RootState) => state.inventory.inventory);
-
-	const window = useSelector((state: RootState) => state.windowManager.windows.hud);
 
 	return (
 		<screengui
@@ -23,60 +22,62 @@ export function Hotbar() {
 			ScreenInsets={Enum.ScreenInsets.DeviceSafeInsets}
 			ZIndexBehavior={Enum.ZIndexBehavior.Global}
 			ResetOnSpawn={false}
-			Enabled={window === true}
+			Enabled={true}
 			DisplayOrder={-1}
 		>
-			<frame
-				key={"frame"}
-				AnchorPoint={new Vector2(0.5, 0.5)}
-				BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-				BackgroundTransparency={1}
-				BorderColor3={Color3.fromRGB(0, 0, 0)}
-				BorderSizePixel={0}
-				Position={UDim2.fromScale(0.5, 0.919)}
-				Size={UDim2.fromScale(0.0907, 0.161)}
-			>
-				<uiaspectratioconstraint />
-
+			<WindowWrapper target={UDim2.fromScale(0.5, 1.3)} window={Window.hud}>
 				<frame
-					key={"hotbar"}
+					key={"frame"}
 					AnchorPoint={new Vector2(0.5, 0.5)}
 					BackgroundColor3={Color3.fromRGB(255, 255, 255)}
 					BackgroundTransparency={1}
 					BorderColor3={Color3.fromRGB(0, 0, 0)}
 					BorderSizePixel={0}
-					Position={UDim2.fromScale(0.5, 0.5)}
-					Size={UDim2.fromScale(3.5, 0.615)}
+					Position={UDim2.fromScale(0.5, 0.919)}
+					Size={UDim2.fromScale(0.0907, 0.161)}
 				>
-					<uiaspectratioconstraint key={"uIAspectRatioConstraint1"} AspectRatio={5.84} />
+					<uiaspectratioconstraint />
 
-					<uilistlayout
-						key={"uIListLayout"}
-						FillDirection={Enum.FillDirection.Horizontal}
-						HorizontalAlignment={Enum.HorizontalAlignment.Center}
-						SortOrder={Enum.SortOrder.LayoutOrder}
-						VerticalAlignment={Enum.VerticalAlignment.Center}
-						Padding={new UDim(0.009)}
-					/>
-					<InventoryOpener />
-					{houseids
-						.filter((house) => house.GetAttribute("equip") !== undefined)
-						.sort((a, b) => (a.GetAttribute("equip") as number) < (b.GetAttribute("equip") as number))
-						.map((house: NumberValue, index: number) => {
-							const model = houseModels.FindFirstChild(house.Name);
-							if (!model || !model.IsA("Model")) return <></>;
-							return (
-								<HotbarSlot
-									key={house.Name}
-									houseModel={model}
-									houseId={house.Name}
-									valueBase={house}
-									layoutorder={index + 1}
-								/>
-							);
-						})}
+					<frame
+						key={"hotbar"}
+						AnchorPoint={new Vector2(0.5, 0.5)}
+						BackgroundColor3={Color3.fromRGB(255, 255, 255)}
+						BackgroundTransparency={1}
+						BorderColor3={Color3.fromRGB(0, 0, 0)}
+						BorderSizePixel={0}
+						Position={UDim2.fromScale(0.5, 0.5)}
+						Size={UDim2.fromScale(3.5, 0.615)}
+					>
+						<uiaspectratioconstraint key={"uIAspectRatioConstraint1"} AspectRatio={5.84} />
+
+						<uilistlayout
+							key={"uIListLayout"}
+							FillDirection={Enum.FillDirection.Horizontal}
+							HorizontalAlignment={Enum.HorizontalAlignment.Center}
+							SortOrder={Enum.SortOrder.LayoutOrder}
+							VerticalAlignment={Enum.VerticalAlignment.Center}
+							Padding={new UDim(0.009)}
+						/>
+						<InventoryOpener />
+						{houseids
+							.filter((house) => house.GetAttribute("equip") !== undefined)
+							.sort((a, b) => (a.GetAttribute("equip") as number) < (b.GetAttribute("equip") as number))
+							.map((house: NumberValue, index: number) => {
+								const model = houseModels.FindFirstChild(house.Name);
+								if (!model || !model.IsA("Model")) return <></>;
+								return (
+									<HotbarSlot
+										key={house.Name}
+										houseModel={model}
+										houseId={house.Name}
+										valueBase={house}
+										layoutorder={index + 1}
+									/>
+								);
+							})}
+					</frame>
 				</frame>
-			</frame>
+			</WindowWrapper>
 		</screengui>
 	);
 }

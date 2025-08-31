@@ -9,6 +9,7 @@ import { Window } from "client/react/store/producer/windowproducer";
 import { Events } from "client/network";
 import { RebirthButton } from "./rebirthbutton";
 import { WindowWrapper } from "../windows/windowwrapper";
+import { InteractiveButton } from "../misc/interactivebutton";
 
 export interface RebirthProps {
 	cost: number;
@@ -172,19 +173,12 @@ export function Rebirth(props: RebirthProps) {
 				</React.Fragment>
 			)}
 
-			<imagebutton
+			<InteractiveButton
 				key={"cancel"}
 				Image={"rbxassetid://122765808708569"}
-				BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-				AutoButtonColor={false}
-				BorderColor3={Color3.fromRGB(0, 0, 0)}
-				BorderSizePixel={0}
-				AnchorPoint={new Vector2(0.5, 0.5)}
 				Position={UDim2.fromScale(0.676, 0.638)}
 				Size={UDim2.fromScale(0.349, 0.212)}
-				Event={{
-					MouseButton1Click: () => dispatch.setWindowState(Window.rebirth, false),
-				}}
+				onClick={() => dispatch.setWindowState(Window.rebirth, false)}
 			/>
 		</imagelabel>
 	);

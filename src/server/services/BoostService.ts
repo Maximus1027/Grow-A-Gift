@@ -12,7 +12,7 @@ export class BoostService implements OnStart {
 	constructor(readonly dataService: DataService) {}
 
 	//timed boost
-	private timedBoosters = new Set<TimedBoost>();
+	private timedBoosters = new Map<string, [number, Player]>();
 
 	onStart() {
 		this.startBoostTimer();
@@ -58,19 +58,22 @@ export class BoostService implements OnStart {
 	 */
 	private startBoostTimer() {
 		task.spawn(() => {
-			while (task.wait(1)) {
+			while (task.wait(0.5)) {
 				if (this.timedBoosters.size() <= 0) {
 					continue;
 				}
 
-				for (const booster of this.timedBoosters) {
+				for (const [booster, data] of this.timedBoosters) {
 					const currentTick = tick();
+					const endtick = data[0];
 
-					if (currentTick >= booster.endtick) {
+					if (currentTick >= endtick) {
 						//if booster time has passed
 
 						this.timedBoosters.delete(booster);
-						this.removeBoost(booster.player, booster.namespace);
+
+						this.removeBoost(data[1], booster);
+
 						continue;
 					}
 				}
@@ -79,15 +82,13 @@ export class BoostService implements OnStart {
 	}
 
 	/**
-	 * Remove player's timed boosters from set and return them
+	 * Remove player's timed boosters from map
 	 */
-	private popPlayerboosters(player: Player): TimedBoost[] {
-		const boosters = Object.keys(this.timedBoosters).filter((booster) => booster.player === player);
+	private popPlayerboosters(player: Player) {
+		const boosters = Object.entries(this.timedBoosters).filter(([namespace, data]) => data[1] === player);
 
 		//remove from orignal set
-		boosters.forEach((booster) => this.timedBoosters.delete(booster));
-
-		return boosters;
+		boosters.forEach(([namespace, data]) => this.timedBoosters.delete(namespace));
 	}
 
 	/**
@@ -160,13 +161,8 @@ export class BoostService implements OnStart {
 		if (timed !== undefined && timed !== 0) {
 			const endtick = tick() + timed;
 			booster.SetAttribute("endtick", endtick);
-			this.timedBoosters.add({
-				player: player,
-				namespace: namespace,
-				boostType: boost,
-				boostValue: value,
-				endtick: endtick,
-			});
+
+			this.timedBoosters.set(namespace, [endtick, player]);
 		}
 
 		booster.Parent = player.stats.boosts;
@@ -180,6 +176,7 @@ export class BoostService implements OnStart {
 		if (boost !== undefined) {
 			boost.Destroy();
 			this.calculateBoosts(player);
+			this.timedBoosters.delete(namespace);
 		}
 	}
 
@@ -198,11 +195,20 @@ export class BoostService implements OnStart {
 
 		const boost = foundBoost.GetAttribute("boost") as Boost;
 		const endtick = foundBoost.GetAttribute("endtick") as number;
-		const boostLeft = endtick - tick();
+		const newTime = endtick + extensionTime;
+		//const boostLeft = endtick - tick();
 
-		//this.removeBoost(player, namespace);
-		//this.addBoost(player, namespace, boost, foundBoost.Value + (extensionValue ?? 0), boostLeft + extensionTime);
+		// this.removeBoost(player, namespace);
+		// this.addBoost(player, namespace, boost, foundBoost.Value + (extensionValue ?? 0), boostLeft + extensionTime);
 		foundBoost.SetAttribute("endtick", endtick + extensionTime);
+		this.timedBoosters.delete(namespace);
+		this.timedBoosters.set(namespace, [newTime, player]);
+
+		// this.timedBoosters.delete({
+		// 	player: player,
+		// 	endtick: endtick,
+		// 	bo
+		// })
 		this.calculateBoosts(player);
 		print("Extended booster", namespace, "by", extensionTime, "seconds");
 		print(foundBoost.GetAttribute("endtick"), extensionTime);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "@rbxts/react";
-import { Button } from "../generic/button";
+import { Button } from "../misc/button";
 import { Reward } from "./reward";
 import { useMotion } from "@rbxts/pretty-react-hooks";
 import { SpinAnimation } from "./spinanimation";
@@ -10,6 +10,8 @@ import { getSpinConfig } from "shared/utils/loot";
 import { Events } from "client/network";
 import { Window } from "client/react/store/producer/windowproducer";
 import { Players } from "@rbxts/services";
+import { InteractiveButton } from "../misc/interactivebutton";
+import { WindowWrapper } from "../windows/windowwrapper";
 
 const player = Players.LocalPlayer;
 
@@ -39,77 +41,49 @@ export function Spin() {
 			IgnoreGuiInset={true}
 			ScreenInsets={Enum.ScreenInsets.DeviceSafeInsets}
 			ResetOnSpawn={false}
-			Enabled={window.windows.spin === true}
 		>
-			<imagelabel
-				key={"main"}
-				Image={"rbxassetid://74963660050421"}
-				ScaleType={Enum.ScaleType.Fit}
-				AnchorPoint={new Vector2(0.5, 0.5)}
-				BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-				BackgroundTransparency={1}
-				BorderColor3={Color3.fromRGB(0, 0, 0)}
-				BorderSizePixel={0}
-				Position={UDim2.fromScale(0.5, 0.456)}
-				Size={UDim2.fromScale(0.335, 0.533)}
-			>
-				<uiaspectratioconstraint />
-				<SpinAnimation
-					onAnimationComplete={() => {
-						dispatch.setReward(undefined);
-						dispatch.setFocusedWindow(undefined);
-					}}
-				/>
-
+			<WindowWrapper target={UDim2.fromScale(0.5, -0.5)} window={Window.spin}>
 				<imagelabel
-					key={"var_tick"}
-					Image={"rbxassetid://78596949992244"}
+					key={"main"}
+					Image={"rbxassetid://74963660050421"}
 					ScaleType={Enum.ScaleType.Fit}
 					AnchorPoint={new Vector2(0.5, 0.5)}
 					BackgroundColor3={Color3.fromRGB(255, 255, 255)}
 					BackgroundTransparency={1}
 					BorderColor3={Color3.fromRGB(0, 0, 0)}
 					BorderSizePixel={0}
-					Position={UDim2.fromScale(0.498, 0.0664)}
-					Size={UDim2.fromScale(0.308, 0.308)}
-					ZIndex={5}
+					Position={UDim2.fromScale(0.5, 0.456)}
+					Size={UDim2.fromScale(0.335, 0.533)}
 				>
 					<uiaspectratioconstraint />
-				</imagelabel>
-				{window.inFocus === false && (
-					<React.Fragment>
-						<textlabel
-							key={"spinsamount"}
-							FontFace={new Font("rbxasset://fonts/families/FredokaOne.json")}
-							Text={spins + " Spins"}
-							TextColor3={Color3.fromRGB(255, 255, 255)}
-							TextScaled={true}
-							TextSize={14}
-							TextWrapped={true}
-							AnchorPoint={new Vector2(0.5, 0.5)}
-							BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-							BackgroundTransparency={1}
-							BorderColor3={Color3.fromRGB(0, 0, 0)}
-							BorderSizePixel={0}
-							Position={UDim2.fromScale(0.502, 1.38)}
-							Size={UDim2.fromScale(0.708, 0.121)}
-						>
-							<uistroke key={"uIStroke"} Thickness={3} />
-						</textlabel>
-						<Button
-							key={"spin"}
-							Image={"rbxassetid://135371424340238"}
-							Position={UDim2.fromScale(0.5, 1.19)}
-							Size={UDim2.fromScale(0.567, 0.193)}
-							imageColor={Color3.fromRGB(75, 255, 55)}
-							onClick={() => {
-								reward === undefined && Events.onSpin.fire();
-							}}
-						>
+					<SpinAnimation
+						onAnimationComplete={() => {
+							dispatch.setReward(undefined);
+							dispatch.setFocusedWindow(undefined);
+						}}
+					/>
+
+					<imagelabel
+						key={"var_tick"}
+						Image={"rbxassetid://78596949992244"}
+						ScaleType={Enum.ScaleType.Fit}
+						AnchorPoint={new Vector2(0.5, 0.5)}
+						BackgroundColor3={Color3.fromRGB(255, 255, 255)}
+						BackgroundTransparency={1}
+						BorderColor3={Color3.fromRGB(0, 0, 0)}
+						BorderSizePixel={0}
+						Position={UDim2.fromScale(0.498, 0.0664)}
+						Size={UDim2.fromScale(0.308, 0.308)}
+						ZIndex={5}
+					>
+						<uiaspectratioconstraint />
+					</imagelabel>
+					{window.inFocus === false && (
+						<React.Fragment>
 							<textlabel
-								key={"textLabel"}
+								key={"spinsamount"}
 								FontFace={new Font("rbxasset://fonts/families/FredokaOne.json")}
-								Text={"SPIN"}
+								Text={spins + " Spins"}
 								TextColor3={Color3.fromRGB(255, 255, 255)}
 								TextScaled={true}
 								TextSize={14}
@@ -119,69 +93,98 @@ export function Spin() {
 								BackgroundTransparency={1}
 								BorderColor3={Color3.fromRGB(0, 0, 0)}
 								BorderSizePixel={0}
-								Position={UDim2.fromScale(0.5, 0.452)}
-								Size={UDim2.fromScale(0.874, 0.667)}
+								Position={UDim2.fromScale(0.502, 1.38)}
+								Size={UDim2.fromScale(0.708, 0.121)}
 							>
 								<uistroke key={"uIStroke"} Thickness={3} />
 							</textlabel>
-						</Button>
-						<Button
-							key={"buy1"}
-							Image={"rbxassetid://135371424340238"}
-							Position={UDim2.fromScale(-0.172, 1.09)}
-							Size={UDim2.fromScale(0.567, 0.193)}
-							onClick={() => {}}
-							imageColor={Color3.fromRGB(255, 255, 119)}
-						>
-							<textlabel
-								key={"textLabel1"}
-								FontFace={new Font("rbxasset://fonts/families/FredokaOne.json")}
-								Text={"BUY x5"}
-								TextColor3={Color3.fromRGB(255, 255, 255)}
-								TextScaled={true}
-								TextSize={14}
-								TextWrapped={true}
-								AnchorPoint={new Vector2(0.5, 0.5)}
-								BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-								BackgroundTransparency={1}
-								BorderColor3={Color3.fromRGB(0, 0, 0)}
-								BorderSizePixel={0}
-								Position={UDim2.fromScale(0.5, 0.452)}
-								Size={UDim2.fromScale(0.874, 0.667)}
+							<InteractiveButton
+								key={"spin"}
+								Image={"rbxassetid://135371424340238"}
+								Position={UDim2.fromScale(0.5, 1.19)}
+								Size={UDim2.fromScale(0.567, 0.193)}
+								imageColor={Color3.fromRGB(75, 255, 55)}
+								onClick={() => {
+									reward === undefined && Events.onSpin.fire();
+								}}
 							>
-								<uistroke key={"uIStroke1"} Thickness={3} />
-							</textlabel>
-						</Button>
-						<Button
-							key={"buy2"}
-							Image={"rbxassetid://135371424340238"}
-							Position={UDim2.fromScale(1.17, 1.09)}
-							Size={UDim2.fromScale(0.567, 0.193)}
-							onClick={() => {}}
-							imageColor={Color3.fromRGB(255, 255, 119)}
-						>
-							<textlabel
-								key={"textLabel2"}
-								FontFace={new Font("rbxasset://fonts/families/FredokaOne.json")}
-								Text={"BUY x10"}
-								TextColor3={Color3.fromRGB(255, 255, 255)}
-								TextScaled={true}
-								TextSize={14}
-								TextWrapped={true}
-								AnchorPoint={new Vector2(0.5, 0.5)}
-								BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-								BackgroundTransparency={1}
-								BorderColor3={Color3.fromRGB(0, 0, 0)}
-								BorderSizePixel={0}
-								Position={UDim2.fromScale(0.498, 0.452)}
-								Size={UDim2.fromScale(0.858, 0.667)}
+								<textlabel
+									key={"textLabel"}
+									FontFace={new Font("rbxasset://fonts/families/FredokaOne.json")}
+									Text={"SPIN"}
+									TextColor3={Color3.fromRGB(255, 255, 255)}
+									TextScaled={true}
+									TextSize={14}
+									TextWrapped={true}
+									AnchorPoint={new Vector2(0.5, 0.5)}
+									BackgroundColor3={Color3.fromRGB(255, 255, 255)}
+									BackgroundTransparency={1}
+									BorderColor3={Color3.fromRGB(0, 0, 0)}
+									BorderSizePixel={0}
+									Position={UDim2.fromScale(0.5, 0.452)}
+									Size={UDim2.fromScale(0.874, 0.667)}
+								>
+									<uistroke key={"uIStroke"} Thickness={3} />
+								</textlabel>
+							</InteractiveButton>
+							<InteractiveButton
+								key={"buy1"}
+								Image={"rbxassetid://135371424340238"}
+								Position={UDim2.fromScale(-0.172, 1.09)}
+								Size={UDim2.fromScale(0.567, 0.193)}
+								onClick={() => {}}
+								imageColor={Color3.fromRGB(255, 255, 119)}
 							>
-								<uistroke key={"uIStroke2"} Thickness={3} />
-							</textlabel>
-						</Button>
-					</React.Fragment>
-				)}
-			</imagelabel>
+								<textlabel
+									key={"textLabel1"}
+									FontFace={new Font("rbxasset://fonts/families/FredokaOne.json")}
+									Text={"BUY x5"}
+									TextColor3={Color3.fromRGB(255, 255, 255)}
+									TextScaled={true}
+									TextSize={14}
+									TextWrapped={true}
+									AnchorPoint={new Vector2(0.5, 0.5)}
+									BackgroundColor3={Color3.fromRGB(255, 255, 255)}
+									BackgroundTransparency={1}
+									BorderColor3={Color3.fromRGB(0, 0, 0)}
+									BorderSizePixel={0}
+									Position={UDim2.fromScale(0.5, 0.452)}
+									Size={UDim2.fromScale(0.874, 0.667)}
+								>
+									<uistroke key={"uIStroke1"} Thickness={3} />
+								</textlabel>
+							</InteractiveButton>
+							<InteractiveButton
+								key={"buy2"}
+								Image={"rbxassetid://135371424340238"}
+								Position={UDim2.fromScale(1.17, 1.09)}
+								Size={UDim2.fromScale(0.567, 0.193)}
+								onClick={() => {}}
+								imageColor={Color3.fromRGB(255, 255, 119)}
+							>
+								<textlabel
+									key={"textLabel2"}
+									FontFace={new Font("rbxasset://fonts/families/FredokaOne.json")}
+									Text={"BUY x10"}
+									TextColor3={Color3.fromRGB(255, 255, 255)}
+									TextScaled={true}
+									TextSize={14}
+									TextWrapped={true}
+									AnchorPoint={new Vector2(0.5, 0.5)}
+									BackgroundColor3={Color3.fromRGB(255, 255, 255)}
+									BackgroundTransparency={1}
+									BorderColor3={Color3.fromRGB(0, 0, 0)}
+									BorderSizePixel={0}
+									Position={UDim2.fromScale(0.498, 0.452)}
+									Size={UDim2.fromScale(0.858, 0.667)}
+								>
+									<uistroke key={"uIStroke2"} Thickness={3} />
+								</textlabel>
+							</InteractiveButton>
+						</React.Fragment>
+					)}
+				</imagelabel>
+			</WindowWrapper>
 		</screengui>
 	);
 }

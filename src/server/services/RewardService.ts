@@ -6,6 +6,7 @@ import { getRewardsConfig } from "shared/utils/configtils";
 import { tick } from "shared/utils/generictils";
 import { Players } from "@rbxts/services";
 import Object from "@rbxts/object-utils";
+import { Reward } from "shared/types/config";
 
 @Service({})
 export class RewardService implements OnStart, OnTick {
@@ -20,6 +21,7 @@ export class RewardService implements OnStart, OnTick {
 		Players.PlayerAdded.Connect((player: Player) => {
 			this.startTicks.set(player, tick());
 			player.SetAttribute("highestUnlock", 0);
+			Events.onRewardsAction.fire(player, "start", this.startTicks.get(player) ?? tick());
 		});
 
 		Players.PlayerRemoving.Connect((player: Player) => {
@@ -36,7 +38,7 @@ export class RewardService implements OnStart, OnTick {
 	}
 
 	private onRewardClaim(player: Player, id: number) {
-		const foundReward = this.rewardsConfig[tostring(id)];
+		const foundReward: Reward = { ...this.rewardsConfig[tostring(id)], namespace: "REWARDS" };
 
 		print(foundReward);
 

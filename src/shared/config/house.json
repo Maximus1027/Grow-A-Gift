@@ -88,6 +88,7 @@
             "Mythic": 1000
         }
     },
+    
     "sandhouse": {
         "rate": 5,
         "cost": 500,
@@ -101,6 +102,66 @@
             "Epic": 30,
             "Legendary": 100,
             "Mythic": 1000
+        }
+    },
+    "treehouse": {
+        "rate": 5,
+        "cost": 1000,
+        "displayName": "Tree House",
+        "productid": 123,
+        "stock": 4,
+        "rarity": "Mythic",
+        "loot": {
+            "Common": 2,
+            "Rare": 10,
+            "Epic": 30,
+            "Legendary": 100,
+            "Mythic": 1000
+        }
+    },
+    "minka": {
+        "rate": 5,
+        "cost": 1500,
+        "displayName": "Japanese Home",
+        "productid": 123,
+        "stock": 2,
+        "rarity": "Rare",
+        "loot": {
+            "Common": 5,
+            "Rare": 15,
+            "Epic": 40,
+            "Legendary": 120,
+            "Mythic": 1100
+        }
+    },
+    "cottage": {
+        "rate": 5,
+        "cost": 2000,
+        "displayName": "Cottage",
+        "productid": 123,
+        "stock": 3,
+        "rarity": "Epic",
+        "loot": {
+            "Common": 3,
+            "Rare": 12,
+            "Epic": 35,
+            "Legendary": 105,
+            "Mythic": 1050
+        }
+    },
+    "medieval": {
+        "rate": 5,
+        "cost": 3000,
+        "displayName": "Medieval House",
+        "productid": 123,
+        "stock": 1,
+        "rarity": "Legendary",
+        "loot": {
+            "Common": 1,
+            "Rare": 8,
+            "Epic": 25,
+            "Legendary": 90,
+            "Mythic": 1020
         }
     }
 }

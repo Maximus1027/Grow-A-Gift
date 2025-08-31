@@ -40,7 +40,7 @@ export class SpinService implements OnStart {
 
 			const reward = returnRandomSpinReward();
 			const spinnerConfig = getSpinConfig();
-			const foundReward = spinnerConfig[reward];
+			const foundReward: Reward = { ...spinnerConfig[reward], namespace: "SPIN" };
 			print(foundReward);
 			if (foundReward) {
 				this.grantReward(Player, foundReward);
@@ -68,7 +68,7 @@ export class SpinService implements OnStart {
 			case "boost": {
 				this.boostService.addBoost(
 					player,
-					`SPINPRIZE_${reward.reward}_${reward.amount}`,
+					`${reward.namespace}_${reward.reward}_${reward.amount}`,
 					reward.reward as Boost,
 					reward.amount,
 					reward.timed,

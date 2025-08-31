@@ -30,6 +30,7 @@ export type Reward = {
 	amount: number;
 	timed?: number;
 	image?: string;
+	namespace?: string;
 };
 
 export type SpinConfig = Config<

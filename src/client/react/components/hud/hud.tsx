@@ -7,15 +7,13 @@ import { RootState } from "client/react/store/store";
 import { Window } from "client/react/store/producer/windowproducer";
 
 export function Hud() {
-	const window = useSelector((state: RootState) => state.windowManager.windows.hud);
-
 	return (
 		<screengui
 			key={"hUDDEV"}
 			IgnoreGuiInset={true}
 			ScreenInsets={Enum.ScreenInsets.DeviceSafeInsets}
 			ResetOnSpawn={false}
-			Enabled={window === true}
+			Enabled={true}
 		>
 			<SideBar />
 			<TopBar />
