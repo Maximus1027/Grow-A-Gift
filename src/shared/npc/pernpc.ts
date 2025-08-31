@@ -44,9 +44,7 @@ export class NPC {
 	}
 
 	private spawn() {
-		this.npc.PivotTo(
-			new CFrame(this.spawnLocation.add(new Vector3(0, this.npc.GetExtentsSize().Y / 2, 0)), this.goalLocation),
-		);
+		this.npc.PivotTo(new CFrame(this.spawnLocation.add(new Vector3(0, this.npc.GetExtentsSize().Y / 2, 0))));
 
 		this.npc.SetAttribute("time", this.time);
 		this.npc.SetAttribute("goal", this.goalLocation);
@@ -59,6 +57,7 @@ export class NPC {
 
 		const hrp = this.npc.PrimaryPart as BasePart;
 		const orientation = new CFrame(this.npc.GetPivot().Position, goalPos);
+		hrp.CFrame = orientation;
 
 		const anim = this.npc.AnimationController.Animator.LoadAnimation(animation);
 		const goal = new CFrame(goalPos).mul(orientation.Rotation);

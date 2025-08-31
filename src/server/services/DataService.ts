@@ -6,7 +6,7 @@ import { InventoryService } from "./InventoryService";
 import ProfileService from "@rbxts/profileservice";
 import { Profile } from "@rbxts/profileservice/globals";
 import Object from "@rbxts/object-utils";
-import { Plot, PlotFolder } from "server/plots/plot";
+import { Plot } from "server/plots/plot";
 import { t } from "@rbxts/t";
 import Signal from "@rbxts/lemon-signal";
 import { getCrateConfig } from "shared/utils/loot";

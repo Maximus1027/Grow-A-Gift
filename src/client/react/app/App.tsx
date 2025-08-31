@@ -23,6 +23,7 @@ import { Boost } from "../components/boosts/boost";
 import { Reward } from "../components/spinner/reward";
 import { Rewards } from "../components/rewards/rewards";
 import { AutoPreload } from "../components/preloader/autopreload";
+import { PlotIcons } from "../components/ploticon/ploticons";
 
 export function App() {
 	const player = Players.LocalPlayer;
@@ -50,6 +51,7 @@ export function App() {
 			<FocusEffects />
 			<Boost />
 			<Rewards />
+			<PlotIcons />
 		</ReflexProvider>
 	);
 }

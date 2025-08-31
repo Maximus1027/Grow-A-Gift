@@ -5,6 +5,7 @@ import * as crateConfig from "shared/config/crate.json";
 import { Rarity } from "shared/enums/Rarity";
 
 import * as VillageConfig from "shared/config/villages.json";
+import { PlotFolder } from "shared/types/plot";
 
 /**
  * Check if two models are intersecting in the same place
@@ -137,7 +138,7 @@ export const isModelWithinBounds = (model: Model, boundingPart: BasePart): boole
  */
 export const calculateGoalTime = (start: Vector3, goal: Vector3) => {
 	const magnitude = goal.sub(start).Magnitude;
-	const walkspeed = 16;
+	const walkspeed = 12;
 
 	return magnitude / walkspeed;
 };
@@ -146,4 +147,35 @@ export const getDistanceFromPlayer = (player: Player, vec: Vector3) => {
 	const char = player.Character?.PrimaryPart;
 
 	return char?.Position.sub(vec).Magnitude;
+};
+
+/** Get NPC locations of a plot */
+export const getSpawnLocations = (plot: PlotFolder): Vector3[] => {
+	const region = plot.spawnregion;
+
+	const vecs: Vector3[] = [];
+
+	const addRandomVectors = (part: BasePart, increment: number) => {
+		const pos = part.Position;
+		const loc1 = pos.add(new Vector3(part.Size.X / 2, 0, part.Size.Z / 2));
+		const loc2 = pos.sub(new Vector3(part.Size.X / 2, 0, part.Size.Z / 2));
+
+		for (let x = loc2.X; x <= loc1.X; x += increment) {
+			for (let z = loc2.Z; z <= loc1.Z; z += increment) {
+				vecs.push(new Vector3(x, pos.Y + part.Size.Y / 2, z));
+			}
+		}
+	};
+
+	for (const r of region.GetChildren()) {
+		const part = r as BasePart;
+
+		addRandomVectors(part, 3);
+	}
+
+	return vecs;
+};
+
+export const getRandomSpawnLocation = (vectors: Vector3[]): Vector3 => {
+	return vectors[math.random(0, vectors.size() - 1)];
 };

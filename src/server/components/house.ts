@@ -13,7 +13,13 @@ import {
 } from "shared/utils/loot";
 import { Rarity } from "shared/enums/Rarity";
 import Abbreviator from "@rbxts/abbreviate";
-import { calculateGoalTime, tick } from "shared/utils/generictils";
+import {
+	calculateGoalTime,
+	getPlayerPlotFolder,
+	getRandomSpawnLocation,
+	getSpawnLocations,
+	tick,
+} from "shared/utils/generictils";
 import { Boost } from "shared/enums/Boost";
 import { bool } from "@rbxts/react/src/prop-types";
 import { t } from "@rbxts/t";
@@ -21,6 +27,8 @@ import { ObjectPool } from "shared/utils/objectpool";
 import { ClientNPC } from "shared/types/entity";
 import { EntityService } from "server/services/EntityService";
 import { getPresentValue } from "shared/utils/presentutils";
+import { PlotFolder } from "shared/types/plot";
+import { PlotService } from "server/services/PlotService";
 
 interface Attributes {
 	houseid?: string;
@@ -46,15 +54,22 @@ export class House extends BaseComponent<Attributes, Model> implements OnStart, 
 	private owner?: Player;
 	private lootTable?: RarityLootTable;
 	private attributeChanged?: RBXScriptConnection;
+	private spawnLocations?: Vector3[];
 
 	private lastIncome: number[] = new Array<number>();
 
-	constructor(private readonly entityService: EntityService) {
+	constructor(private readonly entityService: EntityService, private readonly plotservice: PlotService) {
 		super();
 	}
 
 	onStart() {
 		this.owner = Players.GetPlayers().find((player) => player.Name === this.attributes.owner);
+
+		const plot = this.plotservice.getPlayerPlot(this.owner as Player);
+
+		if (plot) {
+			this.spawnLocations = plot.getSpawnLocations();
+		}
 
 		const foundHouse = getHouseConfig()[this.houseId];
 
@@ -98,7 +113,7 @@ export class House extends BaseComponent<Attributes, Model> implements OnStart, 
 	 * Called every drill rate period
 	 */
 	private drill() {
-		if (!this.lootTable) {
+		if (!this.lootTable || !this.owner) {
 			return;
 		}
 
@@ -106,7 +121,8 @@ export class House extends BaseComponent<Attributes, Model> implements OnStart, 
 
 		const randomRarity = returnRandomRarity(this.lootTable, this.houseId, luck as number);
 
-		const spawnLocation = this.spawn!.Position;
+		const spawnLocation =
+			this.spawnLocations !== undefined ? getRandomSpawnLocation(this.spawnLocations) : this.spawn!.Position;
 
 		const chanceDisplay = convertChanceToStringMarkup(randomRarity, this.houseId);
 
@@ -115,28 +131,27 @@ export class House extends BaseComponent<Attributes, Model> implements OnStart, 
 		const presentWorth = getPresentValue(randomRarity);
 		const finalWorth = math.random(presentWorth!.min, presentWorth!.max) * moneyBoost;
 
-		if (this.owner) {
-			this.entityService.spawnNPC(
-				this.owner,
-				spawnLocation,
-				this.end.Position,
-				finalWorth,
-				randomRarity,
-				this.houseId,
-				tick(),
-			);
+		this.entityService.spawnNPC(
+			this.owner,
+			new Vector3(spawnLocation.X, this.spawn?.Position.Y, spawnLocation.Z),
+			this.end.Position,
+			finalWorth,
+			randomRarity,
+			this.houseId,
+			tick(),
+		);
+		const goaltime = calculateGoalTime(spawnLocation, this.end.Position);
 
-			const goaltime = calculateGoalTime(spawnLocation, this.end.Position);
+		task.delay(goaltime, () => {
+			this.owner!.stats.Money.Value += goaltime;
+			this.lastIncome.insert(0, finalWorth);
+			if (this.lastIncome.size() > 10) this.lastIncome.pop();
 
-			task.delay(goaltime, () => {
-				this.owner!.stats.Money.Value += goaltime;
-				this.lastIncome.insert(0, finalWorth);
-				if (this.lastIncome.size() > 10) this.lastIncome.pop();
-
-				this.calculateAverage();
-			});
-		}
+			this.calculateAverage();
+		});
 	}
+
+	private spawnNPC() {}
 
 	private calculateAverage() {
 		let total = 0;

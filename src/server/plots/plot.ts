@@ -8,10 +8,12 @@ import { CrateService } from "server/services/CrateService";
 import { DataService } from "server/services/DataService";
 import { InventoryService } from "server/services/InventoryService";
 import * as HousesConfig from "shared/config/house.json";
+import { PlotFolder } from "shared/types/plot";
 import { ProfileData } from "shared/types/profile";
 import {
 	doesHouseExist,
 	getNextVillageUnlock,
+	getSpawnLocations,
 	getVillage,
 	isModelIntersecting,
 	isModelWithinBounds,
@@ -24,17 +26,7 @@ import { doesPlayerOwnHouse, getPlayerHouseObject } from "shared/utils/playertil
 const serverAssets = ServerStorage.WaitForChild("assets") as Folder;
 const sharedAssets = ReplicatedStorage.WaitForChild("assets") as Folder;
 const houseFolder = sharedAssets.WaitForChild("houses") as Folder & Model[];
-const villages = serverAssets.WaitForChild("villages") as Folder & PlotModel[];
-
-export type PlotModel = Model & {
-	spawn: Model & BasePart;
-	baseplate: BasePart;
-};
-
-export type PlotFolder = BasePart &
-	PlotModel & {
-		houses: Folder & Model[];
-	};
+const villages = serverAssets.WaitForChild("villages") as Folder;
 
 const CrateConfig = getCrateConfig();
 
@@ -45,6 +37,7 @@ export class Plot {
 		if (plot) {
 			this.plot = plot;
 			task.delay(2, () => Events.onDataLoaded.fire(this.player));
+			this.spawnLocations = getSpawnLocations(plot);
 		} else {
 			player.Kick("Couldn't locate village");
 		}
@@ -59,6 +52,7 @@ export class Plot {
 	private grid = new Map<string, CFrame>();
 	private crateTick = new Map<string, number>();
 	private housesFolder?: Folder;
+	private spawnLocations: Vector3[] = [];
 
 	public getPlotFolder(): PlotFolder {
 		return this.plot as PlotFolder;
@@ -92,6 +86,10 @@ export class Plot {
 		});
 	}
 
+	public getSpawnLocations() {
+		return this.spawnLocations;
+	}
+
 	private createPlot() {
 		const PlotsFolder = Workspace.WaitForChild("Plots") as Folder & Folder[];
 
@@ -103,10 +101,7 @@ export class Plot {
 
 		//cleanup any possible artifacts
 
-		plotFolder
-			.GetChildren()
-			.filter((child) => !child.HasTag("baseplate"))
-			.forEach((child) => child.Destroy());
+		this.clearFolder(plotFolder);
 
 		const currentVillage = this.player.stats.village.Value;
 
@@ -437,15 +432,19 @@ export class Plot {
 		}
 	}
 
+	private clearFolder(plotFolder: PlotFolder) {
+		plotFolder
+			.GetChildren()
+			.filter((child) => !child.HasTag("baseplate"))
+			.filter((child) => child !== plotFolder.spawnregion)
+			.forEach((child) => child.Destroy());
+	}
+
 	/**
 	 * When player leaves the game cleanup anything relating to player
 	 */
 	public destroy() {
-		const plotFolder = this.getPlotFolder();
-		plotFolder
-			.GetChildren()
-			.filter((child) => !child.HasTag("baseplate"))
-			.forEach((child) => child.Destroy());
+		this.clearFolder(this.plot as PlotFolder);
 
 		//add default plot
 		this.placeVillage("dirt");

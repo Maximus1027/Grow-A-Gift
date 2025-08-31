@@ -102,4 +102,8 @@ export class PlotService implements OnStart, OnInit {
 
 		plot.summonPlayer();
 	}
+
+	public getPlayerPlot(player: Player) {
+		return this.plotMap.get(player);
+	}
 }

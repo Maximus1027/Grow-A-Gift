@@ -1,6 +1,7 @@
 import * as Houses from "shared/config/house.json";
 import Object from "@rbxts/object-utils";
 import { getCrateConfig, getHouseConfig } from "./loot";
+import { PlotFolder } from "shared/types/plot";
 
 /**
  * <House, Integer> $$ map
