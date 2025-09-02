@@ -1,6 +1,7 @@
 import Abbreviator from "@rbxts/abbreviate";
 import { useMotion } from "@rbxts/pretty-react-hooks";
 import React, { useEffect } from "@rbxts/react";
+import { abbreviateNumber } from "shared/utils/generictils";
 
 export interface PricePopupProps {
 	price: number;
@@ -8,7 +9,6 @@ export interface PricePopupProps {
 
 export function PricePopup(props: PricePopupProps) {
 	const [y, setY] = useMotion(0);
-	const abv = new Abbreviator();
 
 	useEffect(() => {
 		setY.spring(1.406, {
@@ -37,7 +37,7 @@ export function PricePopup(props: PricePopupProps) {
 			<textlabel
 				key={"textLabel"}
 				FontFace={new Font("rbxasset://fonts/families/FredokaOne.json")}
-				Text={`$${abv.commify(props.price)}`}
+				Text={`$${abbreviateNumber(props.price)}`}
 				TextColor3={Color3.fromRGB(66, 205, 91)}
 				TextScaled={true}
 				TextSize={14}

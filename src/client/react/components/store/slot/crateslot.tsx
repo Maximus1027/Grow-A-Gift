@@ -1,15 +1,13 @@
 import React from "@rbxts/react";
 import { BaseSlot, StoreSlotProps } from "./baseslot";
 import Abbreviator from "@rbxts/abbreviate";
-import { formatMinutesToDisplay } from "shared/utils/generictils";
+import { abbreviateNumber, formatMinutesToDisplay } from "shared/utils/generictils";
 
 export interface CrateProps extends StoreSlotProps {
 	openTime: number;
 }
 
 export function CrateSlot(props: CrateProps) {
-	const abv = new Abbreviator();
-
 	return (
 		<BaseSlot itemid={props.itemid} actionType={"crate"} devProductId={"123"}>
 			<textlabel
@@ -36,7 +34,7 @@ export function CrateSlot(props: CrateProps) {
 			<textlabel
 				key={"cost"}
 				FontFace={new Font("rbxasset://fonts/families/FredokaOne.json")}
-				Text={`$${abv.commify(props.cost)}`}
+				Text={`$${abbreviateNumber(props.cost)}`}
 				TextColor3={Color3.fromRGB(99, 247, 138)}
 				TextScaled={true}
 				TextSize={14}

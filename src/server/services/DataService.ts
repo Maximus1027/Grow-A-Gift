@@ -14,7 +14,7 @@ import { getPlayerPlotFolder, tick } from "shared/utils/generictils";
 import { Boost, TimedBoost } from "shared/enums/Boost";
 
 const defaultProfile: ProfileData = {
-	money: 10000000,
+	money: 100,
 	village: "dirt",
 	inventory: {},
 	rebirths: 0,

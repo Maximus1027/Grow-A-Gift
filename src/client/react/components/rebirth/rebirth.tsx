@@ -10,6 +10,7 @@ import { Events } from "client/network";
 import { RebirthButton } from "./rebirthbutton";
 import { WindowWrapper } from "../windows/windowwrapper";
 import { InteractiveButton } from "../misc/interactivebutton";
+import { abbreviateNumber } from "shared/utils/generictils";
 
 export interface RebirthProps {
 	cost: number;
@@ -17,8 +18,6 @@ export interface RebirthProps {
 	luck: number;
 	speed: number;
 }
-
-const abv = new Abbreviator();
 
 export function Rebirth(props: RebirthProps) {
 	const dispatch = useProducer<RootStore>();
@@ -151,7 +150,7 @@ export function Rebirth(props: RebirthProps) {
 						key={"cost"}
 						FontFace={new Font("rbxasset://fonts/families/FredokaOne.json")}
 						RichText={true}
-						Text={`<font color="rgb(255,0,0)">$${abv.commify(
+						Text={`<font color="rgb(255,0,0)">$${abbreviateNumber(
 							props.cost,
 						)}</font> + <font color="rgb(255,0,0)">INVENTORY</font> + <font color="rgb(255,0,0)">ALL HOUSES</font> + <font color="rgb(255,0,0)">VILLAGE</font>`}
 						TextColor3={Color3.fromRGB(255, 255, 255)}

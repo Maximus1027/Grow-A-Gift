@@ -1,6 +1,6 @@
 {
     "tiki": {
-        "rate": 8,
+        "rate": 6,
         "cost": 100,
         "displayName": "Tiki Hut", 
         "productid": 123,
@@ -8,160 +8,153 @@
         "rarity": "Common",
         "loot": {
             "Common": 2,
-            "Rare": 10,
-            "Epic": 30,
-            "Legendary": 100,
-            "Mythic": 1000
+            "Rare": 25,
+            "Epic": 100,
+            "Legendary": 1000
+           
         }
     },
-
-    "tinyhouse": {
+     "tent": {
         "rate": 8,
-        "cost": 10000000,
-        "productid": 123,
-        "displayName": "Tiny House",
-        "rarity": "Epic",
-        "stock": 3,
-        "loot": {
-            "Legendary": 2,
-            "Mythic": 5
-        }
-    },
-
-    "igloo": {
-        "rate": 5,
-        "cost": 100,
-        "displayName": "Igloo",
-        "productid": 123,
-        "stock": 4,
-        "rarity": "Epic",
-        "loot": {
-            "Common": 2,
-            "Rare": 10,
-            "Epic": 30,
-            "Legendary": 100,
-            "Mythic": 1000
-        }
-    },
-    "barrack": {
-        "rate": 5,
-        "cost": 200,
-        "displayName": "Barrack",
-        "productid": 123,
-        "stock": 4,
-        "rarity": "Epic",
-        "loot": {
-            "Common": 2,
-            "Rare": 10,
-            "Epic": 30,
-            "Legendary": 100,
-            "Mythic": 1000
-        }
-    },
-    "pyramid": {
-        "rate": 5,
-        "cost": 300,
-        "displayName": "Pyramid",
-        "productid": 123,
-        "stock": 4,
-        "rarity": "Epic",
-        "loot": {
-            "Common": 2,
-            "Rare": 10,
-            "Epic": 30,
-            "Legendary": 100,
-            "Mythic": 1000
-        }
-    },
-    "tent": {
-        "rate": 5,
-        "cost": 400,
+        "cost": 3500,
         "displayName": "Tent",
         "productid": 123,
         "stock": 4,
-        "rarity": "Epic",
+        "rarity": "Common",
         "loot": {
             "Common": 2,
-            "Rare": 10,
-            "Epic": 30,
-            "Legendary": 100,
-            "Mythic": 1000
-        }
-    },
-    
-    "sandhouse": {
-        "rate": 5,
-        "cost": 500,
-        "displayName": "Sand House",
-        "productid": 123,
-        "stock": 4,
-        "rarity": "Mythic",
-        "loot": {
-            "Common": 2,
-            "Rare": 10,
-            "Epic": 30,
-            "Legendary": 100,
-            "Mythic": 1000
-        }
-    },
-    "treehouse": {
-        "rate": 5,
-        "cost": 1000,
-        "displayName": "Tree House",
-        "productid": 123,
-        "stock": 4,
-        "rarity": "Mythic",
-        "loot": {
-            "Common": 2,
-            "Rare": 10,
-            "Epic": 30,
-            "Legendary": 100,
-            "Mythic": 1000
-        }
-    },
-    "minka": {
-        "rate": 5,
-        "cost": 1500,
-        "displayName": "Japanese Home",
-        "productid": 123,
-        "stock": 2,
-        "rarity": "Rare",
-        "loot": {
-            "Common": 5,
             "Rare": 15,
-            "Epic": 40,
-            "Legendary": 120,
-            "Mythic": 1100
+            "Epic": 50,
+            "Legendary": 500
+        }
+    },
+    "igloo": {
+        "rate": 8,
+        "cost": 25000,
+        "displayName": "Igloo",
+        "productid": 123,
+        "stock": 4,
+        "rarity": "Common",
+        "loot": {
+            "Rare": 2,
+            "Epic": 25,
+            "Legendary": 100,
+            "Mythic": 2500
+        }
+    },
+     "barrack": {
+        "rate": 8,
+        "cost": 102500,
+        "displayName": "Barrack",
+        "productid": 123,
+        "stock": 4,
+        "rarity": "Common",
+        "loot": {
+            "Rare": 2,
+            "Epic": 5,
+            "Legendary": 15,
+            "Mythic": 50
+        }
+    },
+    "tinyhouse": {
+        "rate": 8,
+        "cost": 325000,
+        "productid": 123,
+        "displayName": "Tiny House",
+        "rarity": "Rare",
+        "stock": 3,
+        "loot": {
+            "Epic": 3,
+            "Legendary": 5,
+            "Mythic": 25,
+            "Exotic": 100
         }
     },
     "cottage": {
-        "rate": 5,
-        "cost": 2000,
+        "rate": 8,
+        "cost": 775000,
         "displayName": "Cottage",
         "productid": 123,
         "stock": 3,
-        "rarity": "Epic",
+        "rarity": "Rare",
         "loot": {
-            "Common": 3,
-            "Rare": 12,
-            "Epic": 35,
-            "Legendary": 105,
-            "Mythic": 1050
+            "Legendary": 3,
+            "Mythic": 10,
+            "Exotic": 20
         }
     },
-    "medieval": {
-        "rate": 5,
-        "cost": 3000,
+
+    "pyramid": {
+        "rate": 8,
+        "cost": 1600000,
+        "displayName": "Pyramid",
+        "productid": 123,
+        "stock": 4,
+        "rarity": "Rare",
+        "loot": {
+            "Legendary": 3,
+            "Mythic": 25,
+            "Exotic": 100,
+            "Celestial": 5000
+        }
+    },
+    "sandhouse": {
+        "rate": 8,
+        "cost": 3250000,
+        "displayName": "Sand House",
+        "productid": 123,
+        "stock": 4,
+        "rarity": "Rare",
+        "loot": {
+          "Legendary": 2,
+            "Mythic": 10,
+            "Exotic": 50,
+            "Celestial": 1000
+        }
+    },
+   
+    "minka": {
+        "rate": 8,
+        "cost": 6000000,
+        "displayName": "Japanese Home",
+        "productid": 123,
+        "stock": 2,
+        "rarity": "Epic",
+        "loot": {
+           "Legendary": 2,
+            "Mythic": 10,
+            "Exotic": 50,
+            "Celestial": 1000
+        }
+    },
+     "medieval": {
+        "rate": 8,
+        "cost": 10000000,
         "displayName": "Medieval House",
         "productid": 123,
         "stock": 1,
-        "rarity": "Legendary",
+        "rarity": "Epic",
         "loot": {
             "Common": 1,
             "Rare": 8,
             "Epic": 25,
             "Legendary": 90,
             "Mythic": 1020
+        }
+    },    
+    "treehouse": {
+        "rate": 8,
+        "cost": 16000000,
+        "displayName": "Tree House",
+        "productid": 123,
+        "stock": 4,
+        "rarity": "Epic",
+        "loot": {
+            "Common": 2,
+            "Rare": 10,
+            "Epic": 30,
+            "Legendary": 100,
+            "Mythic": 1000
         }
     }
 }

@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from "@rbxts/react";
+import React, { useState, useEffect } from "@rbxts/react";
 import { createPortal } from "@rbxts/react-roblox";
+import { t } from "@rbxts/t";
+import { abbreviateNumber, forceAbbreviateNumber } from "shared/utils/generictils";
 
 export interface AverageIncomeProps {
 	houseModel: Model;
@@ -14,7 +16,8 @@ export function AverageIncome(props: AverageIncomeProps) {
 				return;
 			}
 
-			setIncome((props.houseModel!.GetAttribute("avg") as string) ?? "");
+			const avg = props.houseModel!.GetAttribute("avg");
+			setIncome(forceAbbreviateNumber(t.number(avg) ? avg : 0));
 		});
 
 		return () => {

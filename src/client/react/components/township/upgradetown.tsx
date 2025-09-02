@@ -1,7 +1,7 @@
 import Abbreviator from "@rbxts/abbreviate";
 import React, { useState } from "@rbxts/react";
 import { Button } from "../misc/button";
-import { getVillage } from "shared/utils/generictils";
+import { abbreviateNumber, getVillage } from "shared/utils/generictils";
 import { useProducer } from "@rbxts/react-reflex";
 import { RootStore } from "client/react/store/store";
 import { Window } from "client/react/store/producer/windowproducer";
@@ -13,8 +13,6 @@ export interface TownshipProps {
 	nextTown: string;
 	currentTown: string;
 }
-
-const abv = new Abbreviator();
 
 export function UpgradeTown(props: TownshipProps) {
 	const current = getVillage(props.currentTown);
@@ -108,7 +106,7 @@ export function UpgradeTown(props: TownshipProps) {
 							<textlabel
 								key={"cost"}
 								FontFace={new Font("rbxasset://fonts/families/FredokaOne.json")}
-								Text={`-$${abv.commify(nextVillage[1].cost)}`}
+								Text={`-$${abbreviateNumber(nextVillage[1].cost)}`}
 								TextColor3={Color3.fromRGB(255, 0, 0)}
 								TextScaled={true}
 								TextSize={14}

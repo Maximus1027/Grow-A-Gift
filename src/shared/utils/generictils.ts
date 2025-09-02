@@ -6,6 +6,7 @@ import { Rarity } from "shared/enums/Rarity";
 
 import * as VillageConfig from "shared/config/villages.json";
 import { PlotFolder } from "shared/types/plot";
+import Abbreviator from "@rbxts/abbreviate";
 
 /**
  * Check if two models are intersecting in the same place
@@ -99,8 +100,9 @@ export const isModelWithinBounds = (model: Model, boundingPart: BasePart): boole
 	const extentsSize = model.GetExtentsSize();
 	const [cframe, boundingSize] = model.GetBoundingBox();
 
-	const corner1 = cframe.Position.add(new Vector3(extentsSize.X / 2, 0, extentsSize.Z / 2));
-	const corner2 = cframe.Position.sub(new Vector3(extentsSize.X / 2, 0, extentsSize.Z / 2));
+	const corner1 = cframe.PointToWorldSpace(new Vector3(extentsSize.X / 2, 0, extentsSize.Z / 2));
+
+	const corner2 = cframe.PointToWorldSpace(new Vector3(-extentsSize.X / 2, 0, -extentsSize.Z / 2));
 
 	const boundingCorner1 = boundingPart.CFrame.PointToWorldSpace(
 		new Vector3(boundingPart.Size.X / 2, 12, boundingPart.Size.Z / 2),
@@ -121,6 +123,12 @@ export const isModelWithinBounds = (model: Model, boundingPart: BasePart): boole
 				return true;
 			}
 		}
+		print(
+			corner.X <= math.max(boundingCorner1.X, boundingCorner2.X),
+			corner.X >= math.min(boundingCorner1.X, boundingCorner2.X),
+			corner.Z <= math.max(boundingCorner1.Z, boundingCorner2.Z),
+			corner.Z >= math.min(boundingCorner1.Z, boundingCorner2.Z),
+		);
 		return false;
 	};
 
@@ -178,4 +186,21 @@ export const getSpawnLocations = (plot: PlotFolder): Vector3[] => {
 
 export const getRandomSpawnLocation = (vectors: Vector3[]): Vector3 => {
 	return vectors[math.random(0, vectors.size() - 1)];
+};
+
+const abv = new Abbreviator();
+abv.setSetting("stripTrailingZeroes", true);
+
+export const abbreviateNumber = (value: number): string => {
+	const rounded = math.round(value);
+
+	if (value >= 1_000_000_000) {
+		return abv.numberToString(rounded);
+	}
+
+	return abv.commify(rounded);
+};
+
+export const forceAbbreviateNumber = (value: number): string => {
+	return abv.numberToString(value);
 };

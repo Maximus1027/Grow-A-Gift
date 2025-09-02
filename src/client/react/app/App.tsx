@@ -24,6 +24,7 @@ import { Reward } from "../components/spinner/reward";
 import { Rewards } from "../components/rewards/rewards";
 import { AutoPreload } from "../components/preloader/autopreload";
 import { PlotIcons } from "../components/ploticon/ploticons";
+import { TagManager } from "../components/nametag/tagmanager";
 
 export function App() {
 	const player = Players.LocalPlayer;
@@ -51,6 +52,7 @@ export function App() {
 			<FocusEffects />
 			<Boost />
 			<Rewards />
+			<TagManager />
 			<PlotIcons />
 		</ReflexProvider>
 	);

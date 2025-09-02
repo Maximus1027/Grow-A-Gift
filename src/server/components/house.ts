@@ -14,6 +14,7 @@ import {
 import { Rarity } from "shared/enums/Rarity";
 import Abbreviator from "@rbxts/abbreviate";
 import {
+	abbreviateNumber,
 	calculateGoalTime,
 	getPlayerPlotFolder,
 	getRandomSpawnLocation,
@@ -33,10 +34,8 @@ import { PlotService } from "server/services/PlotService";
 interface Attributes {
 	houseid?: string;
 	owner?: string;
-	avg?: string;
+	avg?: number;
 }
-
-const abv = new Abbreviator();
 
 const sharedAssets = ReplicatedStorage.WaitForChild("assets") as Folder;
 const npcModel = sharedAssets.WaitForChild("npc")!.WaitForChild("default") as ClientNPC;
@@ -50,7 +49,7 @@ export class House extends BaseComponent<Attributes, Model> implements OnStart, 
 	private houseId: string = this.attributes.houseid as string;
 	private NPCfolder = this.instance.Parent?.Parent?.FindFirstChild("NPC") as Folder;
 	private spawn?: BasePart;
-	private end: BasePart = this.instance.FindFirstChild("drop") as BasePart;
+	private end: BasePart = this.instance.FindFirstChild("drop") as BasePart & { cash: ParticleEmitter };
 	private owner?: Player;
 	private lootTable?: RarityLootTable;
 	private attributeChanged?: RBXScriptConnection;
@@ -143,7 +142,11 @@ export class House extends BaseComponent<Attributes, Model> implements OnStart, 
 		const goaltime = calculateGoalTime(spawnLocation, this.end.Position);
 
 		task.delay(goaltime, () => {
-			this.owner!.stats.Money.Value += goaltime;
+			if (this.instance === undefined || !this.instance.IsDescendantOf(game)) {
+				return;
+			}
+
+			this.owner!.stats.Money.Value += finalWorth;
 			this.lastIncome.insert(0, finalWorth);
 			if (this.lastIncome.size() > 10) this.lastIncome.pop();
 
@@ -160,10 +163,12 @@ export class House extends BaseComponent<Attributes, Model> implements OnStart, 
 
 		const average = total / this.lastIncome.size();
 
-		this.attributes.avg = abv.commify(math.ceil(average));
+		this.attributes.avg = math.ceil(average);
 	}
 
 	destroy(): void {
+		print("destroyed");
 		this.attributeChanged?.Disconnect();
+		this.instance.Destroy();
 	}
 }

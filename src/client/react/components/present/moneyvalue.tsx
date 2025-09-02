@@ -1,5 +1,6 @@
 import React, { useEffect } from "@rbxts/react";
 import { createPortal } from "@rbxts/react-roblox";
+import { abbreviateNumber } from "shared/utils/generictils";
 import { getPresentValue } from "shared/utils/presentutils";
 
 export interface MoneyValueProps {
@@ -15,7 +16,7 @@ export function MoneyValue(props: MoneyValueProps) {
 			Active={true}
 			ClipsDescendants={true}
 			ExtentsOffsetWorldSpace={new Vector3(0, 0.8, 0)}
-			Size={UDim2.fromScale(2, 1.5)}
+			Size={UDim2.fromScale(3.5, 2.5)}
 			StudsOffsetWorldSpace={new Vector3(0, 1, 0)}
 			ZIndexBehavior={Enum.ZIndexBehavior.Sibling}
 			MaxDistance={45}
@@ -37,12 +38,12 @@ export function MoneyValue(props: MoneyValueProps) {
 				Size={UDim2.fromScale(1, 0.4)}
 				Position={UDim2.fromScale(0, 0)}
 			>
-				<uistroke key={"uIStroke"} Color={Color3.fromRGB(0, 0, 0)} Thickness={1} />
+				<uistroke key={"uIStroke"} Color={Color3.fromRGB(0, 0, 0)} Thickness={3} />
 			</textlabel>
 			<textlabel
 				key={"money"}
 				FontFace={new Font("rbxasset://fonts/families/FredokaOne.json")}
-				Text={`$` + props.value}
+				Text={`$` + abbreviateNumber(props.value)}
 				TextColor3={Color3.fromRGB(255, 255, 255)}
 				TextScaled={true}
 				TextSize={14}
@@ -51,7 +52,7 @@ export function MoneyValue(props: MoneyValueProps) {
 				BackgroundTransparency={1}
 				BorderColor3={Color3.fromRGB(0, 0, 0)}
 				BorderSizePixel={0}
-				Position={UDim2.fromScale(0, 0.5)}
+				Position={UDim2.fromScale(0, 0.4)}
 				Size={UDim2.fromScale(1, 0.5)}
 			>
 				<uistroke key={"uIStroke"} Color={Color3.fromRGB(0, 170, 0)} Thickness={3} />

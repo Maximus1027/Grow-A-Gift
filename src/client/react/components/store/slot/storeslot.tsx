@@ -4,13 +4,13 @@ import * as Houses from "shared/config/house.json";
 import { getHouseConfig, getLootTable, RarityLootTable } from "shared/utils/loot";
 import { PresentList } from "../presentlist";
 import { BaseSlot, StoreSlotProps } from "./baseslot";
+import { abbreviateNumber } from "shared/utils/generictils";
 
 export interface HouseSlotProps extends StoreSlotProps {
 	stock: number;
 }
 
 export function HouseSlot(props: HouseSlotProps) {
-	const abv = new Abbreviator();
 	// eslint-disable-next-line roblox-ts/no-any
 	const maxStock = getHouseConfig()[props.itemid].stock;
 
@@ -45,7 +45,7 @@ export function HouseSlot(props: HouseSlotProps) {
 			<textlabel
 				key={"cost"}
 				FontFace={new Font("rbxasset://fonts/families/FredokaOne.json")}
-				Text={`$${abv.commify(props.cost)}`}
+				Text={`$${abbreviateNumber(props.cost)}`}
 				TextColor3={Color3.fromRGB(255, 255, 255)}
 				TextScaled={true}
 				TextSize={14}

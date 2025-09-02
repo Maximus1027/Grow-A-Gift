@@ -1,22 +1,35 @@
 {
     "Common": {
-        "min": 1,
-        "max": 5
+        "min": 10,
+        "max": 16
     },
     "Rare": {
-        "min": 50,
-        "max": 255
+        "min": 30,
+        "max": 65
     },
     "Epic": {
-        "min": 500,
-        "max": 750
+        "min": 140,
+        "max": 333
     },
     "Legendary": {
-        "min": 1000,
-        "max": 1200
+        "min": 844,
+        "max": 2246
     },
     "Mythic": {
-        "min": 15000,
-        "max": 20000
+        "min": 6250,
+        "max": 18096
+    },
+    "Exotic": {
+        "min": 54340,
+        "max": 168713
+    },
+    "Celestial": {
+        "min": 540193,
+        "max": 1779785
+    },
+    "Divine": {
+        "min": 6022487,
+        "max": 20895304
     }
+
 }

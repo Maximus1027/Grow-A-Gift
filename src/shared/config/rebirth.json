@@ -6,5 +6,21 @@
             "NPCSpeed": 10,
             "GiftLuck": 10
         }
+    },
+     "2": {
+        "cost": 1000000,
+        "boost": {
+            "Income": 10,
+            "NPCSpeed": 10,
+            "GiftLuck": 10
+        }
+    },
+     "3": {
+        "cost": 1000000,
+        "boost": {
+            "Income": 10,
+            "NPCSpeed": 10,
+            "GiftLuck": 10
+        }
     }
 }

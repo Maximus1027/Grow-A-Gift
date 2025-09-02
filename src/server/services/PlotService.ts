@@ -8,6 +8,7 @@ import { DataService } from "./DataService";
 import { Profile } from "@rbxts/profileservice/globals";
 import { ProfileData } from "shared/types/profile";
 import { InventoryService } from "./InventoryService";
+import Signal from "@rbxts/lemon-signal";
 
 @Service({
 	loadOrder: 1,
@@ -15,6 +16,8 @@ import { InventoryService } from "./InventoryService";
 export class PlotService implements OnStart, OnInit {
 	private plotMap = new Map<Player, Plot>();
 	constructor(readonly inventoryService: InventoryService) {}
+
+	public PlotLoaded = new Signal<Player>();
 
 	onInit() {
 		// const PlotsFolder = new Instance("Folder");
@@ -84,6 +87,8 @@ export class PlotService implements OnStart, OnInit {
 		const plot = new Plot(player);
 
 		this.plotMap.set(player, plot);
+
+		this.PlotLoaded.Fire(player);
 
 		return plot;
 	}
