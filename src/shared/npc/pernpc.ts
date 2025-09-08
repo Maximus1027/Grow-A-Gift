@@ -3,7 +3,10 @@ import { HttpService, ReplicatedStorage, ServerStorage, TweenService } from "@rb
 import { t } from "@rbxts/t";
 import { Boost } from "shared/enums/Boost";
 import { Rarity } from "shared/enums/Rarity";
+import { NPCConfig, NPCData } from "shared/types/config";
 import { ClientNPC, EntityNPC } from "shared/types/entity";
+import { abbreviateNumber } from "shared/utils/generictils";
+import { getNPCConfig } from "shared/utils/loot";
 import { ObjectPool } from "shared/utils/objectpool";
 import { getMoneyStat } from "shared/utils/playertils";
 import { getPresentValue } from "shared/utils/presentutils";
@@ -12,9 +15,6 @@ const sharedAssets = ReplicatedStorage.WaitForChild("assets") as Folder;
 const presents = sharedAssets.WaitForChild("presents") as Folder;
 const npcModel = sharedAssets.WaitForChild("npc")!.WaitForChild("default") as ClientNPC;
 
-const animation = new Instance("Animation");
-animation.AnimationId = "rbxassetid://132691640529191";
-
 /**
  * Server side Npc object
  * Creates entity and destroys when reach destination
@@ -22,9 +22,13 @@ animation.AnimationId = "rbxassetid://132691640529191";
 export class NPC {
 	private npc: ClientNPC;
 	private present?: Model;
+	private animation: Animation;
+	private npcData: NPCData;
+
 	constructor(
 		readonly owner: Player,
 		readonly pool: ObjectPool<ClientNPC>,
+		readonly npcid: keyof NPCConfig,
 		readonly spawnLocation: Vector3,
 		readonly goalLocation: Vector3,
 		readonly presentWorth: number,
@@ -38,6 +42,13 @@ export class NPC {
 		const newNPC = this.pool.getObject();
 		this.npc = newNPC;
 
+		this.npcData = getNPCConfig()[this.npcid];
+
+		const animation = new Instance("Animation");
+		animation.AnimationId = this.npcData.animation;
+
+		this.animation = animation;
+
 		this.spawn();
 		this.attachPresent();
 		this.walk();
@@ -50,6 +61,8 @@ export class NPC {
 		this.npc.SetAttribute("goal", this.goalLocation);
 
 		this.npc.Parent = this.parent;
+
+		this.setTransparency(1, 0, true);
 	}
 
 	private walk() {
@@ -59,7 +72,7 @@ export class NPC {
 		const orientation = new CFrame(this.npc.GetPivot().Position, goalPos);
 		hrp.CFrame = orientation;
 
-		const anim = this.npc.AnimationController.Animator.LoadAnimation(animation);
+		const anim = this.npc.AnimationController.Animator.LoadAnimation(this.animation);
 		const goal = new CFrame(goalPos).mul(orientation.Rotation);
 
 		const tween = TweenService.Create(hrp, new TweenInfo(this.time, Enum.EasingStyle.Linear), {
@@ -80,6 +93,7 @@ export class NPC {
 
 	private attachPresent() {
 		const newPresent = presents.FindFirstChild(this.presentRarity)?.Clone() as Model;
+		newPresent.ScaleTo(this.npcData.giftscale);
 		newPresent.AddTag("Present");
 		newPresent.Name = HttpService.GenerateGUID();
 		newPresent.GetChildren().forEach((part) => {
@@ -87,8 +101,14 @@ export class NPC {
 				part.CollisionGroup = "npc";
 			}
 		});
-		newPresent.SetAttribute("value", this.presentWorth);
-		newPresent.SetAttribute("chance", this.chanceDisplay);
+
+		const abbreviatedValue = abbreviateNumber(this.presentWorth);
+
+		const formattedValue = this.npcData.present.value.format(abbreviatedValue);
+		const formattedChance = this.npcData.present.chance.format(this.chanceDisplay);
+		newPresent.SetAttribute("value", formattedValue ?? abbreviatedValue);
+		newPresent.SetAttribute("chance", formattedChance ?? this.chanceDisplay);
+		newPresent.SetAttribute("guiscale", this.npcData.guiscale);
 
 		const torso = this.npc.Torso;
 		newPresent.Parent = torso;
@@ -108,9 +128,10 @@ export class NPC {
 			this.present.Destroy();
 		}
 		task.spawn(() => {
+			//	this.setTransparency(1, 0, false);
 			this.setTransparency(0, 1, true);
 			task.wait(1);
-			this.setTransparency(1, 0, false);
+
 			this.pool.returnObject(this.npc);
 		});
 	}

@@ -4,9 +4,10 @@ import { abbreviateNumber } from "shared/utils/generictils";
 import { getPresentValue } from "shared/utils/presentutils";
 
 export interface MoneyValueProps {
-	value: number;
+	value: string;
 	chance: string;
-	parent: Instance;
+	scale: number;
+	parent: Model;
 }
 
 export function MoneyValue(props: MoneyValueProps) {
@@ -15,17 +16,17 @@ export function MoneyValue(props: MoneyValueProps) {
 			key={props.parent.Name}
 			Active={true}
 			ClipsDescendants={true}
-			ExtentsOffsetWorldSpace={new Vector3(0, 0.8, 0)}
-			Size={UDim2.fromScale(3.5, 2.5)}
-			StudsOffsetWorldSpace={new Vector3(0, 1, 0)}
+			//ExtentsOffsetWorldSpace={new Vector3(0, props.scale, 0)}
+			StudsOffsetWorldSpace={new Vector3(0, props.parent.GetExtentsSize().Y, 0)}
+			Size={UDim2.fromScale(3.5 * props.scale, 2.5 * props.scale)}
 			ZIndexBehavior={Enum.ZIndexBehavior.Sibling}
-			MaxDistance={45}
+			MaxDistance={45 * props.scale}
 			Enabled={true}
 		>
 			<textlabel
 				key={"chance"}
 				FontFace={new Font("rbxasset://fonts/families/FredokaOne.json")}
-				Text={props.chance}
+				Text={props.chance ?? ""}
 				TextColor3={Color3.fromRGB(255, 255, 255)}
 				TextScaled={true}
 				TextSize={14}
@@ -43,7 +44,7 @@ export function MoneyValue(props: MoneyValueProps) {
 			<textlabel
 				key={"money"}
 				FontFace={new Font("rbxasset://fonts/families/FredokaOne.json")}
-				Text={`$` + abbreviateNumber(props.value)}
+				Text={props.value}
 				TextColor3={Color3.fromRGB(255, 255, 255)}
 				TextScaled={true}
 				TextSize={14}

@@ -2,11 +2,27 @@
     "default": {
         "walkspeed": 12,
         "range": 50,
-        "animation": "132691640529191"
+        "animation": "rbxassetid://132691640529191",
+        "chance": 1,
+        "multiplier": 1,
+        "giftscale": 0.007,
+        "guiscale": 1,
+        "present": {
+            "value": "$%s",
+            "chance": "%s"
+        }
     },
     "giant": {
         "walkspeed": 8,
         "range": 200,
-        "animation": "104122982556444"
+        "animation": "rbxassetid://104122982556444",
+        "chance": 10,
+        "multiplier": 1000,
+        "giftscale": 0.04,
+        "guiscale": 2,
+         "present": {
+            "value": "$%s",
+            "chance": "<font color=\"rgb(255, 0, 255)\">1000x</font>"
+        }
     }
 }

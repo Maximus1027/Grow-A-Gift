@@ -13,7 +13,6 @@ export function Nametag(props: NametagProps) {
 	const [hrp, setHRP] = useState<BasePart>();
 
 	useEffect(() => {
-		print("nametag");
 		const a = props.player.AttributeChanged.Connect((attr) => {
 			if (attr === "totalincome") {
 				const money = props.player.GetAttribute("totalincome");

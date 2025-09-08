@@ -29,8 +29,10 @@
     "@flamework/core": "^1.2.2",
     "@flamework/networking": "^1.2.2",
     "@rbxts/abbreviate": "^3.0.4",
+    "@rbxts/camera-shaker": "^1.0.8",
     "@rbxts/centurion": "^1.0.1",
     "@rbxts/centurion-ui": "^1.0.8",
+    "@rbxts/janitor": "^1.18.3-ts.0",
     "@rbxts/lemon-signal": "^1.2.0",
     "@rbxts/object-utils": "^1.0.4",
     "@rbxts/pretty-react-hooks": "^0.6.4",
@@ -41,6 +43,7 @@
     "@rbxts/reflex": "^4.3.1",
     "@rbxts/services": "^1.5.5",
     "@rbxts/shared-components-flamework": "^2.7.2",
-    "@rbxts/t": "^3.2.1"
+    "@rbxts/t": "^3.2.1",
+    "@rbxts/ui-labs": "^2.4.1"
   }
 }

@@ -26,7 +26,6 @@ export function Booster(props: BoosterProps) {
 
 		return () => {
 			stepped.Disconnect();
-			print("Booster disconnected");
 		};
 	}, []);
 

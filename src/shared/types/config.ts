@@ -23,6 +23,8 @@ export type HouseConfig = Config<{
 
 export type CrateConfig = Config<{ loot: CrateLootTable; displayName: string; timeInMinutes: number }>;
 
+export type NPCConfig = Config<NPCData>;
+
 export type Reward = {
 	rewardType: "boost" | "stats" | "inventory";
 	reward: string;
@@ -48,4 +50,18 @@ export type RewardConfig = Config<
 export type UIConfig = {
 	crates: { [k in keyof typeof Rarity]: string };
 	boost: { [k in keyof typeof Boost]: string };
+};
+
+export type NPCData = {
+	walkspeed: number;
+	range: number;
+	animation: string;
+	chance: number;
+	multiplier: number;
+	giftscale: number;
+	guiscale: number;
+	present: {
+		value: string;
+		chance: string;
+	};
 };

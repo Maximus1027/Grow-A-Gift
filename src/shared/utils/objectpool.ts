@@ -25,8 +25,6 @@ export class ObjectPool<T extends Model> {
 
 		if (found) return found;
 
-		print("Instantiated a new object");
-
 		return this.object.Clone();
 	}
 

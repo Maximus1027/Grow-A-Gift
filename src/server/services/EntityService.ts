@@ -5,11 +5,12 @@ import { Events } from "server/network";
 import { Rarity } from "shared/enums/Rarity";
 import { NPC } from "shared/npc/npc";
 import { NPCPacket } from "shared/types/entity";
-import { getHouseConfig } from "shared/utils/loot";
+import { getHouseConfig, getNPCConfig } from "shared/utils/loot";
 import { ObjectPool } from "shared/utils/objectpool";
 
 const rarities = Object.keys(Rarity);
 const houses = Object.keys(getHouseConfig());
+const npcs = Object.keys(getNPCConfig());
 
 @Service({})
 export class EntityService implements OnStart {
@@ -44,6 +45,7 @@ export class EntityService implements OnStart {
 		rarity: Rarity,
 		houseid: string,
 		arrivalTick: number,
+		npcid: string,
 	) {
 		const packet: NPCPacket = [
 			spawn,
@@ -54,7 +56,10 @@ export class EntityService implements OnStart {
 			rarities.indexOf(rarity),
 			houses.indexOf(houseid),
 			arrivalTick,
+			npcs.indexOf(npcid),
 		];
+
+		print(npcid);
 
 		this.NPCQueue.push(packet);
 	}

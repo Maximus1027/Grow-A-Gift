@@ -29,7 +29,7 @@ export function MoneyDisplay(props: MoneyProps) {
 
 	return (
 		<screengui
-			key={"cASHDEV"}
+			key={"CASH-PRODUCTION"}
 			IgnoreGuiInset={true}
 			ScreenInsets={Enum.ScreenInsets.DeviceSafeInsets}
 			ResetOnSpawn={false}
@@ -43,8 +43,8 @@ export function MoneyDisplay(props: MoneyProps) {
 				BackgroundTransparency={1}
 				BorderColor3={Color3.fromRGB(0, 0, 0)}
 				BorderSizePixel={0}
-				Position={UDim2.fromScale(0.0493, 0.904)}
-				Size={UDim2.fromScale(0.0441, 0.108)}
+				Position={UDim2.fromScale(0.048, 0.891)}
+				Size={UDim2.fromScale(0.067, 0.135)}
 			>
 				<textlabel
 					key={"textLabel"}
@@ -60,7 +60,7 @@ export function MoneyDisplay(props: MoneyProps) {
 					BackgroundTransparency={1}
 					BorderColor3={Color3.fromRGB(0, 0, 0)}
 					BorderSizePixel={0}
-					Position={UDim2.fromScale(2.25, 0.508)}
+					Position={UDim2.fromScale(1.942, 0.515)}
 					Size={UDim2.fromScale(2.51, 0.524)}
 				>
 					<uiaspectratioconstraint key={"uIAspectRatioConstraint"} AspectRatio={5.32} />

@@ -17,7 +17,6 @@ export class BoostsController implements OnStart {
 			this.refreshBoosters();
 		});
 		Events.onBoost.connect(() => {
-			print("refreshing");
 			this.refreshBoosters();
 		});
 	}
@@ -46,8 +45,6 @@ export class BoostsController implements OnStart {
 				boostType: boostType as Boost,
 				endtick: t.number(endtick) ? endtick : undefined,
 			};
-
-			print(boost.Name, endtick, endtick ?? 0 - tick());
 
 			boosts.push(timedBoost);
 		}

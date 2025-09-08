@@ -40,8 +40,6 @@ export class RewardService implements OnStart, OnTick {
 	private onRewardClaim(player: Player, id: number) {
 		const foundReward: Reward = { ...this.rewardsConfig[tostring(id)], namespace: "REWARDS" };
 
-		print(foundReward);
-
 		if (foundReward) {
 			this.SpinService.grantReward(player, foundReward);
 			Events.onRewardsAction.fire(player, "claim", id);

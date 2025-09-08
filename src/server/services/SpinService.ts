@@ -41,7 +41,7 @@ export class SpinService implements OnStart {
 			const reward = returnRandomSpinReward();
 			const spinnerConfig = getSpinConfig();
 			const foundReward: Reward = { ...spinnerConfig[reward], namespace: "SPIN" };
-			print(foundReward);
+
 			if (foundReward) {
 				this.grantReward(Player, foundReward);
 				Events.onReward.fire(Player, "spin", reward, "");

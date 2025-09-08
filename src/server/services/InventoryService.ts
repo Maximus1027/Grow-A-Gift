@@ -202,8 +202,6 @@ export class InventoryService implements OnStart {
 			.sort((a, b) => (a.GetAttribute("equip") as number) > (b.GetAttribute("equip") as number))
 			.pop();
 
-		print("popped", lastItem);
-
 		return lastItem ? lastItem.Name : undefined;
 	}
 

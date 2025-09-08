@@ -211,6 +211,5 @@ export class BoostService implements OnStart {
 		// })
 		this.calculateBoosts(player);
 		print("Extended booster", namespace, "by", extensionTime, "seconds");
-		print(foundBoost.GetAttribute("endtick"), extensionTime);
 	}
 }

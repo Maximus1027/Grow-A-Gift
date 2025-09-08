@@ -16,10 +16,6 @@ export function TopBar() {
 	const dispatch = useProducer<RootStore>();
 	const [transition, setTransition] = useState<(() => void) | undefined>(undefined);
 
-	useEffect(() => {
-		print(transition);
-	}, [transition]);
-
 	return (
 		<React.Fragment>
 			{t.callback(transition) && (

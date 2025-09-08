@@ -28,7 +28,6 @@ export function AutoPreload() {
 	useAsyncEffect(async () => {
 		ContentProvider.PreloadAsync(contentIds, (assetId) => {
 			setCurrentAsset(assetId);
-			print(assetId);
 		});
 
 		setCurrentAsset(undefined);

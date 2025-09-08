@@ -22,7 +22,9 @@ export type ClientNPC = Model & {
 	};
 	["Right Leg"]: Part;
 	Torso: Part;
-	HumanoidRootPart: Part;
+	HumanoidRootPart: Part & {
+		Gift: Attachment;
+	};
 	["Left Arm"]: Part;
 	AnimationController: AnimationController & {
 		Animator: Animator;
@@ -38,4 +40,5 @@ export type NPCPacket = [
 	number, //rarityid
 	number, //housid
 	number, //spawn tick
+	number, //npc type id
 ];

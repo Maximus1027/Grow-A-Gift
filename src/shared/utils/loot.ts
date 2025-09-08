@@ -4,11 +4,13 @@ import { getRarityColor, Rarity } from "shared/enums/Rarity";
 import * as HousesConfig from "shared/config/house.json";
 import * as CratesConfig from "shared/config/crate.json";
 import * as SpinnerConfig from "shared/config/spinner.json";
-import { HouseConfig, CrateConfig, SpinConfig } from "shared/types/config";
+import * as NPCSConfig from "shared/config/npc.json";
+import { HouseConfig, CrateConfig, SpinConfig, NPCConfig, NPCData } from "shared/types/config";
 
 export type RarityLootTable = Partial<Record<Rarity, number>>;
 export type CrateLootTable = Record<string, number>;
 export type SpinnerLootTable = CrateLootTable;
+export type NPCLootTable = CrateLootTable;
 
 const rarityOrderCache: Record<string, Rarity[]> = {};
 
@@ -29,6 +31,8 @@ const mappedSpinnerLoot: SpinnerLootTable = Object.entries(SpinnerConfig as Spin
 	acc[key as string] = value.chance;
 	return acc;
 }, {} as SpinnerLootTable);
+
+const npcChances = Object.entries(NPCSConfig as unknown as NPCConfig).sort((a, b) => a[1].chance > b[1].chance);
 
 /**
  * Use loot table to return a random rarity
@@ -57,6 +61,26 @@ export const returnRandomRarity = (loot: RarityLootTable | CrateLootTable, house
 	//incase no luck above return least rarest
 
 	return rarities[rarities.size() - 1];
+};
+
+/**
+ * Return random NPC type id
+ * @param luck
+ * @returns
+ */
+export const returnRandomNPC = (luck?: number): string => {
+	//luck must be not nil and at least 1
+	const adjustedLuck = luck !== undefined && luck >= 1 ? luck : 1;
+
+	for (const [id, data] of npcChances) {
+		const adjustedChance = math.max(1, math.round((data.chance as number) / adjustedLuck));
+
+		if (math.random(1, adjustedChance) === 1) {
+			return id;
+		}
+	}
+
+	return "default";
 };
 
 export const returnRandomSpinReward = (): string => {
@@ -156,6 +180,10 @@ export const getSpinConfig = (): SpinConfig => {
 
 export const getSpinnerLootTable = (): SpinnerLootTable => {
 	return mappedSpinnerLoot;
+};
+
+export const getNPCConfig = (): NPCConfig => {
+	return NPCSConfig as unknown as NPCConfig;
 };
 
 export const getOrderedLoottable = (houseid: string) => rarityOrderCache[houseid];

@@ -123,12 +123,7 @@ export const isModelWithinBounds = (model: Model, boundingPart: BasePart): boole
 				return true;
 			}
 		}
-		print(
-			corner.X <= math.max(boundingCorner1.X, boundingCorner2.X),
-			corner.X >= math.min(boundingCorner1.X, boundingCorner2.X),
-			corner.Z <= math.max(boundingCorner1.Z, boundingCorner2.Z),
-			corner.Z >= math.min(boundingCorner1.Z, boundingCorner2.Z),
-		);
+
 		return false;
 	};
 
@@ -144,9 +139,8 @@ export const isModelWithinBounds = (model: Model, boundingPart: BasePart): boole
  * @param start
  * @param goal
  */
-export const calculateGoalTime = (start: Vector3, goal: Vector3) => {
+export const calculateGoalTime = (start: Vector3, goal: Vector3, walkspeed: number) => {
 	const magnitude = goal.sub(start).Magnitude;
-	const walkspeed = 12;
 
 	return magnitude / walkspeed;
 };
@@ -204,3 +198,5 @@ export const abbreviateNumber = (value: number): string => {
 export const forceAbbreviateNumber = (value: number): string => {
 	return abv.numberToString(value);
 };
+
+export const getParticleFolder = () => ReplicatedStorage.WaitForChild("assets").WaitForChild("particles") as Folder;

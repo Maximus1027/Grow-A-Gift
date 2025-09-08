@@ -25,6 +25,8 @@ import { Rewards } from "../components/rewards/rewards";
 import { AutoPreload } from "../components/preloader/autopreload";
 import { PlotIcons } from "../components/ploticon/ploticons";
 import { TagManager } from "../components/nametag/tagmanager";
+import { ErrorBoundary } from "../components/misc/errorboundary";
+import { ErrorHandler } from "../components/misc/errorhandler";
 
 export function App() {
 	const player = Players.LocalPlayer;
@@ -32,28 +34,29 @@ export function App() {
 	const moneyValue = stats.WaitForChild("Money") as NumberValue;
 
 	return (
-		<ReflexProvider producer={store}>
-			<AutoPreload />
-			<Version />
-			<Presents />
-			<MoneyDisplay value={moneyValue} />
-			<Hotbar />
-			<Inventory />
-			<Store />
-			<HouseSelect />
-			<PresentChancesHover />
-			<Crates />
-			<Hud />
-			<Township />
-			<HouseIncomeManager />
-			<RebirthManager />
-			<InviteFriends />
-			<Spin />
-			<FocusEffects />
-			<Boost />
-			<Rewards />
-			<TagManager />
-			<PlotIcons />
-		</ReflexProvider>
+		<ErrorHandler>
+			<ReflexProvider producer={store}>
+				<Version />
+				<Presents />
+				<MoneyDisplay value={moneyValue} />
+				<Hotbar />
+				<Inventory />
+				<Store />
+				<HouseSelect />
+				<PresentChancesHover />
+				<Crates />
+				<Hud />
+				<Township />
+				<HouseIncomeManager />
+				<RebirthManager />
+				<InviteFriends />
+				<Spin />
+				<FocusEffects />
+				<Boost />
+				<Rewards />
+				<TagManager />
+				<PlotIcons />
+			</ReflexProvider>
+		</ErrorHandler>
 	);
 }

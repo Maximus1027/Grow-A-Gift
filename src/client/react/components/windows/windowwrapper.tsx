@@ -39,10 +39,6 @@ export function WindowWrapper(props: WindowWrapperProps) {
 
 			task.delay(time, () => setVisible(false));
 		}
-
-		return () => {
-			print(props.window, "wrapper disconnected");
-		};
 	}, [window]);
 
 	return (

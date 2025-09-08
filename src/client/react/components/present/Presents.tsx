@@ -27,8 +27,9 @@ export function Presents() {
 		<MoneyValue
 			key={present.Name}
 			parent={present}
-			value={present.GetAttribute("value") as number}
+			value={present.GetAttribute("value") as string}
 			chance={present.GetAttribute("chance") as string}
+			scale={present.GetAttribute("guiscale") as number}
 		/>
 	));
 }

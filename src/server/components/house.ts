@@ -8,7 +8,9 @@ import {
 	convertChanceToStringMarkup,
 	getHouseConfig,
 	getLootTable,
+	getNPCConfig,
 	RarityLootTable,
+	returnRandomNPC,
 	returnRandomRarity,
 } from "shared/utils/loot";
 import { Rarity } from "shared/enums/Rarity";
@@ -30,6 +32,7 @@ import { EntityService } from "server/services/EntityService";
 import { getPresentValue } from "shared/utils/presentutils";
 import { PlotFolder } from "shared/types/plot";
 import { PlotService } from "server/services/PlotService";
+import { NPCData } from "shared/types/config";
 
 interface Attributes {
 	houseid?: string;
@@ -127,8 +130,12 @@ export class House extends BaseComponent<Attributes, Model> implements OnStart, 
 
 		const moneyBoost = (this.owner?.GetAttribute(Boost.Income) as number) ?? 1;
 
+		const randomNPC = returnRandomNPC();
+
+		const npcData = getNPCConfig()[randomNPC] as NPCData;
+
 		const presentWorth = getPresentValue(randomRarity);
-		const finalWorth = math.random(presentWorth!.min, presentWorth!.max) * moneyBoost;
+		const finalWorth = math.random(presentWorth!.min, presentWorth!.max) * moneyBoost * npcData!.multiplier;
 
 		this.entityService.spawnNPC(
 			this.owner,
@@ -138,8 +145,9 @@ export class House extends BaseComponent<Attributes, Model> implements OnStart, 
 			randomRarity,
 			this.houseId,
 			tick(),
+			randomNPC,
 		);
-		const goaltime = calculateGoalTime(spawnLocation, this.end.Position);
+		const goaltime = calculateGoalTime(spawnLocation, this.end.Position, npcData.walkspeed);
 
 		task.delay(goaltime, () => {
 			if (this.instance === undefined || !this.instance.IsDescendantOf(game)) {
@@ -167,7 +175,6 @@ export class House extends BaseComponent<Attributes, Model> implements OnStart, 
 	}
 
 	destroy(): void {
-		print("destroyed");
 		this.attributeChanged?.Disconnect();
 		this.instance.Destroy();
 	}

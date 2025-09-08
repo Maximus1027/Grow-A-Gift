@@ -78,7 +78,6 @@ export function Rewards() {
 									// countdown={true || rewardsState.highestUnlock + 1 === nid}
 									mega={tonumber(id) === rewards.size()}
 									onClick={() => {
-										print(claimState);
 										claimState === "claim" && Events.onRewardClaim.fire(nid);
 									}}
 								/>
