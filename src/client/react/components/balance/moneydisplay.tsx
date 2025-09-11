@@ -43,14 +43,14 @@ export function MoneyDisplay(props: MoneyProps) {
 				BackgroundTransparency={1}
 				BorderColor3={Color3.fromRGB(0, 0, 0)}
 				BorderSizePixel={0}
-				Position={UDim2.fromScale(0.048, 0.891)}
-				Size={UDim2.fromScale(0.067, 0.135)}
+				Position={UDim2.fromScale(0.0456, 0.896)}
+				Size={UDim2.fromScale(0.0673, 0.135)}
 			>
 				<textlabel
 					key={"textLabel"}
 					FontFace={new Font("rbxasset://fonts/families/FredokaOne.json")}
 					Text={money.map((num) => "$" + abbreviateNumber(num))}
-					TextColor3={Color3.fromRGB(255, 255, 255)}
+					TextColor3={Color3.fromRGB(115, 255, 127)}
 					TextScaled={true}
 					TextSize={14}
 					TextWrapped={true}
@@ -60,13 +60,15 @@ export function MoneyDisplay(props: MoneyProps) {
 					BackgroundTransparency={1}
 					BorderColor3={Color3.fromRGB(0, 0, 0)}
 					BorderSizePixel={0}
-					Position={UDim2.fromScale(1.942, 0.515)}
+					Position={UDim2.fromScale(2.17, 0.499)}
 					Size={UDim2.fromScale(2.51, 0.524)}
 				>
 					<uiaspectratioconstraint key={"uIAspectRatioConstraint"} AspectRatio={5.32} />
 
-					<uistroke Color={Color3.fromRGB(0, 194, 28)} key={"uIStroke"} Thickness={4} />
+					<uistroke key={"uIStroke"} Thickness={5} />
 				</textlabel>
+
+				<uiaspectratioconstraint key={"uIAspectRatioConstraint1"} AspectRatio={0.886} />
 			</imagelabel>
 		</screengui>
 	);

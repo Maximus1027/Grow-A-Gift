@@ -20,6 +20,7 @@ export enum Window {
 	"spin" = "spin",
 	"hotbar" = "hotbar",
 	"rewards" = "rewards",
+	"rewardpopup" = "rewardpopup",
 }
 
 export interface WindowState {
@@ -36,25 +37,23 @@ const initialState: WindowState = {
 	},
 };
 
-let savedWindows: WindowState["windows"] = {};
+// let savedWindows: WindowState["windows"] = {};
 
 export const WindowActions = createProducer(initialState, {
 	setFocusedWindow: (state: WindowState, window?: Window) => {
-		if (window !== undefined) {
-			//save windows open before close
-			savedWindows = state.windows;
-		}
+		// if (window !== undefined) {
+		// 	//save windows open before close
+		// 	savedWindows = state.windows;
+		// }
 
-		return {
-			...state,
-			inFocus: window !== undefined,
-			windows:
-				window !== undefined
-					? {
-							[window]: true,
-					  }
-					: savedWindows,
-		};
+		return window
+			? {
+					inFocus: true,
+					windows: {
+						[window]: true,
+					},
+			  }
+			: initialState;
 	},
 	setWindowState: (state: WindowState, window: Window, enabled: boolean) => {
 		if (state.inFocus) {

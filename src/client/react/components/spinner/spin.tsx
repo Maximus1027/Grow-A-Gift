@@ -12,8 +12,10 @@ import { Window } from "client/react/store/producer/windowproducer";
 import { Players } from "@rbxts/services";
 import { InteractiveButton } from "../misc/interactivebutton";
 import { WindowWrapper } from "../windows/windowwrapper";
+import { t } from "@rbxts/t";
 
 const player = Players.LocalPlayer;
+const spinConfig = getSpinConfig();
 
 export function Spin() {
 	const window = useSelector((state: RootState) => state.windowManager);
@@ -59,7 +61,9 @@ export function Spin() {
 					<SpinAnimation
 						onAnimationComplete={() => {
 							dispatch.setReward(undefined);
-							dispatch.setFocusedWindow(undefined);
+
+							if (t.string(reward)) dispatch.popup(spinConfig[reward]);
+							dispatch.setFocusedWindow(Window.rewardpopup);
 						}}
 					/>
 

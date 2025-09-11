@@ -5,10 +5,10 @@ import { HouseDisplay } from "../housedisplay";
 import { getHouseDisplayName } from "shared/utils/houseutils";
 import { Chance } from "../../hover/chance";
 import { getRarityColor, Rarity } from "shared/enums/Rarity";
+import { Sunray } from "./sunray";
 
 export function HouseReward(props: { houseid: string; rarity: Rarity; chance: string }) {
 	const [size, setSize] = useMotion(0.05);
-	const [rot, setrot] = useMotion(0);
 	const [pos, setpos] = useMotion(0);
 
 	useEffect(() => {
@@ -16,13 +16,6 @@ export function HouseReward(props: { houseid: string; rarity: Rarity; chance: st
 			frequency: 0.79,
 			friction: 1,
 		});
-
-		setrot.tween(300, {
-			time: 4,
-			style: Enum.EasingStyle.Linear,
-		});
-
-		setrot.onComplete(() => setpos.spring(1));
 	}, []);
 
 	return (
@@ -32,24 +25,6 @@ export function HouseReward(props: { houseid: string; rarity: Rarity; chance: st
 			ScreenInsets={Enum.ScreenInsets.DeviceSafeInsets}
 			ResetOnSpawn={false}
 		>
-			<imagelabel
-				key={"sunray"}
-				Image={"rbxassetid://13522988808"}
-				ImageColor3={Color3.fromRGB(58, 58, 58)}
-				ImageTransparency={0.59}
-				ScaleType={Enum.ScaleType.Crop}
-				AnchorPoint={new Vector2(0.5, 0.5)}
-				BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-				BackgroundTransparency={1}
-				BorderColor3={Color3.fromRGB(27, 42, 53)}
-				BorderSizePixel={0}
-				Position={pos.map((y) => UDim2.fromScale(0.5, y + 0.499))}
-				Size={UDim2.fromScale(0.329, 0.691)}
-				Rotation={rot}
-			>
-				<uiaspectratioconstraint />
-			</imagelabel>
-
 			<frame
 				key={"houseimage"}
 				AnchorPoint={new Vector2(0.5, 0.5)}
@@ -61,6 +36,13 @@ export function HouseReward(props: { houseid: string; rarity: Rarity; chance: st
 				Size={size.map((y) => UDim2.fromScale(0.231, y))}
 				ZIndex={2}
 			>
+				<Sunray
+					key={"sunray"}
+					Position={UDim2.fromScale(0.5, 0.499)}
+					Size={UDim2.fromScale(1.7, 1.7)}
+					looped={false}
+					onComplete={() => setpos.spring(1)}
+				/>
 				<HouseDisplay
 					houseid={props.houseid}
 					rotate={true}

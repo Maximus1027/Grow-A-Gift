@@ -17,7 +17,12 @@ const rewardsMap = Object.entries(rewards);
 const rewardsSorted = rewardsMap.sort((a, b) => (tonumber(a[0]) as number) < (tonumber(b[0]) as number));
 
 const rewardsLabels = rewardsSorted.map(([reward, data]) => (
-	<Reward id={tonumber(reward) as number} title={data.displayName.format(data.amount)} image={data!.image} />
+	<Reward
+		special={data.special ?? false}
+		id={tonumber(reward) as number}
+		title={data.displayName.format(data.amount)}
+		image={data!.image}
+	/>
 ));
 
 export function SpinAnimation(props: SpinProps) {
@@ -25,8 +30,17 @@ export function SpinAnimation(props: SpinProps) {
 	const [rot, setRot] = useMotion(0);
 	const reward = useSelector((state: RootState) => state.spin.chosenReward);
 
+	const idleSpin = () => {
+		setRot.immediate(0);
+		setRot.linear(360, {
+			speed: 15,
+		});
+	};
+
 	useEffect(() => {
 		if (reward === undefined) {
+			setRot.onComplete(() => reward === undefined && idleSpin());
+			idleSpin();
 			return;
 		}
 
@@ -36,13 +50,16 @@ export function SpinAnimation(props: SpinProps) {
 		const rotAngle = 360 / rewardsMap.size();
 		const randomOffset = math.random(-18, 18);
 
+		setRot.stop();
 		setRot.immediate(0);
 		setRot.tween(360 * spins - rotAngle * index + randomOffset, {
 			style: Enum.EasingStyle.Exponential,
 			direction: Enum.EasingDirection.Out,
 			time: 6.5,
 		});
-		setRot.onComplete(() => props.onAnimationComplete());
+		setRot.onComplete(() => {
+			props.onAnimationComplete();
+		});
 	}, [reward]);
 
 	return (

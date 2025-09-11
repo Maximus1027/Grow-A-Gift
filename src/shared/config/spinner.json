@@ -59,6 +59,7 @@
         "reward": "igloo",
         "displayName": "Igloo",
         "amount": 1,
-        "chance": 2
+        "chance": 2,
+        "special": true
     }
 }

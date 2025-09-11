@@ -1,8 +1,10 @@
 import React from "@rbxts/react";
+import { Sunray } from "../crates/roll/sunray";
 
 export interface SpinRewardProps {
 	id: number;
 	title: string;
+	special: boolean;
 	image?: string;
 }
 
@@ -77,6 +79,15 @@ export function Reward(props: SpinRewardProps) {
 					Size={UDim2.fromScale(1.26, 3.16)}
 					ZIndex={5}
 				>
+					{props.special && (
+						<Sunray
+							ZIndex={4}
+							speed={7}
+							Position={UDim2.fromScale(0.5, 0.5)}
+							Size={UDim2.fromScale(2, 2)}
+							looped={true}
+						/>
+					)}
 					<uiaspectratioconstraint key={"uIAspectRatioConstraint"} AspectRatio={1.5} />
 				</imagelabel>
 			</textlabel>

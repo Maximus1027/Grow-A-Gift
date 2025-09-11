@@ -38,6 +38,7 @@ export type Reward = {
 export type SpinConfig = Config<
 	Reward & {
 		chance: number;
+		special?: boolean;
 	}
 >;
 

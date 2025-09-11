@@ -27,6 +27,7 @@ import { PlotIcons } from "../components/ploticon/ploticons";
 import { TagManager } from "../components/nametag/tagmanager";
 import { ErrorBoundary } from "../components/misc/errorboundary";
 import { ErrorHandler } from "../components/misc/errorhandler";
+import { RewardPopup } from "../components/popups/rewardpopup";
 
 export function App() {
 	const player = Players.LocalPlayer;
@@ -56,6 +57,7 @@ export function App() {
 				<Rewards />
 				<TagManager />
 				<PlotIcons />
+				<RewardPopup />
 			</ReflexProvider>
 		</ErrorHandler>
 	);

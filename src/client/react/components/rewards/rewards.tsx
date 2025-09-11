@@ -78,7 +78,12 @@ export function Rewards() {
 									// countdown={true || rewardsState.highestUnlock + 1 === nid}
 									mega={tonumber(id) === rewards.size()}
 									onClick={() => {
-										claimState === "claim" && Events.onRewardClaim.fire(nid);
+										if (claimState === "claim") {
+											Events.onRewardClaim.fire(nid);
+
+											dispatch.popup(config);
+											dispatch.setFocusedWindow(Window.rewardpopup);
+										}
 									}}
 								/>
 							);
