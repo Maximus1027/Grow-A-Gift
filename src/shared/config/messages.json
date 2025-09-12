@@ -1,0 +1,18 @@
+{
+    "stat": {
+        "message": "You have received %s %s!",
+        "color": [255, 2, 230]
+    },
+    "boost": {
+        "message": "You have received a %s %s boost for %s Minutes!",
+        "color": [255, 255, 12]
+    },
+    "inventory": {
+        "message": "You have received %sx %s",
+        "color": [34, 255, 0]
+    },
+    "purchase": {
+        "message": "Thank you for your purchase!",
+        "color": [255, 2, 230]
+    }
+}

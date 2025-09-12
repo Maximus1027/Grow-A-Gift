@@ -22,6 +22,7 @@ export function MoneyValue(props: MoneyValueProps) {
 			ZIndexBehavior={Enum.ZIndexBehavior.Sibling}
 			MaxDistance={45 * props.scale}
 			Enabled={true}
+			AlwaysOnTop={true}
 		>
 			<textlabel
 				key={"chance"}

@@ -1,19 +1,24 @@
 import { createProducer } from "@rbxts/reflex";
 import { InventoryState } from "./inventoryproducer";
 
-export interface CrateState {
-	crateList: Model[];
-}
-
-const initialState: CrateState = {
-	crateList: [],
+export type Message = {
+	text: string;
+	color: Color3;
 };
 
-export const CrateActions = createProducer(initialState, {
-	setCrateList: (state: CrateState, crates: Model[]) => {
+export interface MessageState {
+	messages: Message[];
+}
+
+const initialState: MessageState = {
+	messages: [],
+};
+
+export const MessageActions = createProducer(initialState, {
+	sendMessage: (state: MessageState, message: Message) => {
 		return {
 			...state,
-			crateList: crates,
+			messages: [...state.messages, message],
 		};
 	},
 });

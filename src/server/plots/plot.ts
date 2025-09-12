@@ -36,7 +36,8 @@ export class Plot {
 
 		if (plot) {
 			this.plot = plot;
-			task.delay(2, () => Events.onDataLoaded.fire(this.player));
+			//task.delay(2, () => Events.onDataLoaded.fire(this.player));
+			Events.onDataLoaded.fire(this.player);
 			this.spawnLocations = getSpawnLocations(plot);
 		} else {
 			player.Kick("Couldn't locate village");

@@ -29,17 +29,18 @@ import { ErrorBoundary } from "../components/misc/errorboundary";
 import { ErrorHandler } from "../components/misc/errorhandler";
 import { RewardPopup } from "../components/popups/rewardpopup";
 
+const player = Players.LocalPlayer;
+
 export function App() {
-	const player = Players.LocalPlayer;
-	const stats = player.WaitForChild("stats");
-	const moneyValue = stats.WaitForChild("Money") as NumberValue;
+	const stats = player.FindFirstChild("stats");
+	const moneyValue = stats?.FindFirstChild("Money") as NumberValue;
 
 	return (
 		<ErrorHandler>
 			<ReflexProvider producer={store}>
 				<Version />
 				<Presents />
-				<MoneyDisplay value={moneyValue} />
+				{stats && <MoneyDisplay value={moneyValue} />}
 				<Hotbar />
 				<Inventory />
 				<Store />

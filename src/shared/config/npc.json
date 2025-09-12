@@ -13,10 +13,10 @@
         }
     },
     "giant": {
-        "walkspeed": 8,
+        "walkspeed": 6,
         "range": 200,
         "animation": "rbxassetid://104122982556444",
-        "chance": 10,
+        "chance": 200,
         "multiplier": 1000,
         "giftscale": 0.04,
         "guiscale": 2,

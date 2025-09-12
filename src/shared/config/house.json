@@ -2,7 +2,7 @@
     "tiki": {
         "rate": 6,
         "cost": 100,
-        "displayName": "Tiki Hut", 
+        "displayName": "Tiki Hut",
         "productid": 123,
         "stock": 4,
         "rarity": "Common",
@@ -11,10 +11,9 @@
             "Rare": 25,
             "Epic": 100,
             "Legendary": 1000
-           
         }
     },
-     "tent": {
+    "tent": {
         "rate": 8,
         "cost": 3500,
         "displayName": "Tent",
@@ -42,7 +41,7 @@
             "Mythic": 2500
         }
     },
-     "barrack": {
+    "barrack": {
         "rate": 8,
         "cost": 102500,
         "displayName": "Barrack",
@@ -78,12 +77,12 @@
         "stock": 3,
         "rarity": "Rare",
         "loot": {
+            "Epic": 2,
             "Legendary": 3,
             "Mythic": 10,
             "Exotic": 20
         }
     },
-
     "pyramid": {
         "rate": 8,
         "cost": 1600000,
@@ -92,10 +91,10 @@
         "stock": 4,
         "rarity": "Rare",
         "loot": {
-            "Legendary": 3,
-            "Mythic": 25,
-            "Exotic": 100,
-            "Celestial": 5000
+            "Legendary": 2,
+            "Mythic": 15,
+            "Exotic": 25,
+            "Celestial": 1000
         }
     },
     "sandhouse": {
@@ -106,13 +105,12 @@
         "stock": 4,
         "rarity": "Rare",
         "loot": {
-          "Legendary": 2,
-            "Mythic": 10,
-            "Exotic": 50,
-            "Celestial": 1000
+            "Mythic": 2,
+            "Exotic": 10,
+            "Celestial": 200,
+            "Divine": 1000
         }
     },
-   
     "minka": {
         "rate": 8,
         "cost": 6000000,
@@ -121,13 +119,13 @@
         "stock": 2,
         "rarity": "Epic",
         "loot": {
-           "Legendary": 2,
-            "Mythic": 10,
-            "Exotic": 50,
-            "Celestial": 1000
+            "Mythic": 2,
+            "Exotic": 10,
+            "Celestial": 100,
+            "Divine": 500
         }
     },
-     "medieval": {
+    "medieval": {
         "rate": 8,
         "cost": 10000000,
         "displayName": "Medieval House",
@@ -135,13 +133,11 @@
         "stock": 1,
         "rarity": "Epic",
         "loot": {
-            "Common": 1,
-            "Rare": 8,
-            "Epic": 25,
-            "Legendary": 90,
-            "Mythic": 1020
+            "Exotic": 3,
+            "Celestial": 25,
+            "Divine": 100
         }
-    },    
+    },
     "treehouse": {
         "rate": 8,
         "cost": 16000000,
@@ -150,11 +146,8 @@
         "stock": 4,
         "rarity": "Epic",
         "loot": {
-            "Common": 2,
-            "Rare": 10,
-            "Epic": 30,
-            "Legendary": 100,
-            "Mythic": 1000
+            "Celestial": 2,
+            "Divine": 50
         }
     }
 }

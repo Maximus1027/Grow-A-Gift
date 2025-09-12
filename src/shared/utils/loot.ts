@@ -24,7 +24,7 @@ function cacheOrderedConfig(conf: HouseConfig | CrateConfig): void {
 	}
 }
 
-cacheOrderedConfig(HousesConfig);
+cacheOrderedConfig(HousesConfig as HouseConfig);
 cacheOrderedConfig(CratesConfig);
 
 const mappedSpinnerLoot: SpinnerLootTable = Object.entries(SpinnerConfig as SpinConfig).reduce((acc, [key, value]) => {

@@ -44,6 +44,7 @@
     "@rbxts/services": "^1.5.5",
     "@rbxts/shared-components-flamework": "^2.7.2",
     "@rbxts/t": "^3.2.1",
+    "@rbxts/topbar-plus": "^3.2.5",
     "@rbxts/ui-labs": "^2.4.1",
     "discord.js": "^14.22.1"
   }

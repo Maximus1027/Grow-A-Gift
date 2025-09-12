@@ -44,7 +44,8 @@ export function RewardPopup() {
 					BackgroundTransparency={1}
 					BorderColor3={Color3.fromRGB(0, 0, 0)}
 					BorderSizePixel={0}
-					Position={UDim2.fromScale(0.332, 0.246)}
+					AnchorPoint={new Vector2(0.5, 0.5)}
+					Position={UDim2.fromScale(0.5, 0.5)}
 					Size={UDim2.fromScale(0.343, 0.485)}
 				>
 					<InteractiveButton

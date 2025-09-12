@@ -5,14 +5,17 @@ import { getParticleFolder } from "shared/utils/generictils";
 import { Workspace } from "@rbxts/services";
 import { Janitor } from "@rbxts/janitor";
 import CameraShaker from "@rbxts/camera-shaker";
+import { ClientNPC } from "shared/types/entity";
 
 const camera = Workspace.CurrentCamera as Camera;
 const playerCFrame = camera.CFrame;
 
 interface Attributes {}
 
-@Component({})
-export class Giant extends BaseComponent<Attributes> implements OnStart, OnTick {
+@Component({
+	tag: "Giant",
+})
+export class Giant extends BaseComponent<Attributes, ClientNPC> implements OnStart, OnTick {
 	private janitor = new Janitor();
 	private camShake = new CameraShaker(
 		Enum.RenderPriority.Camera.Value,
@@ -34,9 +37,9 @@ export class Giant extends BaseComponent<Attributes> implements OnStart, OnTick 
 	}
 
 	onTick(dt: number) {
-		if (dt % 10 === 0 && !this.instance.IsDescendantOf(Workspace)) {
-			return;
-		}
+		// if (dt % 10 === 0 && !this.instance.IsDescendantOf(Workspace)) {
+		// 	return;
+		// }
 		//
 		//this.camShake.Shake(CameraShaker.Presets.Explosion);
 	}
