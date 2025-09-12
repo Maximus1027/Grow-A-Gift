@@ -1,18 +1,20 @@
 {
     "stat": {
-        "message": "You have received %s %s!",
-        "color": [255, 2, 230]
+        "message": "<font color=\"rgb(255,2,230)\"> You have received %s %s!</font>"
     },
     "boost": {
-        "message": "You have received a %s %s boost for %s Minutes!",
-        "color": [255, 255, 12]
+        "message": "<font color=\"rgb(255,255,12)\">You have received a %s %s boost for %d!</font>"
     },
     "inventory": {
-        "message": "You have received %sx %s",
-        "color": [34, 255, 0]
+        "message": "<font color=\"rgb(34,255,0)\">You have received %sx %s</font>"
     },
     "purchase": {
-        "message": "Thank you for your purchase!",
-        "color": [255, 2, 230]
+        "message": "<font color=\"rgb(255,2,230)\">Thank you for your purchase!</font>"
+    },
+    "stockreset": {
+        "message": "<font color=\"rgb(255,216,23)\">The house shop has restocked!</font>"
+    },
+    "error": {
+        "message": "<font color=\"rgb(255,49,52)\">%s</font>"
     }
 }

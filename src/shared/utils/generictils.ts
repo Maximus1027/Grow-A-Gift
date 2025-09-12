@@ -54,8 +54,6 @@ export const getPlayerPlotFolder = (player: Player) =>
 		?.GetChildren()
 		.find((folder) => folder.GetAttribute("player") === player.Name);
 
-export const getPlayerPlot = (player: Player) => getPlayerPlotFolder(player)!.FindFirstChild("plot") as Model;
-
 export const formatSecondsToMinutesAndSeconds = (totalSeconds: number): string => {
 	const minutes = math.floor(totalSeconds / 60);
 	const remainingSeconds = totalSeconds % 60;
@@ -68,7 +66,7 @@ export const formatSecondsToMinutesAndSeconds = (totalSeconds: number): string =
 
 export const formatMinutesToDisplay = (minutes: number): string => {
 	if (minutes >= 60) {
-		const hours = minutes / 60;
+		const hours = math.round(minutes / 60);
 
 		return `${minutes / 60} Hour${hours >= 2 ? "s" : ""}`;
 	} else {

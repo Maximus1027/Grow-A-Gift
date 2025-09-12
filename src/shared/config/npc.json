@@ -24,5 +24,18 @@
             "value": "$%s",
             "chance": "<font color=\"rgb(255, 0, 255)\">1000x</font>"
         }
+    },
+    "dark": {
+        "walkspeed": 12,
+        "range": 75,
+        "animation": "rbxassetid://132691640529191",
+        "chance": 2,
+        "multiplier": 1.1,
+        "giftscale": 0.007,
+        "guiscale": 1,
+         "present": {
+            "value": "$%s",
+            "chance": "%s"
+        }
     }
 }

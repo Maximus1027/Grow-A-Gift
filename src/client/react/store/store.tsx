@@ -7,6 +7,7 @@ import { WindowActions } from "./producer/windowproducer";
 import { SpinActions } from "./producer/spinproducer";
 import { BoosterActions } from "./producer/boosterproducer";
 import { RewardActions } from "./producer/rewardproducer";
+import { MessageActions } from "./producer/messageproducer";
 
 export function createStore() {
 	const store = combineProducers({
@@ -18,6 +19,7 @@ export function createStore() {
 		spin: SpinActions,
 		boost: BoosterActions,
 		rewards: RewardActions,
+		messages: MessageActions,
 	});
 
 	return store;

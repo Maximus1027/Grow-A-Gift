@@ -7,6 +7,9 @@ export enum Rarity {
 	"Rare" = "Rare",
 	"Legendary" = "Legendary",
 	"Mythic" = "Mythic",
+	"Exotic" = "Exotic",
+	"Celestial" = "Celestial",
+	"Divine" = "Divine",
 }
 
 const RarityColors: Record<Rarity, Color3> = {} as Record<Rarity, Color3>;

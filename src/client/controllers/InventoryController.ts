@@ -3,6 +3,9 @@ import { Players, UserInputService } from "@rbxts/services";
 import { t } from "@rbxts/t";
 import { store } from "client/react/store/store";
 import { getInventoryFolder } from "shared/utils/playertils";
+import { MessageController } from "./MessageController";
+import { Message } from "discord.js";
+import { MESSAGE } from "shared/types/messages";
 
 const player = Players.LocalPlayer;
 const inventoryFolder = getInventoryFolder(player);
@@ -21,6 +24,8 @@ const keyMap: Record<string, number> = {
 
 @Controller({})
 export class InventoryController implements OnStart {
+	constructor(private readonly messageController: MessageController) {}
+
 	onStart() {
 		//keyboard manager for hotbar
 		UserInputService.InputBegan.Connect((input) => {
@@ -73,5 +78,8 @@ export class InventoryController implements OnStart {
 		houseid.GetAttributeChangedSignal("equip").Connect(() => {
 			store.setInventory(inventoryFolder.GetChildren() as NumberValue[]);
 		});
+		// houseid.Changed.Connect(() => {
+		// 	this.messageController.sendMessage(MESSAGE.INVENTORY, 1 + "", houseid.Name);
+		// });
 	}
 }

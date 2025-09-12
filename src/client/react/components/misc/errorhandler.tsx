@@ -5,7 +5,7 @@ export function ErrorHandler({ children }: React.PropsWithChildren) {
 	return (
 		<ErrorBoundary
 			fallback={(message) => {
-				return <></>;
+				return <frame></frame>;
 			}}
 		>
 			{children}

@@ -129,7 +129,7 @@ export function Rebirth(props: RebirthProps) {
 						key={"label"}
 						FontFace={new Font("rbxasset://fonts/families/FredokaOne.json")}
 						RichText={true}
-						Text={'<font color="rgb(255,0,0)">COST</font> TO <font color="rgb(255,170,0)">REBIRTH</font>'}
+						Text={'<font color="rgb(255,0,0)"></font>YOU WILL <font color="rgb(255,0,0)">LOSE</font>:'}
 						TextColor3={Color3.fromRGB(255, 255, 255)}
 						TextScaled={true}
 						TextSize={14}

@@ -1,5 +1,6 @@
 import * as mainConfig from "shared/config/main.json";
 import { getPlayerPlotFolder } from "./generictils";
+import { Workspace } from "@rbxts/services";
 
 export const getMoneyStat = (player: Player): NumberValue => {
 	return player.FindFirstChild("stats")?.FindFirstChild("Money") as NumberValue;
@@ -30,14 +31,21 @@ export const getPlayerNPCFolder = (player: Player) => {
 	return folder?.FindFirstChild("NPC");
 };
 
-export const summonPlayer = (player: Player, pos: Vector3) => {
+export const summonPlayer = (player: Player, cframe: CFrame) => {
 	const character = player.Character || player.CharacterAdded.Wait()[0];
 
 	if (!character) {
 		return;
 	}
 
-	character.MoveTo(pos.add(new Vector3(0, character.GetExtentsSize().Y / 2, 0)));
+	const newPos = cframe.add(new Vector3(0, character.GetExtentsSize().Y / 2, 0));
+	character.PivotTo(newPos);
+
+	if (Workspace.CurrentCamera) {
+		print(Workspace.CurrentCamera.CFrame.Position, newPos.Position);
+		Workspace.CurrentCamera.Focus = newPos;
+		//Workspace.CurrentCamera.CFrame = new CFrame(Workspace.CurrentCamera.CFrame.Position, newPos.Position);
+	}
 };
 
 export const sendPlayerToPlot = (player: Player) => {
@@ -50,6 +58,6 @@ export const sendPlayerToPlot = (player: Player) => {
 	const spawn = plot.GetDescendants().find((child) => child.HasTag("Spawn"));
 
 	if (spawn && spawn.IsA("BasePart")) {
-		summonPlayer(player, spawn.CFrame.Position);
+		summonPlayer(player, spawn.CFrame);
 	}
 };

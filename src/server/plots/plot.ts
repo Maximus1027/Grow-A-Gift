@@ -34,14 +34,17 @@ export class Plot {
 	constructor(readonly player: Player) {
 		const plot = this.createPlot();
 
-		if (plot) {
-			this.plot = plot;
-			//task.delay(2, () => Events.onDataLoaded.fire(this.player));
-			Events.onDataLoaded.fire(this.player);
-			this.spawnLocations = getSpawnLocations(plot);
-		} else {
-			player.Kick("Couldn't locate village");
-		}
+		plot.andThen((plot) => {
+			if (plot) {
+				this.plot = plot;
+
+				task.delay(1, () => Events.onDataLoaded.fire(this.player));
+				//Events.onDataLoaded.fire(this.player);
+				this.spawnLocations = getSpawnLocations(plot);
+			} else {
+				player.Kick("Couldn't locate village");
+			}
+		});
 	}
 	private inventoryService = Dependency<InventoryService>();
 	private dataService = Dependency<DataService>();
@@ -65,7 +68,7 @@ export class Plot {
 		return houseFolder;
 	}
 
-	public loadData() {
+	public async loadData() {
 		const profile = this.dataService.getProfile(this.player);
 
 		if (!profile) {
@@ -91,7 +94,7 @@ export class Plot {
 		return this.spawnLocations;
 	}
 
-	private createPlot() {
+	private async createPlot() {
 		const PlotsFolder = Workspace.WaitForChild("Plots") as Folder & Folder[];
 
 		//get next available plot
@@ -123,7 +126,7 @@ export class Plot {
 
 		this.plotBaseplate = plotFolder.WaitForChild("baseplate") as BasePart;
 
-		this.loadData();
+		this.loadData().await();
 
 		return plotFolder as PlotFolder;
 	}

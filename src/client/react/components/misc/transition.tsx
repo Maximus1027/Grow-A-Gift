@@ -24,9 +24,9 @@ export function DropTransition(props: TransitionProps) {
 	}, []);
 
 	return (
-		<screengui DisplayOrder={5}>
+		<screengui ScreenInsets={Enum.ScreenInsets.None} DisplayOrder={5} IgnoreGuiInset={true} ResetOnSpawn={false}>
 			<frame
-				Size={UDim2.fromScale(1, 2)}
+				Size={UDim2.fromScale(1.5, 2)}
 				Position={position}
 				AnchorPoint={new Vector2(0.5, 0.5)}
 				BackgroundColor3={Color3.fromRGB(0, 0, 0)}

@@ -15,8 +15,6 @@ export class ReactMount implements OnStart {
 
 		const playerGui = Players.LocalPlayer.WaitForChild("PlayerGui");
 
-		print("Loaded");
-
 		Events.onDataLoaded.connect(() => {
 			print("Client loading...");
 			root.render(<StrictMode>{createPortal(<App />, playerGui)}</StrictMode>);

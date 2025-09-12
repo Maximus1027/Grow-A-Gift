@@ -52,7 +52,7 @@ export class RewardService implements OnStart, OnTick {
 		for (const [player, t] of this.startTicks) {
 			const unlock = player.GetAttribute("highestUnlock") as number;
 
-			if (t + reward[tostring(unlock + 1) as string].timeInMinutes - tick() <= 0) {
+			if (t + reward[tostring(unlock + 1) as string].timeInMinutes * 60 - tick() <= 0) {
 				player.SetAttribute("highestUnlock", unlock + 1);
 				Events.onRewardsAction.fire(player, "unlock", unlock + 1);
 

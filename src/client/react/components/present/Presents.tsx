@@ -10,17 +10,22 @@ export function Presents() {
 	useEffect(() => {
 		const plots = Workspace.WaitForChild("NPC-PROD", 10) as Folder;
 
-		plots.DescendantAdded.Connect((present) => {
+		const a = plots.DescendantAdded.Connect((present) => {
 			if (present.HasTag("Present")) {
-				setPresentObjects(CollectionService.GetTagged("Present") as Model[]);
+				setPresentObjects(CollectionService.GetTagged("Present").filterUndefined() as Model[]);
 			}
 		});
 
-		plots.DescendantRemoving.Connect((present) => {
+		const b = plots.DescendantRemoving.Connect((present) => {
 			if (present.HasTag("Present")) {
-				setPresentObjects(CollectionService.GetTagged("Present") as Model[]);
+				setPresentObjects(CollectionService.GetTagged("Present").filterUndefined() as Model[]);
 			}
 		});
+
+		return () => {
+			a.Disconnect();
+			b.Disconnect();
+		};
 	}, []);
 
 	return presentObjects.map((present) => (

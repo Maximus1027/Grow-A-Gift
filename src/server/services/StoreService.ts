@@ -1,6 +1,6 @@
 import { Service, OnStart, Dependency } from "@flamework/core";
 import { DataService } from "./DataService";
-import { getItemCost } from "shared/utils/houseutils";
+import { getHouseDisplayName, getItemCost } from "shared/utils/houseutils";
 import { Events } from "server/network";
 import { t } from "@rbxts/t";
 import { Players, RunService } from "@rbxts/services";
@@ -8,6 +8,8 @@ import Object from "@rbxts/object-utils";
 import { timeToStock } from "shared/config/main.json";
 import * as HouseConfig from "shared/config/house.json";
 import { InventoryService } from "./InventoryService";
+import { MESSAGE } from "shared/types/messages";
+import { getCrateConfig } from "shared/utils/loot";
 
 @Service({})
 export class StoreService implements OnStart {
@@ -111,6 +113,8 @@ export class StoreService implements OnStart {
 			this.playerStock.set(player, stock);
 
 			Events.onStock.fire(player, stock);
+
+			Events.onMessage.fire(player, MESSAGE.INVENTORY, 1 + "", getHouseDisplayName(houseid));
 		}
 	}
 
@@ -126,6 +130,8 @@ export class StoreService implements OnStart {
 		if (playerValue.Value >= getCrateCost) {
 			this.inventoryService.addHouseToInventory(player, crateid, 1, true);
 			playerValue.Value -= getCrateCost;
+
+			Events.onMessage.fire(player, MESSAGE.INVENTORY, 1 + "", getCrateConfig()[crateid].displayName);
 		}
 	}
 }

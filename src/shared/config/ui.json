@@ -4,7 +4,10 @@
         "Rare" : "rbxassetid://135031166335883",
         "Epic": "rbxassetid://137874828636062",
         "Legendary": "rbxassetid://116436070286807",
-        "Mythic": "rbxassetid://103500731460787"
+        "Mythic": "rbxassetid://103500731460787",
+        "Exotic": "rbxassetid://77428942865161",
+        "Celestial": "rbxassetid://126409117857408",
+        "Divine": "rbxassetid://118216593727694"
     },
     "boost": {
         "Income": "rbxassetid://139659539145818",

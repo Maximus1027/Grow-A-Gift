@@ -7,7 +7,7 @@ export type Message = {
 };
 
 export interface MessageState {
-	messages: Message[];
+	messages: string[];
 }
 
 const initialState: MessageState = {
@@ -15,10 +15,28 @@ const initialState: MessageState = {
 };
 
 export const MessageActions = createProducer(initialState, {
-	sendMessage: (state: MessageState, message: Message) => {
+	sendMessage: (state: MessageState, message: string) => {
 		return {
 			...state,
 			messages: [...state.messages, message],
+		};
+	},
+	removeMessage: (state: MessageState) => {
+		const lastMessages = state.messages;
+		lastMessages.pop();
+
+		print(lastMessages);
+
+		return {
+			...state,
+			messages: lastMessages,
+		};
+	},
+
+	clearMessages: (state: MessageState) => {
+		return {
+			...state,
+			messages: [],
 		};
 	},
 });

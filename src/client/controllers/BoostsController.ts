@@ -5,12 +5,15 @@ import { t } from "@rbxts/t";
 import { Events } from "client/network";
 import { store } from "client/react/store/store";
 import { Boost, optionalBoost, TimedBoost } from "shared/enums/Boost";
-import { tick } from "shared/utils/generictils";
+import { formatMinutesToDisplay, formatSecondsToMinutesAndSeconds, tick } from "shared/utils/generictils";
+import { MessageController } from "./MessageController";
+import { MESSAGE } from "shared/types/messages";
 
 const player = Players.LocalPlayer;
 
 @Controller({})
 export class BoostsController implements OnStart {
+	constructor(private readonly messageController: MessageController) {}
 	onStart() {
 		Events.onDataLoaded.connect(() => {
 			//	this.setupBoosterListener();
@@ -55,7 +58,9 @@ export class BoostsController implements OnStart {
 	setupBoosterListener() {
 		//player.AttributeChanged.Connect(() => this.refreshBoosters());
 		const boostfolder = player.stats.boosts;
-		boostfolder.ChildAdded.Connect(() => this.refreshBoosters());
+		boostfolder.ChildAdded.Connect((child) => {
+			this.refreshBoosters();
+		});
 		boostfolder.ChildRemoved.Connect(() => this.refreshBoosters());
 	}
 }

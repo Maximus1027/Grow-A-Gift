@@ -111,7 +111,6 @@ export class NPC {
 		newPresent.SetAttribute("guiscale", this.npcData.guiscale);
 
 		const torso = this.npc.Torso;
-		newPresent.Parent = torso;
 
 		const motor6d = new Instance("Motor6D");
 
@@ -119,6 +118,8 @@ export class NPC {
 		motor6d.Part1 = newPresent.PrimaryPart;
 		motor6d.C1 = new CFrame(0, 0, newPresent.GetExtentsSize().X);
 		motor6d.Parent = newPresent;
+
+		newPresent.Parent = torso;
 
 		this.present = newPresent;
 	}

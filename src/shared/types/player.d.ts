@@ -10,3 +10,5 @@ declare class Player {
 		boosts: Folder & { [k in Boost]: NumberValue };
 	};
 }
+
+declare function unpack<T>(arr: Array<T>): T;

@@ -23,6 +23,10 @@ export type HouseConfig = Config<{
 
 export type CrateConfig = Config<{ loot: CrateLootTable; displayName: string; timeInMinutes: number }>;
 
+export type MessageConfig = Config<{
+	message: string;
+}>;
+
 export type NPCConfig = Config<NPCData>;
 
 export type Reward = {

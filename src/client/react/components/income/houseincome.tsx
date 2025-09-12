@@ -32,8 +32,6 @@ export function HouseIncomeManager() {
 				return;
 			}
 
-			print(item, homes);
-
 			homes = homes.filter((house) => (house.props as AverageIncomeProps).houseModel !== item);
 			setHouses(homes);
 		});

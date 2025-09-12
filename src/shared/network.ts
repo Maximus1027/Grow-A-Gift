@@ -1,5 +1,6 @@
 import { Networking } from "@flamework/networking";
 import { NPCPacket } from "./types/entity";
+import { MESSAGE } from "./types/messages";
 
 interface ClientToServerEvents {
 	onPlotAction: (action: unknown, ...args: unknown[]) => void;
@@ -16,6 +17,7 @@ interface ServerToClientEvents {
 	onBoost: () => void;
 	onDataLoaded: () => void;
 	onNPC: (npcs: NPCPacket[]) => void;
+	onMessage: (message: MESSAGE, ...args: string[]) => void;
 }
 
 interface ClientToServerFunctions {}

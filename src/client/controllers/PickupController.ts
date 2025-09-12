@@ -20,7 +20,11 @@ export class PickupController implements OnStart {
 				const windows = state.windowManager.windows;
 
 				//Ensure not currently placing
-				if (state.build.selectedMachine !== "" || windows.inventory === true) {
+				if (
+					state.build.selectedMachine !== "" ||
+					windows.inventory === true ||
+					state.inventory.promptHouseid !== ""
+				) {
 					return;
 				}
 				this.promptPickup();

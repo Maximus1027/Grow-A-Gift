@@ -41,7 +41,7 @@ export function PlotIcons() {
 			addPlayer(player);
 		});
 		const leave = Players.PlayerRemoving.Connect((player) => {
-			addPlayer(player);
+			setProfiles(profiles.filter((p) => p.player !== player));
 		});
 		Players.GetPlayers().forEach((player) => addPlayer(player));
 

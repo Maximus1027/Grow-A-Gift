@@ -60,7 +60,7 @@ export function TopBar() {
 								// setTransition(() => () => {
 								// 	return true;
 								// });
-								setTransition(() => () => summonPlayer(Players.LocalPlayer, SHOPSPAWN.CFrame.Position));
+								setTransition(() => () => summonPlayer(Players.LocalPlayer, SHOPSPAWN.CFrame));
 							}
 						}}
 						hover={1.01}

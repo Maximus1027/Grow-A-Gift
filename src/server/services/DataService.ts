@@ -44,6 +44,16 @@ export class DataService implements OnStart {
 		Players.PlayerRemoving.Connect((player) => this.saveProfile(player));
 	}
 
+	doSaveLoop() {
+		// eslint-disable-next-line no-constant-condition
+		while (true) {
+			task.wait(60);
+			for (const player of Players.GetPlayers()) {
+				this.saveData(player);
+			}
+		}
+	}
+
 	/**
 	 * Create profile for player
 	 * @param player
@@ -120,28 +130,42 @@ export class DataService implements OnStart {
 	}
 
 	/**
-	 * Save profile
+	 * Save and release profile
 	 * @param player
 	 * @returns
 	 */
 	private saveProfile(player: Player) {
+		const profile = this.loadedProfiles.get(player);
+		if (!profile) {
+			return;
+		}
+
+		this.saveData(player)
+			.andThen(() => profile.Release())
+			.andThen(() => this.loadedProfiles.delete(player))
+			.finallyCall(print, `Saved profile for ${player.Name}`);
+	}
+
+	/**
+	 * Save data to profile
+	 * @param player
+	 * @returns
+	 */
+	private async saveData(player: Player) {
 		const profile = this.loadedProfiles.get(player);
 
 		if (!profile) {
 			return;
 		}
 
-		this.saveInventory(player)
+		return this.saveInventory(player)
 			.andThen(() => this.saveTimedBoosters(player))
 			.andThen(() => {
 				profile.Data.money = getMoneyStat(player).Value;
 				profile.Data.village = player.stats.village.Value;
 				profile.Data.rebirths = player.stats.rebirths.Value;
 				profile.Data.spins = player.stats.spins.Value;
-			})
-			.andThen(() => profile.Release())
-			.andThen(() => this.loadedProfiles.delete(player))
-			.finallyCall(print, `Saved profile for ${player.Name}`);
+			});
 	}
 
 	/**

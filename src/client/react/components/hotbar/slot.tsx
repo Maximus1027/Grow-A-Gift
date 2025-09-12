@@ -1,7 +1,7 @@
 import { Dependency } from "@flamework/core";
 import React, { useEffect, useRef, useState } from "@rbxts/react";
 import { useProducer, useSelector } from "@rbxts/react-reflex";
-import { RunService } from "@rbxts/services";
+import { RunService, UserInputService } from "@rbxts/services";
 import { t } from "@rbxts/t";
 import { PlacementController } from "client/controllers/PlacementController";
 import { Events } from "client/network";
@@ -23,6 +23,8 @@ export function HotbarSlot(props: HotbarProps) {
 	const camera = useRef();
 	const [houseAmount, setAmount] = useState<number>(props.valueBase.Value);
 	const placementController = Dependency<PlacementController>();
+
+	const hasKeyboard = UserInputService.KeyboardEnabled;
 
 	useEffect(() => {
 		const machineDisplay = props.houseModel.Clone() as Model;
@@ -128,28 +130,30 @@ export function HotbarSlot(props: HotbarProps) {
 				<uitextsizeconstraint key={"uITextSizeConstraint"} MaxTextSize={50} />
 				<uiaspectratioconstraint />
 			</textlabel>
-			<textlabel
-				key={"keyboardid"}
-				FontFace={new Font("rbxasset://fonts/families/FredokaOne.json")}
-				Text={props.layoutorder + ""}
-				TextColor3={Color3.fromRGB(255, 255, 255)}
-				TextScaled={true}
-				TextSize={14}
-				TextTransparency={0.2}
-				TextWrapped={true}
-				AnchorPoint={new Vector2(0.5, 0.5)}
-				BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-				BackgroundTransparency={1}
-				BorderColor3={Color3.fromRGB(0, 0, 0)}
-				BorderSizePixel={0}
-				Position={UDim2.fromScale(0.304, 0.259)}
-				Rotation={3}
-				Size={UDim2.fromScale(0.301, 0.311)}
-			>
-				<uiaspectratioconstraint />
+			{hasKeyboard && (
+				<textlabel
+					key={"keyboardid"}
+					FontFace={new Font("rbxasset://fonts/families/FredokaOne.json")}
+					Text={props.layoutorder + ""}
+					TextColor3={Color3.fromRGB(255, 255, 255)}
+					TextScaled={true}
+					TextSize={14}
+					TextTransparency={0.2}
+					TextWrapped={true}
+					AnchorPoint={new Vector2(0.5, 0.5)}
+					BackgroundColor3={Color3.fromRGB(255, 255, 255)}
+					BackgroundTransparency={1}
+					BorderColor3={Color3.fromRGB(0, 0, 0)}
+					BorderSizePixel={0}
+					Position={UDim2.fromScale(0.304, 0.259)}
+					Rotation={3}
+					Size={UDim2.fromScale(0.301, 0.311)}
+				>
+					<uiaspectratioconstraint />
 
-				<uistroke key={"uIStroke"} Thickness={2} />
-			</textlabel>
+					<uistroke key={"uIStroke"} Thickness={2} />
+				</textlabel>
+			)}
 		</imagebutton>
 	);
 }

@@ -8,6 +8,10 @@ import { DataService } from "./DataService";
 import Object from "@rbxts/object-utils";
 import Signal from "@rbxts/lemon-signal";
 import { Workspace } from "@rbxts/services";
+import { MESSAGE } from "shared/types/messages";
+import { getHouseConfig } from "shared/utils/loot";
+
+const houseConfig = getHouseConfig();
 
 @Service({
 	loadOrder: 1,

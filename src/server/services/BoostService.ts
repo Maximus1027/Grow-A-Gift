@@ -4,8 +4,9 @@ import { Players } from "@rbxts/services";
 import { Boost, TimedBoost } from "shared/enums/Boost";
 import { t } from "@rbxts/t";
 import Object from "@rbxts/object-utils";
-import { tick } from "shared/utils/generictils";
+import { formatMinutesToDisplay, tick } from "shared/utils/generictils";
 import { Events } from "server/network";
+import { MESSAGE } from "shared/types/messages";
 
 @Service({})
 export class BoostService implements OnStart {
@@ -166,6 +167,8 @@ export class BoostService implements OnStart {
 		}
 
 		booster.Parent = player.stats.boosts;
+
+		Events.onMessage.fire(player, MESSAGE.BOOST, value + "x", boost, math.round((timed ?? 0) / 60) + " Minutes");
 
 		this.calculateBoosts(player);
 	}

@@ -29,6 +29,8 @@ import { ErrorBoundary } from "../components/misc/errorboundary";
 import { ErrorHandler } from "../components/misc/errorhandler";
 import { RewardPopup } from "../components/popups/rewardpopup";
 
+import { Messages } from "../components/messages/messages";
+
 const player = Players.LocalPlayer;
 
 export function App() {
@@ -59,6 +61,7 @@ export function App() {
 				<TagManager />
 				<PlotIcons />
 				<RewardPopup />
+				<Messages />
 			</ReflexProvider>
 		</ErrorHandler>
 	);

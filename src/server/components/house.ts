@@ -171,7 +171,7 @@ export class House extends BaseComponent<Attributes, Model> implements OnStart, 
 
 		const average = total / this.lastIncome.size();
 
-		this.attributes.avg = math.ceil(average);
+		this.attributes.avg = math.ceil(average) / (this.spawnRate ?? 1);
 	}
 
 	destroy(): void {

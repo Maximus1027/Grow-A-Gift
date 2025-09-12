@@ -11,7 +11,6 @@ import {
 import { store } from "client/react/store/store";
 import {
 	getHouseAssetsFolder,
-	getPlayerPlot,
 	getPlayerPlotFolder,
 	isModelIntersecting,
 	isModelWithinBounds,
@@ -137,8 +136,6 @@ export class PlacementController implements OnStart, OnInit {
 		if (!isModelWithinBounds(this.tempMachine, this.baseplate)) {
 			return;
 		}
-
-		const plot = getPlayerPlot(player);
 
 		Events.onPlotAction.fire("place", this.tempMachine.Name, this.tempMachine.GetPivot());
 
