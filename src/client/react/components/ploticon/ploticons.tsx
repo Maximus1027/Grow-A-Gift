@@ -1,10 +1,11 @@
 import { useEffect, useState } from "@rbxts/react";
 import { PFP } from "./pfp";
-import { Players } from "@rbxts/services";
+import { Players, Workspace } from "@rbxts/services";
 import React from "@rbxts/react";
 import { useAsyncEffect } from "@rbxts/pretty-react-hooks";
 import { getPlayerPlotFolder } from "shared/utils/generictils";
 import { t } from "@rbxts/t";
+import { Janitor } from "@rbxts/janitor";
 
 type profile = {
 	player: Player;
@@ -14,6 +15,7 @@ type profile = {
 
 export function PlotIcons() {
 	const [profiles, setProfiles] = useState<profile[]>([]);
+	const janitor = new Janitor();
 
 	const addPlayer = (player: Player) => {
 		const [thumbnail, ready] = Players.GetUserThumbnailAsync(
@@ -26,8 +28,8 @@ export function PlotIcons() {
 		if (!t.Instance(plot) || !ready) {
 			return;
 		}
-		setProfiles([
-			...profiles,
+		setProfiles((state) => [
+			...state,
 			{
 				player: player,
 				thumbnail: thumbnail,
@@ -36,18 +38,28 @@ export function PlotIcons() {
 		]);
 	};
 
-	useAsyncEffect(async () => {
-		const join = Players.PlayerAdded.Connect((player) => {
-			addPlayer(player);
-		});
-		const leave = Players.PlayerRemoving.Connect((player) => {
-			setProfiles(profiles.filter((p) => p.player !== player));
-		});
+	useEffect(() => {
+		const trackChanges = (plot: Instance) => {
+			janitor.Add(
+				plot.GetAttributeChangedSignal("player").Connect((attribute) => {
+					if (t.string(plot.GetAttribute("player"))) {
+						const foundPlayer = Players.GetPlayers().find((p) => p.Name === plot.GetAttribute("player"));
+
+						if (foundPlayer) addPlayer(foundPlayer);
+					} else {
+						setProfiles((old) => old.filter((p) => p.part !== plot));
+					}
+				}),
+			);
+		};
+
+		Workspace.WaitForChild("Plots")
+			.GetChildren()
+			.forEach((plot) => trackChanges(plot));
 		Players.GetPlayers().forEach((player) => addPlayer(player));
 
 		return () => {
-			join.Disconnect();
-			leave.Disconnect();
+			janitor.Cleanup();
 		};
 	}, []);
 

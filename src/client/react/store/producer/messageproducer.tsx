@@ -25,8 +25,6 @@ export const MessageActions = createProducer(initialState, {
 		const lastMessages = state.messages;
 		lastMessages.pop();
 
-		print(lastMessages);
-
 		return {
 			...state,
 			messages: lastMessages,

@@ -59,8 +59,6 @@ export class EntityService implements OnStart {
 			npcs.indexOf(npcid),
 		];
 
-		print(npcid);
-
 		this.NPCQueue.push(packet);
 	}
 }

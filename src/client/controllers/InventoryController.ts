@@ -6,9 +6,9 @@ import { getInventoryFolder } from "shared/utils/playertils";
 import { MessageController } from "./MessageController";
 import { Message } from "discord.js";
 import { MESSAGE } from "shared/types/messages";
+import { Events } from "client/network";
 
 const player = Players.LocalPlayer;
-const inventoryFolder = getInventoryFolder(player);
 
 const keyMap: Record<string, number> = {
 	One: 1,
@@ -25,6 +25,8 @@ const keyMap: Record<string, number> = {
 @Controller({})
 export class InventoryController implements OnStart {
 	constructor(private readonly messageController: MessageController) {}
+
+	private inventoryFolder?: Instance;
 
 	onStart() {
 		//keyboard manager for hotbar
@@ -51,6 +53,15 @@ export class InventoryController implements OnStart {
 			}
 		});
 
+		Events.onDataLoaded.connect(() => {
+			this.inventoryFolder = getInventoryFolder(player);
+			if (this.inventoryFolder) this.setupTracking();
+		});
+	}
+
+	setupTracking() {
+		const inventoryFolder = this.inventoryFolder as Folder;
+
 		inventoryFolder.ChildAdded.Connect((child) => {
 			if (!child.IsA("NumberValue")) {
 				return;
@@ -74,6 +85,8 @@ export class InventoryController implements OnStart {
 	}
 
 	trackHouseForEquip(houseid: NumberValue) {
+		const inventoryFolder = this.inventoryFolder as Folder;
+
 		//how we check if house was put in hotbar
 		houseid.GetAttributeChangedSignal("equip").Connect(() => {
 			store.setInventory(inventoryFolder.GetChildren() as NumberValue[]);
