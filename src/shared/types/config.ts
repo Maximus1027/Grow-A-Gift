@@ -19,6 +19,7 @@ export type HouseConfig = Config<{
 	rarity: string;
 	stock: number;
 	rate: number;
+	chance: number;
 }>;
 
 export type CrateConfig = Config<{ loot: CrateLootTable; displayName: string; timeInMinutes: number }>;

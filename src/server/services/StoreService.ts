@@ -96,6 +96,7 @@ export class StoreService implements OnStart {
 		const stock = this.playerStock.get(player) as Record<string, number>;
 
 		if (stock[houseid] === undefined || stock[houseid] <= 0) {
+			Events.onMessage.fire(player, MESSAGE.NOSTOCK);
 			return;
 		}
 
@@ -113,9 +114,11 @@ export class StoreService implements OnStart {
 			this.playerStock.set(player, stock);
 
 			Events.onStock.fire(player, stock);
-
 			Events.onMessage.fire(player, MESSAGE.INVENTORY, 1 + "", getHouseDisplayName(houseid));
+			return;
 		}
+
+		Events.onMessage.fire(player, MESSAGE.NOMONEY);
 	}
 
 	onCratePurchase(player: Player, crateid: string) {

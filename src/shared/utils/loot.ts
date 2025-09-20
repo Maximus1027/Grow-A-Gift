@@ -32,7 +32,13 @@ const mappedSpinnerLoot: SpinnerLootTable = Object.entries(SpinnerConfig as Spin
 	return acc;
 }, {} as SpinnerLootTable);
 
+const mappedShop: SpinnerLootTable = Object.entries(SpinnerConfig as SpinConfig).reduce((acc, [key, value]) => {
+	acc[key as string] = value.chance;
+	return acc;
+}, {} as SpinnerLootTable);
+
 const npcChances = Object.entries(NPCSConfig as unknown as NPCConfig).sort((a, b) => a[1].chance > b[1].chance);
+const shopChances = Object.entries(SpinnerConfig as SpinConfig).sort((a, b) => a[1].chance > b[1].chance);
 
 /**
  * Use loot table to return a random rarity

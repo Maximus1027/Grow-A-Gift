@@ -58,6 +58,8 @@ export class House extends BaseComponent<Attributes, Model> implements OnStart, 
 	private attributeChanged?: RBXScriptConnection;
 	private spawnLocations?: Vector3[];
 
+	private balance = 0;
+
 	private lastIncome: number[] = new Array<number>();
 
 	constructor(private readonly entityService: EntityService, private readonly plotservice: PlotService) {
@@ -156,6 +158,7 @@ export class House extends BaseComponent<Attributes, Model> implements OnStart, 
 
 			this.owner!.stats.Money.Value += finalWorth;
 			this.lastIncome.insert(0, finalWorth);
+
 			if (this.lastIncome.size() > 10) this.lastIncome.pop();
 
 			this.calculateAverage();

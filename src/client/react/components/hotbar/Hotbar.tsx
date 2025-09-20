@@ -8,12 +8,22 @@ import { useProducer, useSelector } from "@rbxts/react-reflex";
 import { RootState, RootStore } from "client/react/store/store";
 import { Window } from "client/react/store/producer/windowproducer";
 import { WindowWrapper } from "../windows/windowwrapper";
+import { Dependency } from "@flamework/core";
+import { PlacementController } from "client/controllers/PlacementController";
+import { Events } from "client/network";
 
 const houseModels = ReplicatedStorage.WaitForChild("assets").WaitForChild("houses") as Folder;
 const player = Players.LocalPlayer;
 
 export function Hotbar() {
 	const houseids = useSelector((state: RootState) => state.inventory.inventory);
+
+	const placementController = Dependency<PlacementController>();
+
+	const selectedMachine = useSelector((state: RootState) => state.build.selectedMachine);
+	const inventoryOpen = useSelector((state: RootState) => state.windowManager.windows.inventory);
+
+	const dispatch = useProducer<RootStore>();
 
 	return (
 		<screengui
@@ -34,7 +44,7 @@ export function Hotbar() {
 					BorderColor3={Color3.fromRGB(0, 0, 0)}
 					BorderSizePixel={0}
 					Position={UDim2.fromScale(0.5, 0.919)}
-					Size={UDim2.fromScale(0.0907, 0.161)}
+					Size={UDim2.fromScale(0.118, 0.191)}
 				>
 					<uiaspectratioconstraint />
 
@@ -72,6 +82,23 @@ export function Hotbar() {
 										houseId={house.Name}
 										valueBase={house}
 										layoutorder={index + 1}
+										onClick={() => {
+											const houseid = house.Name;
+											if (inventoryOpen === true) {
+												Events.onInventoryAction("addInventory", houseid);
+												return;
+											}
+											if (selectedMachine === houseid) {
+												dispatch.selectMachine("");
+												placementController.stopPlacingMachine();
+												return;
+											}
+											if (selectedMachine !== "") {
+												placementController.stopPlacingMachine();
+											}
+											dispatch.selectMachine(houseid);
+											placementController.beginPlacingMachine(houseid);
+										}}
 									/>
 								);
 							})}

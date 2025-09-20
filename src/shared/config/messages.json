@@ -16,5 +16,11 @@
     },
     "error": {
         "message": "<font color=\"rgb(255,49,52)\">%s</font>"
+    },
+    "nomoney": {
+        "message": "<font color=\"rgb(255,49,52)\">You do not have enough money!</font>"
+    },
+    "nostock": {
+        "message": "<font color=\"rgb(255,49,52)\">This item is out of stock!</font>"
     }
 }

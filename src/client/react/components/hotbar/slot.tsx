@@ -12,17 +12,16 @@ export interface HotbarProps {
 	houseModel: Model;
 	valueBase: NumberValue;
 	layoutorder: number;
+	onClick: () => void;
 }
 
 export function HotbarSlot(props: HotbarProps) {
 	const dispatch = useProducer<RootStore>();
-	const selectedMachine = useSelector((state: RootState) => state.build.selectedMachine);
-	const inventoryOpen = useSelector((state: RootState) => state.windowManager.windows.inventory);
 	const selectedKey = useSelector((state: RootState) => state.inventory.inputKey);
-
 	const camera = useRef();
 	const [houseAmount, setAmount] = useState<number>(props.valueBase.Value);
-	const placementController = Dependency<PlacementController>();
+
+	const selectedMachine = useSelector((state: RootState) => state.build.selectedMachine);
 
 	const hasKeyboard = UserInputService.KeyboardEnabled;
 
@@ -31,12 +30,12 @@ export function HotbarSlot(props: HotbarProps) {
 
 		machineDisplay.Parent = camera.current;
 
-		const x = 2 + machineDisplay.GetExtentsSize().X;
+		const x = machineDisplay.GetExtentsSize().Z * 2;
 
 		const cam = camera.current as unknown as Camera;
 		cam.CFrame = new CFrame(new Vector3(0, 13, 6), new Vector3(x, 0, 0));
 
-		machineDisplay.PivotTo(new CFrame(x, -machineDisplay.GetExtentsSize().Y / 2.6, 0));
+		machineDisplay.PivotTo(new CFrame(x, -machineDisplay.GetExtentsSize().Y / 2.5, 0));
 
 		const baseEvent = props.valueBase.Changed.Connect((newValue) => {
 			setAmount(newValue);
@@ -55,33 +54,12 @@ export function HotbarSlot(props: HotbarProps) {
 		};
 	}, []);
 
-	const slotPressed = () => {
-		if (inventoryOpen === true) {
-			Events.onInventoryAction("addInventory", props.houseId);
-			return;
-		}
-
-		if (selectedMachine === props.houseId) {
-			dispatch.selectMachine("");
-			placementController.stopPlacingMachine();
-
-			return;
-		}
-
-		if (selectedMachine !== "") {
-			placementController.stopPlacingMachine();
-		}
-
-		dispatch.selectMachine(props.houseId);
-		placementController.beginPlacingMachine(props.houseId);
-	};
-
 	useEffect(() => {
 		if (!t.number(selectedKey) || props.layoutorder !== selectedKey) {
 			return;
 		}
 
-		slotPressed();
+		props.onClick();
 		dispatch.setInputKey();
 	}, [selectedKey]);
 
@@ -98,14 +76,17 @@ export function HotbarSlot(props: HotbarProps) {
 			Position={UDim2.fromScale(0.0856, 0.5)}
 			Size={UDim2.fromScale(0.171, 1)}
 			Event={{
-				MouseButton1Click: () => slotPressed(),
+				MouseButton1Click: () => props.onClick(),
 			}}
+			ImageColor3={
+				selectedMachine === props.houseId ? Color3.fromRGB(245, 209, 89) : Color3.fromRGB(255, 255, 255)
+			}
 		>
 			<viewportframe
 				AnchorPoint={new Vector2(0.5, 0.5)}
 				Position={UDim2.fromScale(0.5, 0.5)}
 				BackgroundTransparency={1}
-				Size={UDim2.fromScale(1, 1)}
+				Size={UDim2.fromScale(1.5, 1.5)}
 				CurrentCamera={camera}
 			>
 				<camera ref={camera} />
@@ -124,10 +105,9 @@ export function HotbarSlot(props: HotbarProps) {
 				BackgroundTransparency={1}
 				BorderColor3={Color3.fromRGB(0, 0, 0)}
 				BorderSizePixel={0}
-				Position={UDim2.fromScale(0.725, 0.706)}
-				Size={UDim2.fromScale(0.265, 0.221)}
+				Position={UDim2.fromScale(0.66, 0.706)}
+				Size={UDim2.fromScale(0.3, 0.3)}
 			>
-				<uitextsizeconstraint key={"uITextSizeConstraint"} MaxTextSize={50} />
 				<uiaspectratioconstraint />
 			</textlabel>
 			{hasKeyboard && (

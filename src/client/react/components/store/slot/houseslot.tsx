@@ -13,6 +13,7 @@ export interface HouseSlotProps extends StoreSlotProps {
 export function HouseSlot(props: HouseSlotProps) {
 	// eslint-disable-next-line roblox-ts/no-any
 	const maxStock = getHouseConfig()[props.itemid].stock;
+	const chance = getHouseConfig()[props.itemid].chance;
 
 	return (
 		<BaseSlot actionType="house" devProductId={props.productid ?? ""} itemid={props.itemid}>

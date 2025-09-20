@@ -2,7 +2,7 @@ import React from "@rbxts/react";
 import { storeType } from "../Store";
 import { BaseSlotProps, StoreSlotProps } from "./baseslot";
 import { CrateProps, CrateSlot } from "./crateslot";
-import { HouseSlot, HouseSlotProps } from "./storeslot";
+import { HouseSlot, HouseSlotProps } from "./houseslot";
 import { getCrateConfig } from "shared/utils/loot";
 import { store } from "client/react/store/store";
 

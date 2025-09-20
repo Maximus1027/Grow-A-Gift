@@ -5,4 +5,6 @@ export enum MESSAGE {
 	PURCHASE = "purchase",
 	STOCKRESET = "stockreset",
 	ERROR = "error",
+	NOMONEY = "nomoney",
+	NOSTOCK = "nostock",
 }

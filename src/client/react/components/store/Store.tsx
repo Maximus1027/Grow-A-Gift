@@ -9,7 +9,7 @@ import { Events } from "client/network";
 import { CountdownTimer } from "./countdown";
 import { ExitButton } from "../inventory/exit";
 import { useMotion } from "@rbxts/pretty-react-hooks";
-import { HouseSlot, HouseSlotProps } from "./slot/storeslot";
+import { HouseSlot, HouseSlotProps } from "./slot/houseslot";
 import { SmartSlot } from "./slot/smartslot";
 import { getCrateConfig } from "shared/utils/loot";
 import { Window } from "client/react/store/producer/windowproducer";

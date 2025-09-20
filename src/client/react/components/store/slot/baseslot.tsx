@@ -8,6 +8,7 @@ export interface BaseSlotProps extends React.PropsWithChildren {
 	itemid: string;
 	actionType: storeType;
 	devProductId: string;
+	onClick?: () => void;
 }
 
 //To be extended by other slots
@@ -46,7 +47,10 @@ export function BaseSlot(props: BaseSlotProps) {
 				Image={"rbxassetid://131222522112144"}
 				Position={UDim2.fromScale(0.652, 0.688)}
 				Size={UDim2.fromScale(0.18, 0.288)}
-				onClick={() => Events.onStoreAction.fire(props.actionType, props.itemid)}
+				onClick={() => {
+					Events.onStoreAction.fire(props.actionType, props.itemid);
+					props.onClick && props.onClick();
+				}}
 			>
 				<uiaspectratioconstraint key={"uIAspectRatioConstraint3"} AspectRatio={2.27} />
 			</InteractiveButton>
